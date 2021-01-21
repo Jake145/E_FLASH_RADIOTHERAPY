@@ -74,16 +74,7 @@ Applicator80BeamLine::Applicator80BeamLine():
 
   solidGiunz5FinalAppFLASH(0),
   physiGiunz5FinalAppFLASH(0),
-  
-  cover1(0),
-  physicover1FLASH(0),
-  
-  cover2(0),
-  physicover2FLASH(0),
-  
-  cover3(0),
-  physicover3FLASH(0),
-  
+
   protector1(0),
   physiprotector1(0),
   
@@ -95,6 +86,17 @@ Applicator80BeamLine::Applicator80BeamLine():
   
   protector4(0),
   physiprotector4(0),
+  
+  cover1(0),
+  physicover1FLASH(0),
+  
+  cover2(0),
+  physicover2FLASH(0),
+  
+  cover3(0),
+  physicover3FLASH(0),
+  
+  
   /*
   solidBlocco1FLASH(0),
   physiBlocco1FLASH(0),
@@ -241,7 +243,7 @@ void Applicator80BeamLine::SetDefaultDimensions()
   G4Element* copperNist = G4NistManager::Instance()->FindOrBuildElement("Cu");
 
   // COMPOUND
-  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+  //G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   //G4Material* kaptonNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_KAPTON", isotopes);
   G4Material* galacticNist = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic", isotopes);
   G4Material* PMMANist = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", isotopes);
