@@ -23,42 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the first version of FLASH, a Geant4-based application
 //
-// 
-//////////////////////////////////////////////////////////////////////////////////////////////
+/// \file FLASHActionInitialization.cc
+/// \brief Implementation of the FLASHActionInitialization class
 
-#include "G4SystemOfUnits.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4SDManager.hh"
-#include "G4VVisManager.hh"
-
-#include "FLASHEventAction.hh"
+#include "FLASHActionInitialization.hh"
+#include "Applicator80BeamLine.hh"
+#include "Applicator80BeamLineMessenger.hh"
 #include "FLASHDetectorConstruction.hh"
+#include "FLASHEventAction.hh"
+#include "FLASHDetectorMessenger.hh"
 #include "FLASHEventActionMessenger.hh"
+#include "FLASHGeometryController.hh"
+#include "FLASHGeometryMessenger.hh"
+#include "FLASHPhysicsList.hh"
+#include "FLASHPhysicsListMessenger.hh"
+#include "FLASHPrimaryGeneratorAction.hh"
+#include "FLASHPrimaryGeneratorMessenger.hh"
+#include "FLASHRunAction.hh"
+#include "FLASHStepMax.hh"
+#include "FLASHStepMaxMessenger.hh"
+#include "FLASHSteppingAction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FLASHEventAction::FLASHEventAction(FLASHRunAction* runAction) :
-  drawFlag("all" ),printModulo(1000), pointerEventMessenger(0)
-{ 
-  pointerEventMessenger = new FLASHEventActionMessenger(this);
-}
-
-FLASHEventAction::~FLASHEventAction()
-{
- delete pointerEventMessenger;
-}
-
-void FLASHEventAction::BeginOfEventAction(const G4Event* evt)
-{ 
-  G4int evtNb = evt->GetEventID();
-  
-  //printing survey
-  if (evtNb%printModulo == 0)
-     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
- 
-}
-
-void FLASHEventAction::EndOfEventAction(const G4Event*)
+FLASHActionInitialization::FLASHActionInitialization()
+ : G4VUserActionInitialization()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+FLASHActionInitialization::~FLASHActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void FLASHActionInitialization::BuildForMaster() const
+{
+  FLASHRunAction* runAction = new FLASHRunAction;
+  SetUserAction(runAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void FLASHActionInitialization::Build() const
+{
+  SetUserAction(new FLASHPrimaryGeneratorAction);
+
+  FLASHRunAction* runAction = new FLASHRunAction;
+  SetUserAction(runAction);
+  
+  FLASHEventAction* eventAction = new FLASHEventAction(runAction);
+  SetUserAction(eventAction);
+  
+  SetUserAction(new FLASHSteppingAction(eventAction));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

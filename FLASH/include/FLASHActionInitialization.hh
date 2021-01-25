@@ -23,28 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the first version of FLASH, a Geant4-based application
 //
-// 
-//////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef FLASHSteppingAction_h
-#define FLASHSteppingAction_h 1
+/// \file FLASHActionInitialization.hh
+/// \brief Definition of the FLASHActionInitialization class
 
-#include "G4UserSteppingAction.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4ios.hh"
-#include "globals.hh"
+#ifndef FLASHActionInitialization_h
+#define FLASHActionInitialization_h 1
 
-class FLASHRunAction;
-class FLASHSteppingMessenger;
+#include "G4VUserActionInitialization.hh"
 
-class FLASHSteppingAction : public G4UserSteppingAction
+/// Action initialization class.
+
+class FLASHActionInitialization : public G4VUserActionInitialization
 {
-public:
-  FLASHSteppingAction(FLASHRunAction*);
-  ~FLASHSteppingAction();
-  
-  void UserSteppingAction(const G4Step* step);
+  public:
+    FLASHActionInitialization();
+    virtual ~FLASHActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+
+    

@@ -34,16 +34,20 @@
 #include "globals.hh"
 
 class FLASHEventActionMessenger;
-
+class FLASHRunAction;
 class FLASHEventAction : public G4UserEventAction
 {
-public:
-  FLASHEventAction();
-  ~FLASHEventAction();
 
-public:
-  void BeginOfEventAction(const G4Event*);
-  void EndOfEventAction(const G4Event*);
+  public:
+    FLASHEventAction(FLASHRunAction* runAction);
+    virtual ~FLASHEventAction();
+
+    virtual void BeginOfEventAction(const G4Event* event);
+    virtual void EndOfEventAction(const G4Event* event);
+
+
+
+
 
   void SetPrintModulo(G4int val)
   {

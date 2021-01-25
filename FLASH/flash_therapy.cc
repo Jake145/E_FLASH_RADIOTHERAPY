@@ -34,14 +34,15 @@
 // 
 //  ----------------------------------------------------------------------------
 
-#ifdef G4MULTITHREADED
+//#ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+//#else
+//#include "G4RunManager.hh"
+//#endif
 #include "G4UImanager.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
+#include "FLASHActionInitialization.hh"
 #include "FLASHEventAction.hh"
 #include "FLASHPhysicsList.hh"
 #include "FLASHPrimaryGeneratorAction.hh"
@@ -68,11 +69,11 @@ int main(int argc ,char ** argv)
 //  G4int seed = time(NULL); 
  // CLHEP::HepRandom::setTheSeed(seed);
   
-#ifdef G4MULTITHREADED
+//#ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+//#else
+//  G4RunManager* runManager = new G4RunManager;
+//#endif
 
   G4ScoringManager::GetScoringManager();
   // Scoring mesh
