@@ -45,6 +45,6 @@ public:
   FLASHSteppingAction(FLASHRunAction*);
   ~FLASHSteppingAction();
   
-  void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step* step);
 };
 #endif
