@@ -36,7 +36,12 @@
 
 #include "Applicator80BeamLine.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+
+#endif
 #include "FLASHGeometryMessenger.hh"
 
 /////////////////////////////////////////////////////////////////////////////

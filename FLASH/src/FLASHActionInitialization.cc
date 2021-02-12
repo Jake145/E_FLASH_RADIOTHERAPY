@@ -28,22 +28,11 @@
 /// \brief Implementation of the FLASHActionInitialization class
 
 #include "FLASHActionInitialization.hh"
-#include "Applicator80BeamLine.hh"
-#include "Applicator80BeamLineMessenger.hh"
-#include "FLASHDetectorConstruction.hh"
-#include "FLASHEventAction.hh"
-#include "FLASHDetectorMessenger.hh"
-#include "FLASHEventActionMessenger.hh"
-#include "FLASHGeometryController.hh"
-#include "FLASHGeometryMessenger.hh"
-#include "FLASHPhysicsList.hh"
-#include "FLASHPhysicsListMessenger.hh"
 #include "FLASHPrimaryGeneratorAction.hh"
-#include "FLASHPrimaryGeneratorMessenger.hh"
 #include "FLASHRunAction.hh"
-#include "FLASHStepMax.hh"
-#include "FLASHStepMaxMessenger.hh"
+#include "FLASHEventAction.hh"
 #include "FLASHSteppingAction.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FLASHActionInitialization::FLASHActionInitialization()
@@ -72,10 +61,10 @@ void FLASHActionInitialization::Build() const
   FLASHRunAction* runAction = new FLASHRunAction;
   SetUserAction(runAction);
   
-  FLASHEventAction* eventAction = new FLASHEventAction(runAction);
+  FLASHEventAction* eventAction = new FLASHEventAction();
   SetUserAction(eventAction);
   
-  SetUserAction(new FLASHSteppingAction(eventAction));
+  SetUserAction(new FLASHSteppingAction(runAction));
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

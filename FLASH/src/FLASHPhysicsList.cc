@@ -54,6 +54,9 @@
 #include "G4Positron.hh"
 #include "G4UnitsTable.hh"
 #include "G4DecayPhysics.hh"
+#include "G4AutoLock.hh"
+
+namespace { G4Mutex myFLASHPhysicsList = G4MUTEX_INITIALIZER; }
 
 FLASHPhysicsList::FLASHPhysicsList() : G4VModularPhysicsList()
 {
@@ -150,6 +153,8 @@ void FLASHPhysicsList::AddPhysicsList(const G4String& name)
 
 void FLASHPhysicsList::AddStepMax()
 {
+  G4AutoLock lock(&myFLASHPhysicsList);
+  
   // Step limitation seen as a process
   stepMaxProcess = new FLASHStepMax();
 

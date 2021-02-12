@@ -32,13 +32,18 @@
 #include "FLASHPrimaryGeneratorAction.hh"
 #include "FLASHPrimaryGeneratorMessenger.hh"
 
-#include "globals.hh"
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
+#include "G4AutoLock.hh"
+namespace { G4Mutex myGeneratePrimaries = G4MUTEX_INITIALIZER; }
+
+
+#include <iostream>
+#include <fstream>
   
 FLASHPrimaryGeneratorAction::FLASHPrimaryGeneratorAction()
 {
@@ -80,19 +85,19 @@ void FLASHPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   // Define the parameters of the initial position: 
   // the y, z coordinates have a gaussian distribution 
   
-  G4double defaultX0 = -1000.0 *CLHEP::mm;                 
+  G4double defaultX0 = -1000.0 *mm;                 
   X0 = defaultX0;
 
-  G4double defaultY0 = 0.0 *CLHEP::mm;  
+  G4double defaultY0 = 0.0 *mm;  
   Y0 = defaultY0;
 
-  G4double defaultZ0 = 0.0 *CLHEP::mm;  
+  G4double defaultZ0 = 0.0 *mm;  
   Z0 = defaultZ0;
 
-  G4double defaultsigmaY = 1. *CLHEP::mm;  
+  G4double defaultsigmaY = 1. *mm;  
   sigmaY = defaultsigmaY;
 
-  G4double defaultsigmaZ = 1. *CLHEP::mm;  
+  G4double defaultsigmaZ = 1. *mm;  
   sigmaZ = defaultsigmaZ;
 
   // Define the parameters of the momentum of primary particles: 
@@ -106,13 +111,13 @@ void FLASHPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   sigmaMomentumZ = defaultsigmaMomentumZ;
 */
   //this value will be changed as soon as specs are public
-  G4double defaultTheta = 6.0 *CLHEP::deg;  
+  G4double defaultTheta = 6.0 *deg;  
   Theta = defaultTheta;
-
 }
 
 void FLASHPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  G4AutoLock lock(&myGeneratePrimaries);
   // ****************************************
   // Set the beam angular apread 
   // and spot size
@@ -133,8 +138,9 @@ void FLASHPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     {
       z += G4RandGauss::shoot( Z0, sigmaZ );
     }
+
   //for now we use particle gun. In version 2 of FLASH we will use gps
-  particleGun -> SetParticlePosition(G4ThreeVector( x , y , z ) );
+  particleGun -> SetParticlePosition(G4ThreeVector( x , y, z ) );
  
   // ********************************************
   // Set the beam energy and energy spread
@@ -169,35 +175,45 @@ void FLASHPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double Mx;    
   G4double My;
   G4double Mz;
-  G4double condition;
+  // G4double Theta = 6.0 *deg;  
+
+  do
+  {
+    Mx =  G4RandFlat::shoot(0.7,1);
+    My =  G4RandFlat::shoot(-0.3,0.3); // ranges good for 0<Theta<20
+    Mz =  G4RandFlat::shoot(-0.3,0.3);
+
+  } while (Mx> std::cos(Theta / deg * 0.0174533));
   
-while (true)  {
 
-  //Mx =  CLHEP::RandFlat::shoot(0.9,1);
-  //My =  CLHEP::RandFlat::shoot(-0.1,0.1);
-  //Mz =  CLHEP::RandFlat::shoot(-0.1,0.1);
+  
+// while (true)  {
 
-  Mx =  CLHEP::RandFlat::shoot(0.7,1);
-  My =  CLHEP::RandFlat::shoot(-0.3,0.3); // ranges good for 0<Theta<20
-  Mz =  CLHEP::RandFlat::shoot(-0.3,0.3);
+//   //Mx =  CLHEP::RandFlat::shoot(0.9,1);
+//   //My =  CLHEP::RandFlat::shoot(-0.1,0.1);
+//   //Mz =  CLHEP::RandFlat::shoot(-0.1,0.1);
 
-  condition = std::sqrt(Mx*Mx + My*My + Mz*Mz);
+//   Mx =  G4RandFlat::shoot(0.7,1);
+//   My =  G4RandFlat::shoot(-0.3,0.3); // ranges good for 0<Theta<20
+//   Mz =  G4RandFlat::shoot(-0.3,0.3);
+
+//   condition = std::sqrt(Mx*Mx + My*My + Mz*Mz);
 
  
-  if (condition < 1)  {
-    Mx = Mx/condition;
-    My = My/condition;
-    Mz = Mz/condition;
+//   if (condition < 1)  {
+//     Mx = Mx/condition;
+//     My = My/condition;
+//     Mz = Mz/condition;
 
 
-    if (Mx > std::cos(Theta)) { 
-      break;
-        }
-    }
-}
+//     if (Mx > std::cos(Theta)) { 
+//       break;
+//         }
+//     }
+// }
   
  
-  particleGun ->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection( G4ThreeVector(Mx,My,Mz) );
+  particleGun ->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection( G4ThreeVector(Mx,My,Mz).unit() );
   
 
   // Generate a primary particle

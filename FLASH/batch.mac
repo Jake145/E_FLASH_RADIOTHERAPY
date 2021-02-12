@@ -26,19 +26,19 @@
 ##########################
 # Visualisation 
 #
-/vis/scene/create
-/vis/open OGL
-/vis/viewer/flush
+#/vis/scene/create
+#/vis/open OGL
+#/vis/viewer/flush
 #/vis/viewer/set/style solid 
-/vis/viewer/set/auxiliaryEdge true
+#/vis/viewer/set/auxiliaryEdge true
 #/vis/viewer/set/viewpointThetaPhi 30 140 deg
-/vis/viewer/zoom 1
-/vis/viewer/pan -10  0 cm
+#/vis/viewer/zoom 1
+#/vis/viewer/pan -10  0 cm
 #/vis/scene/add/trajectories
-/vis/scene/endOfEventAction accumulate 
-/vis/scene/add/axes            0 0 0 1000 mm
+#/vis/scene/endOfEventAction accumulate 
+#/vis/scene/add/axes            0 0 0 1000 mm
 #/vis/viewer/update  # new
-/vis/ogl/set/displayListLimit 5000000
+#/vis/ogl/set/displayListLimit 5000000
 
 ##########################
 # Definition of the GUI

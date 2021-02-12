@@ -55,7 +55,10 @@ target_link_libraries(flash_therapy ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(flash_therapy_SCRIPTS
-    batch.mac defaultMacro.mac)
+    batch.mac 
+    defaultMacro.mac
+    vis.mac
+    init_vis.mac)
 
 foreach(_script ${flash_therapy_SCRIPTS})
   configure_file(
