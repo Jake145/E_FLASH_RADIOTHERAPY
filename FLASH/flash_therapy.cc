@@ -55,7 +55,7 @@
 #include "G4Threading.hh" 
 
 
-#include "G4RunManagerFactory.hh"
+#include "G4MTRunManager.hh"
 #include "QBBC.hh"
 
 
@@ -68,8 +68,8 @@ int main(int argc ,char ** argv)
 
   // Construct the default run manager
   //
-  auto* runManager =
-    G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+  auto* runManager = new G4MTRunManager;
+  //  G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
 
   runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
 

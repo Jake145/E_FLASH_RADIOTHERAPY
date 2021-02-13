@@ -38,7 +38,7 @@
 #include "FLASHDetectorConstruction.hh"
 #include "FLASHEventActionMessenger.hh"
 
-FLASHEventAction::FLASHEventAction(FLASHRunAction* runAction) :
+FLASHEventAction::FLASHEventAction() :
   drawFlag("all" ),printModulo(1000), pointerEventMessenger(0)
 { 
   pointerEventMessenger = new FLASHEventActionMessenger(this);

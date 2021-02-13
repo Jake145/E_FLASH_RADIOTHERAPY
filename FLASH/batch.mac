@@ -201,9 +201,9 @@
 #
 /score/list  
 #/DeleteProtectionDisc/delete
-#/run/beamOn	500000
+/run/beamOn	500000
 #/run/beamOn  211950
-/run/beamOn 5
+#/run/beamOn 5
 /score/drawProjection boxMesh_1 dose 
 /score/dumpQuantityToFile boxMesh_1 dose dose.out
 

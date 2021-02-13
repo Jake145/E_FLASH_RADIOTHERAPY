@@ -26,7 +26,7 @@
 
 
 #
-/vis/viewer/set/style surface
+/vis/viewer/set/style wireframe
 /vis/viewer/set/hiddenMarker true
 /vis/viewer/set/viewpointThetaPhi 120 150
 #

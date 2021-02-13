@@ -169,6 +169,6 @@
 /score/close
 #
 /score/list  
-/run/beamOn	10000
+/run/beamOn	50 000 000
 /score/dumpQuantityToFile boxMesh_1 dose ../results/dose.out
 
