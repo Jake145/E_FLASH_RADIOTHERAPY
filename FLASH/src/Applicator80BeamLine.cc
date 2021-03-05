@@ -147,7 +147,7 @@ Applicator80BeamLine::Applicator80BeamLine():
 Applicator80BeamLine::~Applicator80BeamLine()
 {
   
-  delete flashDetectorConstruction;
+  //delete flashDetectorConstruction;
 }
 
 
@@ -163,7 +163,8 @@ G4VPhysicalVolume* Applicator80BeamLine::Construct()
 
   
   // FLASHDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
-  flashDetectorConstruction = new FLASHDetectorConstruction(physicalTreatmentRoom); 
+  
+  //flashDetectorConstruction = new FLASHDetectorConstruction(physicalTreatmentRoom); 
   
   return physicalTreatmentRoom;
 }

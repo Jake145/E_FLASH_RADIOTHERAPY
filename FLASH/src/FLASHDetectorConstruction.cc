@@ -55,17 +55,26 @@
 #include "G4PSDoseDeposit3D.hh"
 #include "FLASHDetectorMessenger.hh"
 
+#include "G4SDManager.hh"
+
+#include "G4PSEnergyDeposit.hh"
+#include "G4PSDoseDeposit.hh"
+
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 /////////////////////////////////////////////////////////////////////////////
 FLASHDetectorConstruction::FLASHDetectorConstruction(G4VPhysicalVolume* physicalTreatmentRoom)
-  : motherPhys(physicalTreatmentRoom), // pointer to WORLD volume 
-    phantom(0), detector(0),
-    phantomLogicalVolume(0), detectorLogicalVolume(0), 
-    phantomPhysicalVolume(0), detectorPhysicalVolume(0),
+:G4VUserDetectorConstruction(),
+    motherPhys(physicalTreatmentRoom), // pointer to WORLD volume 
+    phantom(0), 
+    phantomLogicalVolume(0), 
+    phantomPhysicalVolume(0), 
     aRegion(0)
-
 {
 
+ 
   
+
 
   // Messenger to change parameters of the phantom/detector geometry
   detectorMessenger = new FLASHDetectorMessenger(this);
@@ -76,23 +85,29 @@ FLASHDetectorConstruction::FLASHDetectorConstruction(G4VPhysicalVolume* physical
   // Construct geometry (messenger commands)
 
   // Detector
-  // Default detector sizes in cm!!!!
-  detectorSizeX = 6.* cm;
-  detectorSizeY = 10.* cm;
-  detectorSizeZ = 10.* cm;
+  // Default crystal sizes
+  G4double cryst_dX = 1*cm, cryst_dY = 1*mm, cryst_dZ = 1*mm;
+  G4double gap = 0*mm;        //a gap for wrapping, change to add gap
+  G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap ;
+// optic fiber
+  //
+  G4double opticfiber_core_dx= 5*cm;
+   G4double opticfiber_core_radius=980*um;
+   G4double optic_fiber_clad_radius=1000*um;
 
-  SetDetectorSize(detectorSizeX,  detectorSizeY,  detectorSizeZ); 
  
   // Phantom 
   SetPhantomSize(20. *cm, 20. *cm, 20. *cm);   
   SetPhantomPosition(G4ThreeVector(-99.4 *mm, 0. *mm, 0. *mm)); 
-  SetDetectorToPhantomPosition(G4ThreeVector(0 *mm, 50 *mm, 50 *mm));  
+  SetDetectorPosition(G4ThreeVector(-99.4 *mm, 0. *mm, 0. *mm));  
 
  
 
   // Write virtual parameters to the real ones and check for consistency      
-  UpdateGeometry(); 
+  //UpdateGeometry(); 
+DefineMaterials();
 }
+
 
 /////////////////////////////////////////////////////////////////////////////
 FLASHDetectorConstruction::~FLASHDetectorConstruction()
@@ -109,6 +124,7 @@ FLASHDetectorConstruction::~FLASHDetectorConstruction()
 
 void FLASHDetectorConstruction::ConstructPhantom()
 {
+
     // Definition of the solid volume of the Phantom
     phantom = new G4Box("Phantom", 
 			phantomSizeX/2, 
@@ -139,51 +155,90 @@ void FLASHDetectorConstruction::ConstructPhantom()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// ConstructDetector() it the method the reconstruct a detector region 
-// inside the water phantom. It is a volume, located inside the water phantom
-// and with two coincident faces:
-//
-//           **************************
-//           *   water phantom        *
-//           *                        *
-//           *                        *
-//           *---------------         *
-//  Beam     *              -         *
-//  ----->   * detector     -         *
-//           *              -         *
-//           *---------------         *
-//           *                        *
-//           *                        *
-//           *                        *
-//           **************************
-//
+void FLASHDetectorConstruction::DefineMaterials()
+{
+  G4NistManager* man = G4NistManager::Instance();
+  
+  G4bool isotopes = false;
+  
+  G4Element*  O = man->FindOrBuildElement("O" , isotopes); 
+  G4Element* Si = man->FindOrBuildElement("Si", isotopes);
+  G4Element* Lu = man->FindOrBuildElement("Lu", isotopes); 
+  G4Element* Y = man->FindOrBuildElement("Y", isotopes); 
+  
+  G4Material* LYSO = new G4Material("Lu2Y2SiO5", 7.3*g/cm3, 4);
+  LYSO->AddElement(Lu, 2);
+  LYSO->AddElement(Si, 1);
+  LYSO->AddElement(O , 5);
+  LYSO->AddElement(Y,2);
+  
+
+    
+}
 
 void FLASHDetectorConstruction::ConstructDetector()
 {
+G4bool isotopes = false;
+G4NistManager* nist = G4NistManager::Instance();
+  G4Material* default_mat = nist->FindOrBuildMaterial("G4_AIR");
+  G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2Y2SiO5");
+  G4Material* PMMA = G4NistManager::Instance()->FindOrBuildMaterial("G4_PLEXIGLASS", 
+  isotopes);
+  G4Material* PE = G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE", 
+  isotopes);    
 
-    // Definition of the solid volume of the Detector
-    detector = new G4Box("Detector", 
-			 detectorSizeX/2, 
-			 detectorSizeY/2, 
-			 detectorSizeZ/2);
+G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, cryst_dZ/2);
+                     
+  G4LogicalVolume* logicCryst = 
+    new G4LogicalVolume(solidCryst,          //its solid
+                        cryst_mat,           //its material
+                        "CrystalLV");        //its name
+G4RotationMatrix rotm  = G4RotationMatrix();
+    rotm.rotateY(90*deg); 
     
-    // Definition of the logic volume of the Phantom
-    detectorLogicalVolume = new G4LogicalVolume(detector,
-						detectorMaterial,
-						"DetectorLog",
-						0,0,0);
-// Definition of the physical volume of the Phantom 
-    detectorPhysicalVolume = new G4PVPlacement(0, 
-					       detectorPosition, // Setted by displacement 
-					       "DetectorPhys", 
-					       detectorLogicalVolume, 
-					       phantomPhysicalVolume, 
-					       false,0);
-
-// Visualisation attributes of the detector 
+    G4ThreeVector position = G4ThreeVector(-99.4*mm,  0.*mm,0.*mm);     
+    G4Transform3D transform = G4Transform3D(rotm,position);
+                                    
+    G4VPhysicalVolume* physcryst=new G4PVPlacement(transform,logicCryst,            
+                      "crystal",         
+                      phantomLogicalVolume,
+                      false,0);                  
+  G4Tubs* opticfiber_core =
+    new G4Tubs("OF_core", 0.*cm, opticfiber_core_radius, opticfiber_core_dx, 0., CLHEP::twopi);
+      
+  G4LogicalVolume* opticfiber_core_log =                         
+    new G4LogicalVolume(opticfiber_core,       //its solid
+                        PMMA,         //its material
+                        "OF_core_LV");         //its name
+  G4Tubs* opticfiber_clad =
+    new G4Tubs("OF_clad", opticfiber_core_radius,optic_fiber_clad_radius, opticfiber_core_dx, 0., twopi);
+      
+  G4LogicalVolume* opticfiber_clad_log =                         
+    new G4LogicalVolume(opticfiber_clad,       //its solid
+                        PE,         //its material
+                        "OF_clad_LV");         //its name
+  G4ThreeVector position_opt = G4ThreeVector(-99.4*mm + dX/2,  0.*mm,0.*mm);     
+    G4Transform3D transform_opt = G4Transform3D(rotm,position_opt); 
+  // place rings within detector 
+  //
+    G4VPhysicalVolume* physclad=new G4PVPlacement(transform,                     // rotation
+                       //position
+                      opticfiber_clad_log,             //its logical volume
+                      "outerfiber",                //its name
+                      phantomLogicalVolume,false,0);                 //no boolean operation
+                             // checking overlaps 
+    G4VPhysicalVolume* physcore=new G4PVPlacement(transform,                     // rotation
+                           //position
+                          opticfiber_core_log,             //its logical volume
+                          "OF_clad_LV",                //its name
+                          opticfiber_clad_log,false,0);                 //no boolean operation
+                                 // checking overlaps 
+    
    
     G4VisAttributes * skyBlue1 = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
-    detectorLogicalVolume -> SetVisAttributes(skyBlue1);
+    logicCryst -> SetVisAttributes(skyBlue1);
+    opticfiber_core_log -> SetVisAttributes(skyBlue1);
+    opticfiber_clad_log -> SetVisAttributes(skyBlue1);
    
   // **************
   // Cut per Region    
@@ -193,17 +248,17 @@ void FLASHDetectorConstruction::ConstructDetector()
   // required accuracy 
     if (!aRegion)
     {
-	aRegion = new G4Region("DetectorLog");
-	detectorLogicalVolume -> SetRegion(aRegion);
-	aRegion -> AddRootLogicalVolume(detectorLogicalVolume);
+	aRegion = new G4Region("crystal");
+	logicCryst -> SetRegion(aRegion);
+	aRegion -> AddRootLogicalVolume(logicCryst);
     }
- G4cout << "The Detector has been built --- Add a scoring mesh for it  in the GUI if appropriate (similar to the phantom one)" << G4endl;
+ G4cout << "The Crystal has been built --- Add a scoring mesh for it  in the GUI if appropriate (similar to the phantom one)" << G4endl;
  
 }
 
 
 /////////////////////////////////////////////////////////////////////////////
-
+/*
 void  FLASHDetectorConstruction::ParametersCheck()
 {
     // Check phantom/detector sizes & relative position
@@ -216,7 +271,7 @@ void  FLASHDetectorConstruction::ParametersCheck()
 		detectorToPhantomPosition
 		))
       G4Exception("FLASHDetectorConstruction::ParametersCheck()", "FLASH0001", FatalException, "Error: Detector is not fully inside Phantom!");
-}
+}*/
 
 /////////////////
 // MESSENGERS //
@@ -228,10 +283,8 @@ G4bool FLASHDetectorConstruction::SetPhantomMaterial(G4String material)
     if (G4Material* pMat = G4NistManager::Instance()->FindOrBuildMaterial(material, false) )
     {
 	phantomMaterial  = pMat;
-	detectorMaterial = pMat;
-	if (detectorLogicalVolume && phantomLogicalVolume) 
+	if (phantomLogicalVolume) 
 	{
-	    detectorLogicalVolume -> SetMaterial(pMat); 
 	    phantomLogicalVolume ->  SetMaterial(pMat);
 
 	    G4RunManager::GetRunManager() -> PhysicsHasBeenModified();
@@ -264,9 +317,9 @@ void FLASHDetectorConstruction::SetPhantomSize(G4double sizeX, G4double sizeY, G
 /////////////////////////////////////////////////////////////////////////////
 void FLASHDetectorConstruction::SetDetectorSize(G4double sizeX, G4double sizeY, G4double sizeZ)
 {
-    if (sizeX > 0.) {detectorSizeX = sizeX;}
-    if (sizeY > 0.) {detectorSizeY = sizeY;}
-    if (sizeZ > 0.) {detectorSizeZ = sizeZ;}
+    if (sizeX > 0.) {cryst_dX = sizeX;}
+    if (sizeY > 0.) {cryst_dY = sizeY;}
+    if (sizeZ > 0.) {cryst_dZ = sizeZ;}
 }
 /////////////////////////////////////////////////////////////////////////////
 
@@ -280,18 +333,17 @@ void FLASHDetectorConstruction::SetPhantomPosition(G4ThreeVector pos)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void FLASHDetectorConstruction::SetDetectorToPhantomPosition(G4ThreeVector displ)
+void FLASHDetectorConstruction::SetDetectorPosition(G4ThreeVector displ)
 {
-    detectorToPhantomPosition = displ;
+    position = displ;
+    position_opt=displ+G4ThreeVector(dX/2,dY/2,dZ/2);
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
+/*
 void FLASHDetectorConstruction::UpdateGeometry()
 {
-    /* 
-     * Check parameters consistency
-     */
     ParametersCheck();
 
     G4GeometryManager::GetInstance() -> OpenGeometry();
@@ -306,12 +358,11 @@ void FLASHDetectorConstruction::UpdateGeometry()
 
     // Get the center of the detector 
     SetDetectorPosition();
-    if (detector)
+    if (solidCryst)
     {
-	detector -> SetXHalfLength(detectorSizeX/2);
-	detector -> SetYHalfLength(detectorSizeY/2);
-	detector -> SetZHalfLength(detectorSizeZ/2);
-	detectorPhysicalVolume -> SetTranslation(detectorPosition);      
+	
+	solidCryst -> SetZHalfLength(dZ/2);
+	physcryst -> SetTranslation(position);      
     }
     else    ConstructDetector();
 
@@ -324,7 +375,7 @@ void FLASHDetectorConstruction::UpdateGeometry()
     PrintParameters();
 }
 
-
+*/
 
 void FLASHDetectorConstruction::PrintParameters()
 {
@@ -334,10 +385,9 @@ void FLASHDetectorConstruction::PrintParameters()
 	G4BestUnit( phantom -> GetYHalfLength()*2., "Length") << ',' << 
 	G4BestUnit( phantom -> GetZHalfLength()*2., "Length") << ')' << G4endl; 
     
-    G4cout << "The (X,Y,Z) dimensions of the detector are : (" << 
-	G4BestUnit( detector -> GetXHalfLength()*2., "Length") << ',' << 
-	G4BestUnit( detector -> GetYHalfLength()*2., "Length") << ',' << 
-	G4BestUnit( detector -> GetZHalfLength()*2., "Length") << ')' << G4endl; 
+    G4cout << "The Z dimension of the crystal are : (" << 
+	
+	G4BestUnit( solidCryst -> GetZHalfLength()*2., "Length") << ')' << G4endl; 
 
     G4cout << "Displacement between Phantom and World is: "; 
     G4cout << "DX= "<< G4BestUnit(phantomPosition.getX(),"Length") << 
@@ -345,3 +395,17 @@ void FLASHDetectorConstruction::PrintParameters()
 	"DZ= "<< G4BestUnit(phantomPosition.getZ(),"Length") << G4endl;
 }
 
+void FLASHDetectorConstruction::ConstructSDandField()
+{
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+  
+  // declare crystal as a MultiFunctionalDetector scorer
+  //  
+  G4MultiFunctionalDetector* cryst = new G4MultiFunctionalDetector("crystal");
+  G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
+  G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
+  cryst->RegisterPrimitive(primitiv1);
+  SetSensitiveDetector("CrystalLV",cryst);
+  
+  
+}

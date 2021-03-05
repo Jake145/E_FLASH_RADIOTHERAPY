@@ -37,18 +37,18 @@
 #include "G4LogicalVolume.hh"
 #include "G4UnitsTable.hh"
 #include "G4Tubs.hh"
-
+#include "G4VUserDetectorConstruction.hh"
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class FLASHDetectorMessenger;
 
-class FLASHDetectorConstruction 
+class FLASHDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
 
   FLASHDetectorConstruction(G4VPhysicalVolume*);
 
-  ~FLASHDetectorConstruction();
+  virtual ~FLASHDetectorConstruction();
 
   //  G4VPhysicalVolume *detectorPhysicalVolume;  aggiunto
 
@@ -58,22 +58,29 @@ private:
   void ConstructDetector();
   
   void ConstructSensitiveDetector();
-  void ParametersCheck();
+  //void ParametersCheck();
+
+    void DefineMaterials();
 
 public: 
+    //virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
+               
+  
+
 // Get detector position relative to WORLD
 inline G4ThreeVector GetDetectorToWorldPosition()
   {
-    return phantomPosition + detectorPosition;
+    return phantomPosition + position;
   }
 
 /////////////////////////////////////////////////////////////////////////////
 // Get displacement between phantom and detector by detector position (center of), phantom (center of) and detector sizes
 inline G4ThreeVector GetDetectorToPhantomPosition()
 {
-    return G4ThreeVector(phantomSizeX/2 - detectorSizeX/2 + detectorPosition.getX(),
-                         phantomSizeY/2 - detectorSizeY/2 + detectorPosition.getY(),
-                         phantomSizeZ/2 - detectorSizeZ/2 + detectorPosition.getZ()
+    return G4ThreeVector(phantomSizeX/2 - dX/2 + position.getX(),
+                         phantomSizeY/2 - dY/2 + position.getY(),
+                         phantomSizeZ/2 - dZ/2 + position.getZ()
 		          );
 }
 
@@ -82,15 +89,15 @@ inline G4ThreeVector GetDetectorToPhantomPosition()
 inline void SetDetectorPosition()
   {
 	  // Adjust detector position
-	  detectorPosition.setX(detectorToPhantomPosition.getX() - phantomSizeX/2 + detectorSizeX/2);
-	  detectorPosition.setY(detectorToPhantomPosition.getY() - phantomSizeY/2 + detectorSizeY/2);
-	  detectorPosition.setZ(detectorToPhantomPosition.getZ() - phantomSizeZ/2 + detectorSizeZ/2);
+	  position.setX(position.getX());
+	  position.setY(position.getY());
+	  position.setZ(position.getZ());
      
     //G4cout << "*************** DetectorToPhantomPosition " << detectorToPhantomPosition/cm << "\n";
     //G4cout << "*************** DetectorPosition " << detectorPosition/cm << "\n";
   }
 /////////////////////////////////////////////////////////////////////////////
-// Check whether detector is inside phantom
+/*
 inline bool IsInside(G4double detectorX,
 		     G4double detectorY,
 		     G4double detectorZ,
@@ -99,6 +106,7 @@ inline bool IsInside(G4double detectorX,
 		     G4double phantomZ,
 		     G4ThreeVector detToPhantomPosition)
 {
+
 // Dimensions check... X Y and Z
 // Firstly check what dimension we are modifying
 	{
@@ -141,7 +149,7 @@ inline bool IsInside(G4double detectorX,
 	}
 
 	return true;
-}
+}*/
 /////////////////////////////////////////////////////////////////////////////
 
   G4bool  SetPhantomMaterial(G4String material);
@@ -149,12 +157,12 @@ inline bool IsInside(G4double detectorX,
   void SetDetectorSize(G4double sizeX, G4double sizeY, G4double sizeZ);
   void SetPhantomSize(G4double sizeX, G4double sizeY, G4double sizeZ);
   void SetPhantomPosition(G4ThreeVector);
-  void SetDetectorToPhantomPosition(G4ThreeVector DetectorToPhantomPosition);
-  void UpdateGeometry();
+  void SetDetectorPosition(G4ThreeVector position);
+  //void UpdateGeometry();
   
 
   void PrintParameters();
-  G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
+  //G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
 
   
 
@@ -168,21 +176,31 @@ private:
 
   G4VPhysicalVolume* motherPhys;
 
-  G4Box *phantom , *detector;
-  G4LogicalVolume *phantomLogicalVolume, *detectorLogicalVolume; 
-  G4VPhysicalVolume *phantomPhysicalVolume,   *detectorPhysicalVolume;
+  G4Box *phantom ;
+  G4Tubs *solidCryst, *opticfiber_core, *opticfiber_clad;
+  G4LogicalVolume *phantomLogicalVolume, *logicCryst,*opticfiber_core_log,*opticfiber_clad_log; 
+  G4VPhysicalVolume *phantomPhysicalVolume,   *physcryst, *physclad, *physcore;
   
   G4double phantomSizeX; 
   G4double phantomSizeY; 
   G4double phantomSizeZ;
 
-  G4double detectorSizeX; 
-  G4double detectorSizeY; 
-  G4double detectorSizeZ;
+  G4double dX; 
+  G4double dY; 
+  G4double dZ;
 
-  G4ThreeVector phantomPosition, detectorPosition, detectorToPhantomPosition; //  phantom center, detector center, detector to phantom relative position
+  G4double cryst_dX; 
+  G4double cryst_dY; 
+  G4double cryst_dZ;
 
-  G4Material *phantomMaterial, *detectorMaterial;
+G4double gap;
+G4double opticfiber_core_dx;
+G4double opticfiber_core_radius; 
+G4double optic_fiber_clad_radius;
+
+  G4ThreeVector phantomPosition, position, position_opt; //  phantom center, detector center, detector to phantom relative position
+
+  G4Material *phantomMaterial;
   G4Region* aRegion;
   
   

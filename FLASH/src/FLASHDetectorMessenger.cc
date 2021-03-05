@@ -165,7 +165,7 @@ void FLASHDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   else if (command == changeTheDetectorToPhantomPositionCmd)
   {
 	G4ThreeVector size = changeTheDetectorToPhantomPositionCmd-> GetNew3VectorValue(newValue);
-        flashDetector -> SetDetectorToPhantomPosition(size);
+        flashDetector -> SetDetectorPosition(size);
   }
   else if (command == changeTheDetectorVoxelCmd)
   {
@@ -173,11 +173,11 @@ void FLASHDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
         flashDetector -> SetVoxelSize(size.getX(),size.getY(),size.getZ());
   }
 
-
+/*
   else if (command == updateCmd)
   {
       flashDetector -> UpdateGeometry();
   }
 
-  
+  */
 }
