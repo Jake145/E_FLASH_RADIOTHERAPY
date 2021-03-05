@@ -34,7 +34,6 @@
 // 
 //  ----------------------------------------------------------------------------
 
-#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
@@ -42,29 +41,41 @@
 #include "FLASHPhysicsList.hh"
 #include "FLASHPrimaryGeneratorAction.hh"
 #include "FLASHRunAction.hh"
-#include "Randomize.hh"  
-#include "G4RunManager.hh"
+#include "Randomize.hh"
+#include "FLASHActionInitialization.hh"
 #include "G4UImessenger.hh"
-#include "globals.hh"
 #include "FLASHSteppingAction.hh"
-#include "FLASHGeometryController.hh"
-#include "FLASHGeometryMessenger.hh"
+// #include "FLASHGeometryController.hh"
+// #include "FLASHGeometryMessenger.hh"
+#include "Applicator80BeamLine.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-#include <ctime>
 #include "G4ScoringManager.hh"
+#include "G4SystemOfUnits.hh" 
+#include "G4Threading.hh" 
+
+
+#include "G4MTRunManager.hh"
+#include "QBBC.hh"
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 int main(int argc ,char ** argv)
 {
-  // Set the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
 
-//  G4int seed = time(NULL); 
- // CLHEP::HepRandom::setTheSeed(seed);
-  
-  G4RunManager* runManager = new G4RunManager;
+
+
+  // Construct the default run manager
+  //
+  auto* runManager = new G4MTRunManager;
+  //  G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+
+  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+
+  // Comment to unset the seed.
+  // G4Random::setTheSeed(548235486);
+
 
   G4ScoringManager::GetScoringManager();
   // Scoring mesh
@@ -72,16 +83,31 @@ int main(int argc ,char ** argv)
   // Geometry controller is responsible for instantiating the
   // geometries. All geometry specific setup tasks are now in class
   // FLASHGeometryController.
-  FLASHGeometryController *geometryController = new FLASHGeometryController();
+  // FLASHGeometryController *geometryController = new FLASHGeometryController();
 	
   // Connect the geometry controller to the G4 user interface
-  FLASHGeometryMessenger *geometryMessenger = new FLASHGeometryMessenger(geometryController);
+  // FLASHGeometryMessenger *geometryMessenger = new FLASHGeometryMessenger(geometryController);
 		
   // Initialize the default FLASH geometry
-  geometryController->SetGeometry("default");  
+  // geometryController->SetGeometry("default");  
 
+  // Initialize the physic list
   runManager->SetUserInitialization(new FLASHPhysicsList());
 
+
+  runManager->SetUserInitialization(new Applicator80BeamLine());
+
+  // Physics list
+  // G4VModularPhysicsList* physicsList = new QBBC;
+  // physicsList->SetVerboseLevel(1);
+  // runManager->SetUserInitialization(physicsList);
+
+
+  // Initialize the user actions
+  runManager->SetUserInitialization(new FLASHActionInitialization());
+
+
+  /*
   // Initialize the primary particles
   FLASHPrimaryGeneratorAction *pPrimaryGenerator = new FLASHPrimaryGeneratorAction();
   runManager -> SetUserAction(pPrimaryGenerator);
@@ -96,23 +122,25 @@ int main(int argc ,char ** argv)
   FLASHSteppingAction* steppingAction = new FLASHSteppingAction(pRunAction); 
   runManager -> SetUserAction(steppingAction);    
 
+  */
+
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager -> Initialize();
 	
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-  if (argc!=1)   // batch mode
+   if (argc!=1)   // batch mode
     {
+    
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);  
     }
   else
     {  // interactive mode : define UI session
-       
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
   
-      UImanager->ApplyCommand("/control/execute defaultMacro.mac"); 
+      UImanager->ApplyCommand("/control/execute init_vis.mac"); 
 
       if (ui->IsGUI())
       ui->SessionStart();
@@ -122,8 +150,8 @@ int main(int argc ,char ** argv)
 
   delete visManager;           
 
-  delete geometryMessenger;
-  delete geometryController;
+  // delete geometryMessenger;
+  // delete geometryController;
   delete runManager;
   return 0;
   
