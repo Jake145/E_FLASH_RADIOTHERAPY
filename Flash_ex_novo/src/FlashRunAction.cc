@@ -42,7 +42,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashRunAction::FlashRunAction()
-: G4UserRunAction(),fSumDose(0.){
+: G4UserRunAction() //,fSumDose(0.)
+{
+/*
 const G4double milligray = 1.e-3*gray;
   const G4double microgray = 1.e-6*gray;
   const G4double nanogray  = 1.e-9*gray;  
@@ -56,7 +58,7 @@ const G4double milligray = 1.e-3*gray;
   // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
 
-  accumulableManager->RegisterAccumulable(fSumDose); 
+  accumulableManager->RegisterAccumulable(fSumDose); */
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,8 +68,9 @@ FlashRunAction::~FlashRunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashRunAction::BeginOfRunAction(const G4Run* run)
-{ 
+//void FlashRunAction::BeginOfRunAction(const G4Run* run)
+void FlashRunAction::BeginOfRunAction(const G4Run*)
+{ /*
    G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
   
   // reset accumulables to their initial values
@@ -75,14 +78,15 @@ void FlashRunAction::BeginOfRunAction(const G4Run* run)
   accumulableManager->Reset();
   
   //inform the runManager to save random number seed
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false); */
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashRunAction::EndOfRunAction(const G4Run* run)
-{
+//void FlashRunAction::EndOfRunAction(const G4Run* run)
+void FlashRunAction::EndOfRunAction(const G4Run*)
+{/*
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
   
@@ -98,7 +102,7 @@ void FlashRunAction::EndOfRunAction(const G4Run* run)
      << " Total dose in scintillator : " << G4BestUnit(fSumDose.GetValue(),"Dose") 
      << G4endl 
      << "------------------------------------------------------------" << G4endl 
-     << G4endl;
+     << G4endl; */
   }
         
   

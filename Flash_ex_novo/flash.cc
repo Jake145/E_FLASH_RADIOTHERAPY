@@ -47,7 +47,7 @@
 #include "FlashActionInitialization.hh"
 #include "FlashAnalysis.hh"
 #include "Applicator80BeamLine.hh"
-
+#include "G4TScoreNtupleWriterMessenger.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)

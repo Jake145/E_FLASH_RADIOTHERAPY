@@ -35,7 +35,7 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
-
+#include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashPhysicsList::FlashPhysicsList() 
@@ -71,28 +71,28 @@ void FlashPhysicsList::SetCuts()
   regName = "Phantom_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts =new G4ProductionCuts;
-  cuts->SetProductionCut(0.1*CLHEP::mm);
+  cuts->SetProductionCut(0.1*mm);
   region->SetProductionCuts(cuts);
   
   regName = "crystal_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts =new G4ProductionCuts;
-  cuts->SetProductionCut(0.1*CLHEP::mm,G4ProductionCuts::GetIndex("gamma"));
-  cuts->SetProductionCut(0.1*CLHEP::mm,G4ProductionCuts::GetIndex("e-"));
-  cuts->SetProductionCut(0.1*CLHEP::mm,G4ProductionCuts::GetIndex("e+"));
+  cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("gamma"));
+  cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("e-"));
+  cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("e+"));
   //cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("proton"));
   region->SetProductionCuts(cuts);
   
   regName = "OF_core_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts =new G4ProductionCuts;
-  cuts->SetProductionCut(0.1*CLHEP::mm);
+  cuts->SetProductionCut(0.1*mm);
   region->SetProductionCuts(cuts);
   
   regName = "OF_clad_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts =new G4ProductionCuts;
-  cuts->SetProductionCut(0.1*CLHEP::mm);
+  cuts->SetProductionCut(0.1*mm);
   region->SetProductionCuts(cuts);
   
   

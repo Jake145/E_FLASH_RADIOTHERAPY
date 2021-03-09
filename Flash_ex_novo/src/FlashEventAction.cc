@@ -61,12 +61,14 @@ void FlashEventAction::BeginOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashEventAction::EndOfEventAction(const G4Event* evt)
-{    G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+//void FlashEventAction::EndOfEventAction(const G4Event* evt)
+void FlashEventAction::EndOfEventAction(const G4Event*)
+{ /*    
+G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
   G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
     fCollID_cryst   = SDMan->GetCollectionID("crystalSD/edep");
-    /*  
+     
    G4THitsMap<G4double>* evtMap = 
                      (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_cryst));
                      

@@ -35,3 +35,9 @@
 /vis/verbose warnings
 /vis/scene/add/trajectories
 
+/score/create/boxMesh boxMesh_1
+/score/mesh/boxSize 4. 8. 8. cm
+/score/mesh/nBin 40 40 40
+/score/mesh/translate/xyz -164.4 0 0 mm 
+/score/quantity/doseDeposit dose Gy
+/score/drawProjection boxMesh_1 dose 

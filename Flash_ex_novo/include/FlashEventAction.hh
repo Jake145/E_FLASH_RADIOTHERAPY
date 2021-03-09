@@ -50,7 +50,7 @@ class FlashEventAction : public G4UserEventAction //definisco la Event Action ch
 
   private:
     FlashRunAction* fRunAction; 
-    G4int fCollID_cryst;
+    //G4int fCollID_cryst;
 
 };
 

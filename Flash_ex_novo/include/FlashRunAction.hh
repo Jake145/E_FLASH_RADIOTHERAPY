@@ -53,11 +53,11 @@ class FlashRunAction : public G4UserRunAction //dichiaro il run action
     virtual void   EndOfRunAction(const G4Run*);//finisce la run
 
     //void CountEvent()           { fGoodEvents += 1; };
-    void SumDose(G4double dose) { fSumDose += dose; };  
+    //void SumDose(G4double dose) { fSumDose += dose; };  
 
 private:
     //G4Accumulable<G4int>    fGoodEvents;
-    G4Accumulable<G4double> fSumDose;  
+    //G4Accumulable<G4double> fSumDose;  
 };
 
 #endif
