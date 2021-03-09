@@ -22,10 +22,10 @@ The geometry is as described in the optics sheet. In the images one can see in b
 The application outputs a 3d dosemap txt file, however one can visualize the distribution at end of run to see if it makes sense.
 
 ## Validation
-![Validation](/FLASH/VALIDATION/pdddata.png)
+![Validation](/Flash_ex_novo/VALIDATION/pdddata.png)
 There is also a python script to confront experimental PDD with simulation.
 ## Profile 
-![r100](/FLASH/VALIDATION/r100.png)
-![r80](/FLASH/VALIDATION/r80.png)
-![r50](/FLASH/VALIDATION/r50.png)
+![r100](/Flash_ex_novo/VALIDATION/r100.png)
+![r80](/Flash_ex_novo/VALIDATION/r80.png)
+![r50](/Flash_ex_novo/VALIDATION/r50.png)
 Because of low statistics due to computation limitations, there are some fluctuations in the constant part of the profiles.
