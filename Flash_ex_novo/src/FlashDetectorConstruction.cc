@@ -136,7 +136,7 @@ PhantomRegion->AddRootLogicalVolume(phantomLogicalVolume);
     phantomLogicalVolume -> SetVisAttributes(red); 
 
     
-    G4double maxStep = 0.1;
+    G4double maxStep = 0.1*mm;
   fStepLimit = new G4UserLimits(maxStep);
   phantomLogicalVolume->SetUserLimits(fStepLimit);
   
@@ -268,7 +268,7 @@ G4RotationMatrix rotm  = G4RotationMatrix();
     opticfiber_clad_log -> SetVisAttributes(red);
 
     
-   G4double maxStep_det = 0.1;
+   G4double maxStep_det = 0.1*mm;
   fStepLimit = new G4UserLimits(maxStep_det);
   logicCryst->SetUserLimits(fStepLimit);
   

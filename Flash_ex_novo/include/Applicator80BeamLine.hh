@@ -64,7 +64,7 @@ public:
   void FlashBeamLineFinalApplicator();
 
   void SetInnerRadiusFirstApplicatorFlash(G4double); //Fissano i raggi dei pezzi del collimatore
-  void SetOuterRadiusFirstApplicatorFlash(G4double); /
+  void SetOuterRadiusFirstApplicatorFlash(G4double); 
   
   void SetInnerRadiusFinalApplicatorFlash(G4double);
 
