@@ -25,7 +25,7 @@
 //
 //
 /// \file FlashAnalysis.hh
-/// \brief Selection of the analysis technology
+/// \Serve per far salvare i file con l'estenzione appropriata
 
 #ifndef FlashAnalysis_h
 #define FlashAnalysis_h 1

@@ -25,7 +25,7 @@
 //
 //
 /// \file FlashDetectorConstruction.hh
-/// \brief Definition of the FlashDetectorConstruction class
+/// \Classe per costruire il detector
 
 #ifndef FlashDetectorConstruction_h
 #define FlashDetectorConstruction_h 1

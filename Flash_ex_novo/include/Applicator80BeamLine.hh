@@ -42,57 +42,51 @@
 #include "G4SubtractionSolid.hh"  
 
 class G4VPhysicalVolume;
-//class flashDetectorConstruction;
 
 
-class Applicator80BeamLine
+
+class Applicator80BeamLine //definisco la nuova classe della collimazione
 {
 public:
 
  
-   Applicator80BeamLine(G4VPhysicalVolume*);
-  ~Applicator80BeamLine();
+   Applicator80BeamLine(G4VPhysicalVolume*); //il costruttore prende il puntatore al mondo 
+  ~Applicator80BeamLine();			//distruttore
 
-  void ConstructCollimator(G4VPhysicalVolume*);  
+  void ConstructCollimator(G4VPhysicalVolume*);  //metodo per costruire tutta la collimazione 
 
 
-  void FlashBeamLineVacuumSource();
+  void FlashBeamLineVacuumSource();  // qui si costruiscono le varie parti della collimazione
   void FlashBeamLineTitaniumWindows();
   void FlashBeamLineFirstApplicator();
-  //void FlashBeamLineMonitorChambers();
-  //void FlashBeamLineBlocks() ;
+  
   void FlashBeamLineJunctions(); 
   void FlashBeamLineFinalApplicator();
 
-  void SetInnerRadiusFirstApplicatorFlash(G4double); //this sets the inner radius of the first applicator
-  void SetOuterRadiusFirstApplicatorFlash(G4double); //this sets the outer radius of the first applicator
+  void SetInnerRadiusFirstApplicatorFlash(G4double); //Fissano i raggi dei pezzi del collimatore
+  void SetOuterRadiusFirstApplicatorFlash(G4double); /
   
   void SetInnerRadiusFinalApplicatorFlash(G4double);
-  // This method allows to change the size of the inner radius of the 
-  // final applicator
+
+
 
   void SetOuterRadiusFinalApplicatorFlash(G4double);
-  // This method allows to change the size of the outer radius of the 
-  // final applicator
   
-  //  void SetFinalApplicatorFlashMaterial(G4String);
-  // This method allows to change the material 
-  // of the final applicator
 
   
  
 private:
-//Applicator80 line dimensions
-	G4VPhysicalVolume* motherPhys;
-  void SetDefaultDimensions(); 
-  void ConstructApplicator80BeamLine();
-	//FlashDetectorConstruction* flashDetectorConstruction;
+
+	G4VPhysicalVolume* motherPhys; //mondo fisico
+  void SetDefaultDimensions();  //setta le dimensioni di default
+  void ConstructApplicator80BeamLine(); //costruisce tutto l'applicatore
+
  
 
-  //G4VPhysicalVolume* physicalTreatmentRoom;
 
 
-  G4VisAttributes* blue;
+
+  G4VisAttributes* blue; //colori vari
   G4VisAttributes* gray;
   G4VisAttributes* white;
   G4VisAttributes* red;
@@ -103,25 +97,25 @@ private:
   G4VisAttributes* skyBlue;
   G4VisAttributes* magenta;
 
-  // First Applicator Flash
+  // Variabili del primo pezzo del collimatore
   G4double innerRadiusFirstApplicatorFlash, OuterRadiusFirstApplicatorFlash;
   G4Tubs* solidFirstApplicatorFlash;
   G4VPhysicalVolume* physiFirstApplicatorFlash;
   G4Material* firstApplicatorMaterialFlash;
 
-   // Final Applicator Flash
+   // Variabili del secondo pezzo del collimatore
   G4double innerRadiusFinalApplicatorFlash, OuterRadiusFinalApplicatorFlash;
   G4Tubs* solidFinalApplicatorFlash; 
   G4VPhysicalVolume* physiFinalApplicatorFlash;
   G4Material* finalApplicatorMaterialFlash;
-  //oooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoooooooooooooooooo//
 
-  // Junction 1 FINAL COLLIMATOR Flash
+
+  // Primo raccordo tra pezzi di collimatore e altre parti (finestra di titanio ecc)
   G4Tubs* solidGiunz1FinalAppFlash; 
   G4VPhysicalVolume* physiGiunz1FinalAppFlash;
   G4Material* Giunz1FinalAppMaterialFlash;
 
-  // Junction 2 FINAL COLLIMATOR Flash
+  // Secondo raccordo tra pezzi di collimatore e altre parti (finestra di titanio ecc)
   G4Tubs* solidGiunz2FinalAppFlash; 
   G4VPhysicalVolume* physiGiunz2FinalAppFlash;
   G4Material* Giunz2FinalAppMaterialFlash;

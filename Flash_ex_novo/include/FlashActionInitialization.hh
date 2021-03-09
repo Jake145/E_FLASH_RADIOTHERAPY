@@ -32,7 +32,7 @@
 
 #include "G4VUserActionInitialization.hh"
 
-/// Action initialization class.
+/// Classe Action initialization. Serve per il Multithreading
 
 class FlashActionInitialization : public G4VUserActionInitialization
 {
