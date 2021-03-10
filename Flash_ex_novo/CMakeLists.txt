@@ -44,6 +44,7 @@ target_link_libraries(flash ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(flash_SCRIPTS
+  debug.mac
   init_vis.mac
   run1.mac
   vis.mac

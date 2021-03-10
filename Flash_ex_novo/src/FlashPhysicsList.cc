@@ -36,6 +36,7 @@
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4OpticalPhysics.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashPhysicsList::FlashPhysicsList() 
@@ -44,12 +45,17 @@ FlashPhysicsList::FlashPhysicsList()
 
   // Default physics
   RegisterPhysics(new G4DecayPhysics());
-
-  // EM physics
-  RegisterPhysics(new G4EmStandardPhysics());
-
-  // Radioactive decay
+  
+// Radioactive decay
   RegisterPhysics(new G4RadioactiveDecayPhysics());
+  
+  //optical physics
+  RegisterPhysics(new G4OpticalPhysics());
+  
+  // EM physics
+  RegisterPhysics(new G4EmPenelopePhysics());
+
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

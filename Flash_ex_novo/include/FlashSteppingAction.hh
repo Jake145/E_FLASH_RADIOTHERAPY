@@ -50,8 +50,9 @@ class FlashSteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
   private:
+  G4int fparticlecount;
     FlashEventAction*  fEventAction;
-    G4LogicalVolume* fScoringVolume;
+    //G4LogicalVolume* fScoringVolume;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

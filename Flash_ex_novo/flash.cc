@@ -112,6 +112,7 @@ int main(int argc,char** argv)
   // /score/ntuple/writerVerbose level
   G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
   scoreNtupleWriter.SetVerboseLevel(1);
+  
 
   // Process macro or start UI session
   //

@@ -208,7 +208,7 @@ G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
                         cryst_mat,           //its material
                         "CrystalLV");        //its name
 G4RotationMatrix rotm  = G4RotationMatrix();
-    rotm.rotateY(0*deg); 
+    rotm.rotateY(90*deg); 
     
     G4ThreeVector position = G4ThreeVector(-80.0*mm,  0.*mm,0.*mm);     
     G4Transform3D transform = G4Transform3D(rotm,position);
