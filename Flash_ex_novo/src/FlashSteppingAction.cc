@@ -36,7 +36,7 @@
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
-#include "FlashAnalysis.hh"
+//#include "FlashAnalysis.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashSteppingAction::FlashSteppingAction(FlashEventAction* eventAction)
@@ -50,12 +50,12 @@ FlashSteppingAction::~FlashSteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
+void FlashSteppingAction::UserSteppingAction(const G4Step*)
 {
 
-
+/*
  G4String volumeName = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName();
- if(volumeName == "CrystalLV"){
+ //if(volumeName == "CrystalLV"){
  G4int eventid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
  G4int trackID = aStep->GetTrack()->GetTrackID();
@@ -64,8 +64,9 @@ void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
  analysisManager->FillNtupleIColumn(2,0, trackID);
    analysisManager->FillNtupleDColumn(2,1, kineticEnergy); 
       analysisManager->FillNtupleIColumn(2,2, eventid); 
+            analysisManager->FillNtupleSColumn(2,3, volumeName); 
     analysisManager->AddNtupleRow();
- };
+ //};*/
   }
 
  

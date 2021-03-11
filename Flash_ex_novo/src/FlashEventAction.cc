@@ -43,7 +43,7 @@
 
 FlashEventAction::FlashEventAction(FlashRunAction* runAction)
 : G4UserEventAction(),
-  fRunAction(runAction){}
+  fRunAction(runAction),fCollID_cryst(-1){}
    //inizializzo il costruttore dando gli argomenti appropriati alle funzioni
  
 
@@ -62,8 +62,8 @@ void FlashEventAction::BeginOfEventAction(const G4Event*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //void FlashEventAction::EndOfEventAction(const G4Event* evt)
-void FlashEventAction::EndOfEventAction(const G4Event*)
-{ /*    
+void FlashEventAction::EndOfEventAction(const G4Event* evt)
+{     
 G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
   G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
@@ -73,11 +73,11 @@ G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
                      (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_cryst));
                      
   std::map<G4int,G4double*>::iterator itr;
-                   
-  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
+        G4double edep = 0.;           
+  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++){
     ///G4int copyNb  = (itr->first);
-    G4double edep = *(itr->second);}
-    */
+     edep = *(itr->second);};
+    if (edep > 0.) fRunAction->SumEdep(edep);
   
   
 }
