@@ -32,7 +32,7 @@
 
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
-
+#include <fstream>
 class FlashEventAction;
 
 class G4LogicalVolume;
@@ -50,6 +50,8 @@ class FlashSteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
   private:
+  std::ofstream KinEnFile;
+  G4int ThreadNumber;
   G4int fparticlecount;
     FlashEventAction*  fEventAction;
     //G4LogicalVolume* fScoringVolume;
