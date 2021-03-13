@@ -67,6 +67,7 @@ class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe de
 	//G4VPhysicalVolume* motherPhys;
 
 	G4LogicalVolume* phantomLogicalVolume;
+	G4VPhysicalVolume* phant_phys;
 	G4UserLimits* fStepLimit; 
     G4bool  fCheckOverlaps; //booleano per vedere se vi sono degli overlap nella geometria (preso da B3a)
 };
