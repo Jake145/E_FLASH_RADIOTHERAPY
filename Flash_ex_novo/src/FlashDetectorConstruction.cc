@@ -594,6 +594,7 @@ G4LogicalVolume* logicwrapper_little =
                       false,0);           
     
     //OOOOOOOOOOOOOOOOOooooooooooooooOOOOOOOOOOOOOOOOOOOOOooooooooooooooooOOO 
+  /*  
   G4OpticalSurface* opteflonSurface_up = new G4OpticalSurface("teflonSurface_up");
   opteflonSurface_up->SetType(dielectric_LUTDAVIS);
   opteflonSurface_up->SetFinish(Rough_LUT);
@@ -664,7 +665,8 @@ G4LogicalVolume* logicwrapper_little =
   G4OpticalSurface* opticalSurface_6 = dynamic_cast <G4OpticalSurface*>
         (teflonSurface_back->GetSurface(phys_wrap_little,phys_cryst)->
                                                        GetSurfaceProperty());
-  if (opticalSurface_6) opticalSurface_6->DumpInfo();   
+  if (opticalSurface_6) opticalSurface_6->DumpInfo();  
+  */ 
 //OOOOOOOOOOOOOOOOOOOoooooooooooooooooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOO  
                       
   G4Tubs* opticfiber_core =
@@ -711,6 +713,7 @@ G4LogicalVolume* logicwrapper_little =
 //OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
 // Definiamo ora le ultime tre superfici ottiche interessanti
 
+/*
 G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator");
   opcore_scint->SetType(dielectric_LUTDAVIS);
   opcore_scint->SetFinish(Rough_LUT);
@@ -740,7 +743,7 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
                                                        GetSurfaceProperty());
   if (opticalSurface_8) opticalSurface_8->DumpInfo();   
   
-  /*
+  
 G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
   opphantom_clad->SetType(dielectric_LUTDAVIS);
   opphantom_clad->SetFinish(Rough_LUT);
@@ -754,8 +757,8 @@ G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
         (phantom_clad->GetSurface(phant_phys,physclad)->
                                                        GetSurfaceProperty());
   if (opticalSurface_9) opticalSurface_9->DumpInfo();   
-         
-*/
+         */
+
    
     G4VisAttributes * skyBlue1 = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
      skyBlue1->SetVisibility(true);
@@ -804,9 +807,9 @@ void FlashDetectorConstruction::ConstructSDandField()
   cryst->RegisterPrimitive(primitiv1);
   SetSensitiveDetector("CrystalLV",cryst);
   
-  G4MultiFunctionalDetector* optfiber = new G4MultiFunctionalDetector("fiberSD");
-  G4SDManager::GetSDMpointer()->AddNewDetector(optfiber); 
-  SetSensitiveDetector("OF_core_LV",optfiber);
+  //G4MultiFunctionalDetector* optfiber = new G4MultiFunctionalDetector("fiberSD");
+ // G4SDManager::GetSDMpointer()->AddNewDetector(optfiber); 
+  //SetSensitiveDetector("OF_core_LV",optfiber);
   
   // declare patient as a MultiFunctionalDetector scorer
   //  
