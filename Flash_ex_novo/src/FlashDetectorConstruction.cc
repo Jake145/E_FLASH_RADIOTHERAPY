@@ -148,6 +148,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
               1.3572, 1.358,  1.3585, 1.359,  1.3595,
               1.36,   1.3608};
 
+
   assert(sizeof(refractiveIndex1) == sizeof(photonEnergy));
 
   G4double absorption[] =
@@ -177,7 +178,6 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
               7.00, 6.00, 5.00, 4.00 };
 
   assert(sizeof(scintilSlow) == sizeof(photonEnergy));
-
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
 
   myMPT1->AddProperty("RINDEX",       photonEnergy, refractiveIndex1,nEntries)
@@ -240,7 +240,6 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   };
 
   assert(sizeof(mie_water) == sizeof(energy_water));
-
   // gforward, gbackward, forward backward ratio
   G4double mie_water_const[3]={0.99,0.99,0.8};
 
@@ -594,7 +593,7 @@ G4LogicalVolume* logicwrapper_little =
                       false,0);           
     
     //OOOOOOOOOOOOOOOOOooooooooooooooOOOOOOOOOOOOOOOOOOOOOooooooooooooooooOOO 
-  /*  
+
   G4OpticalSurface* opteflonSurface_up = new G4OpticalSurface("teflonSurface_up");
   opteflonSurface_up->SetType(dielectric_LUTDAVIS);
   opteflonSurface_up->SetFinish(Rough_LUT);
@@ -666,7 +665,7 @@ G4LogicalVolume* logicwrapper_little =
         (teflonSurface_back->GetSurface(phys_wrap_little,phys_cryst)->
                                                        GetSurfaceProperty());
   if (opticalSurface_6) opticalSurface_6->DumpInfo();  
-  */ 
+
 //OOOOOOOOOOOOOOOOOOOoooooooooooooooooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOO  
                       
   G4Tubs* opticfiber_core =
@@ -708,12 +707,14 @@ G4LogicalVolume* logicwrapper_little =
    G4VPhysicalVolume* physcore = new G4PVPlacement(transform_opt,                     
                            //position
                           opticfiber_core_log,            
-                          "OF_clad_LV",                
+
+                          "OF_clad_phys",                
+
                           opticfiber_clad_log,false,0); 
 //OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
 // Definiamo ora le ultime tre superfici ottiche interessanti
 
-/*
+
 G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator");
   opcore_scint->SetType(dielectric_LUTDAVIS);
   opcore_scint->SetFinish(Rough_LUT);
@@ -743,7 +744,9 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
                                                        GetSurfaceProperty());
   if (opticalSurface_8) opticalSurface_8->DumpInfo();   
   
-  
+
+ /* 
+
 G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
   opphantom_clad->SetType(dielectric_LUTDAVIS);
   opphantom_clad->SetFinish(Rough_LUT);
@@ -757,7 +760,9 @@ G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
         (phantom_clad->GetSurface(phant_phys,physclad)->
                                                        GetSurfaceProperty());
   if (opticalSurface_9) opticalSurface_9->DumpInfo();   
-         */
+
+        */ 
+
 
    
     G4VisAttributes * skyBlue1 = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));

@@ -50,6 +50,7 @@ class FlashStackingAction : public G4UserStackingAction
     virtual void PrepareNewEvent();
 
   private:
+
     G4int fScintillationCounter;
     G4int fCerenkovCounter;
 };
@@ -57,4 +58,5 @@ class FlashStackingAction : public G4UserStackingAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
 

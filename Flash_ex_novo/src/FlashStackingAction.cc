@@ -57,7 +57,9 @@ FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
   { // particle is optical photon
     if(aTrack->GetParentID()>0)
     { // particle is secondary
-    	if(aTrack->GetVolume()->GetName()=="OF_core"){
+
+    	if(aTrack->GetVolume()->GetName()=="OF_clad_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
+
       if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation")
         fScintillationCounter++;
       if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
@@ -70,11 +72,13 @@ FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void FlashStackingAction::NewStage()
-{
-  G4cout << "Number of Scintillation photons produced in this event : "
+
+{if(fScintillationCounter!=0 || fCerenkovCounter!=0){
+  G4cout << "HEY!!!!!! Number of Scintillation photons produced in this event : "
          << fScintillationCounter << G4endl;
-  G4cout << "Number of Cerenkov photons produced in this event : "
-         << fCerenkovCounter << G4endl;
+  G4cout << "HEYYY!!!!Number of Cerenkov photons produced in this event : "
+         << fCerenkovCounter << G4endl;}
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
