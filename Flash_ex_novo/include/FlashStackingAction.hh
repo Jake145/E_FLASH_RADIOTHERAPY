@@ -43,8 +43,15 @@ class FlashStackingAction : public G4UserStackingAction
   public:
     FlashStackingAction();
     virtual ~FlashStackingAction();
-     
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);        
+
+  public:
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+    virtual void NewStage();
+    virtual void PrepareNewEvent();
+
+  private:
+    G4int fScintillationCounter;
+    G4int fCerenkovCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

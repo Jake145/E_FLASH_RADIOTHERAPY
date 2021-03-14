@@ -29,29 +29,58 @@
 
 #include "FlashStackingAction.hh"
 
-#include "G4Track.hh"
+#include "G4VProcess.hh"
 
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTypes.hh"
+#include "G4Track.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashStackingAction::FlashStackingAction()
-{ }
+  : G4UserStackingAction(),
+    fScintillationCounter(0), fCerenkovCounter(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashStackingAction::~FlashStackingAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ClassificationOfNewTrack
-FlashStackingAction::ClassifyNewTrack(const G4Track* track)
+FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
-  //Per il momento manteniamo tutte. In futuro posso levare le particelle che non interessano.
-  if (track->GetParentID() == 0) return fUrgent;
-
-  
-  else return fUrgent;
+  if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
+  { // particle is optical photon
+    if(aTrack->GetParentID()>0)
+    { // particle is secondary
+    	if(aTrack->GetVolume()->GetName()=="OF_core"){
+      if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation")
+        fScintillationCounter++;
+      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
+        fCerenkovCounter++;
+    }
+  }}
+  return fUrgent;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void FlashStackingAction::NewStage()
+{
+  G4cout << "Number of Scintillation photons produced in this event : "
+         << fScintillationCounter << G4endl;
+  G4cout << "Number of Cerenkov photons produced in this event : "
+         << fCerenkovCounter << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void FlashStackingAction::PrepareNewEvent()
+{
+  fScintillationCounter = 0;
+  fCerenkovCounter = 0;
+}

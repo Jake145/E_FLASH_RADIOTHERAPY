@@ -122,7 +122,8 @@ G4NistManager* nist = G4NistManager::Instance();
 G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
 // ------------ Generate & Add Material Properties Table ------------
-//
+// 
+/*
   G4double photonEnergy[] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
@@ -253,7 +254,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   myMPT1->DumpTable();
 
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
-  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
+  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV); */
   
 G4double phantomSizeX=20.0*cm, phantomSizeY=20.0*cm, phantomSizeZ=20.0*cm;
 G4ThreeVector phantomPosition = G4ThreeVector(-99.4*mm,  0.*mm,0.*mm);
@@ -276,6 +277,7 @@ G4ThreeVector phantomPosition = G4ThreeVector(-99.4*mm,  0.*mm,0.*mm);
 					    physicalTreatmentRoom,
 					    false,
 					    0);
+/*
 G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
   opWaterSurface->SetType(dielectric_LUTDAVIS);
   opWaterSurface->SetFinish(Rough_LUT);
@@ -289,7 +291,7 @@ G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
         (waterSurface->GetSurface(phant_phys,physicalTreatmentRoom)->
                                                        GetSurfaceProperty());
   if (opticalSurface) opticalSurface->DumpInfo();
-  
+  */
   
 G4Region* PhantomRegion = new G4Region("Phantom_reg");
 phantomLogicalVolume->SetRegion(PhantomRegion);
@@ -326,7 +328,7 @@ G4VPhysicalVolume* FlashDetectorConstruction::Construct()
   G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   // Air
 //
-
+/*
 G4double photonEnergy_air[] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
@@ -349,7 +351,7 @@ const G4int nEntries_air = sizeof(photonEnergy_air)/sizeof(G4double);
   G4cout << "Air G4MaterialPropertiesTable" << G4endl;
   myMPT2->DumpTable();
 
-  airNist->SetMaterialPropertiesTable(myMPT2);
+  airNist->SetMaterialPropertiesTable(myMPT2); */
   
   G4Box* treatmentRoom = new G4Box("TreatmentRoom",worldX,worldY,worldZ);
   G4LogicalVolume* logicTreatmentRoom = new G4LogicalVolume(treatmentRoom, 
@@ -446,6 +448,9 @@ G4double photonEnergy_fib[] =
 
 
   PMMA->SetMaterialPropertiesTable(mpt_fiber);
+  G4cout << "PMMA G4MaterialPropertiesTable" << G4endl;
+  mpt_fiber->DumpTable();
+
   
   G4Material* PE = nist->FindOrBuildMaterial("G4_POLYETHYLENE", 
   isotopes);  
@@ -735,7 +740,7 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
                                                        GetSurfaceProperty());
   if (opticalSurface_8) opticalSurface_8->DumpInfo();   
   
-  
+  /*
 G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
   opphantom_clad->SetType(dielectric_LUTDAVIS);
   opphantom_clad->SetFinish(Rough_LUT);
@@ -750,14 +755,14 @@ G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
                                                        GetSurfaceProperty());
   if (opticalSurface_9) opticalSurface_9->DumpInfo();   
          
-
+*/
    
     G4VisAttributes * skyBlue1 = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
      skyBlue1->SetVisibility(true);
    // logicCryst -> SetVisAttributes(red);
     logicwrapper_long->SetVisAttributes(skyBlue1);
-        logicwrapper_side->SetVisAttributes(red);
-            logicwrapper_little->SetVisAttributes(red);
+        logicwrapper_side->SetVisAttributes(skyBlue1);
+            logicwrapper_little->SetVisAttributes(skyBlue1);
     opticfiber_core_log -> SetVisAttributes(skyBlue1);
     opticfiber_clad_log -> SetVisAttributes(red);
 
