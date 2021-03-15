@@ -62,7 +62,7 @@ void FlashEventAction::BeginOfEventAction(const G4Event*)
 
     G4String colNam;
 
-    collectionID = SDman->GetCollectionID(colNam="Optic_crystal/FlashHitsCollection");
+    collectionID = SDman->GetCollectionID("Optic_fiber/FlashHitsCollection");
 
   }
 }
@@ -115,20 +115,20 @@ G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
     int n_hit = HC->entries();
      chKount=0;
      ScintKount=0;
-
+	DepEn=0;
     for ( int i = 0 ; i < n_hit; i++){
 
       //G4int         stripNo  = (*HC)[i]->GetStripNo();
 
       //G4ThreeVector position = (*HC)[i]->GetPosition();
 
-      //G4ThreeVector momentum = (*HC)[i]->GetMomentum();
+      G4ThreeVector momentum = (*HC)[i]->GetMomentum();
 	
 	chKount+=(*HC)[i]->GetCherenkovCount();
 	ScintKount+=(*HC)[i]->GetScintilCount();
+	DepEn+=(*HC)[i]->GetEdep();
+      G4cout<<"Energy Deposited:"<<DepEn<<G4endl;
 	
-      
-
     }
     G4cout<<"Number of Cherenkov from HCE : "<<chKount<<""<<"Number of Scintillation from HCE:"<<ScintKount<<""<<G4endl;
 

@@ -53,7 +53,7 @@ class FlashEventAction : public G4UserEventAction //definisco la Event Action ch
     G4int fCollID_cryst;
     G4int collectionID;
     G4int chKount;
-
+	G4double DepEn;
     G4int ScintKount;
 
 };
