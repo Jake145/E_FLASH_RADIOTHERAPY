@@ -43,7 +43,7 @@
 
 FlashEventAction::FlashEventAction(FlashRunAction* runAction)
 : G4UserEventAction(),
-  fRunAction(runAction),fCollID_cryst(-1){}
+  fRunAction(runAction),fCollID_cryst(-1),collectionID(-1){}
    //inizializzo il costruttore dando gli argomenti appropriati alle funzioni
  
 
@@ -56,7 +56,15 @@ FlashEventAction::~FlashEventAction() //distruttore
 
 void FlashEventAction::BeginOfEventAction(const G4Event*)
 {    
-  
+  G4SDManager * SDman = G4SDManager::GetSDMpointer();
+
+  if(collectionID<0){
+
+    G4String colNam;
+
+    collectionID = SDman->GetCollectionID(colNam="Optic_crystal/FlashHitsCollection");
+
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,8 +86,59 @@ G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
     ///G4int copyNb  = (itr->first);
      edep = *(itr->second);};
     if (edep > 0.) fRunAction->SumEdep(edep);
-  
-  
+    //Look at optic events in crystal
+    
+    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+
+ 
+
+  if(collectionID<0) return;
+
+ 
+
+  G4HCofThisEvent * HCE_2 = evt->GetHCofThisEvent();
+
+  FlashHitsCollection* HC = 0;
+
+  if(HCE_2)
+
+  {
+
+    HC = (FlashHitsCollection*)(HCE_2->GetHC(collectionID));
+
+  }
+
+ 
+
+  if ( HC ) {
+
+    int n_hit = HC->entries();
+     chKount=0;
+     ScintKount=0;
+
+    for ( int i = 0 ; i < n_hit; i++){
+
+      //G4int         stripNo  = (*HC)[i]->GetStripNo();
+
+      //G4ThreeVector position = (*HC)[i]->GetPosition();
+
+      //G4ThreeVector momentum = (*HC)[i]->GetMomentum();
+	
+	chKount+=(*HC)[i]->GetCherenkovCount();
+	ScintKount+=(*HC)[i]->GetScintilCount();
+	
+      
+
+    }
+    G4cout<<"Number of Cherenkov from HCE : "<<chKount<<""<<"Number of Scintillation from HCE:"<<ScintKount<<""<<G4endl;
+
+  }
+
+ 
+
 }
+  
+  
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

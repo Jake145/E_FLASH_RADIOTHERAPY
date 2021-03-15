@@ -818,7 +818,7 @@ OFcladRegion->AddRootLogicalVolume(opticfiber_clad_log);
   
   
   
-  FlashSensitiveDetector* sd_of_opt = new FlashSensitiveDetector(SDname_of_opt = "Optic_crystal",false);
+  FlashSensitiveDetector* sd_of_opt = new FlashSensitiveDetector(SDname_of_opt = "Optic_fiber",false);
   G4SDManager* SDman_of_opt = G4SDManager::GetSDMpointer();
 
   SDman_of_opt->AddNewDetector( sd_of_opt );

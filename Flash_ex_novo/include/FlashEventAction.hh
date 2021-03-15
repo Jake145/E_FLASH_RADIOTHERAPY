@@ -32,7 +32,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
+#include "FlashHit.hh"
 class FlashRunAction; //definisco la classe Run Action
 
 /// Event action class
@@ -51,6 +51,10 @@ class FlashEventAction : public G4UserEventAction //definisco la Event Action ch
   private:
     FlashRunAction* fRunAction; 
     G4int fCollID_cryst;
+    G4int collectionID;
+    G4int chKount;
+
+    G4int ScintKount;
 
 };
 
