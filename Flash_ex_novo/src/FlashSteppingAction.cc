@@ -64,34 +64,32 @@ FlashSteppingAction::~FlashSteppingAction()
 void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
 
-/*
+
  G4String volumeName = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName();
  if(volumeName == "CrystalLV"){
  G4int eventid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
  G4int trackID = aStep->GetTrack()->GetTrackID();
  
- G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;*/
+ G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;
  
- if(aStep->GetTrack()->GetTrackID()==1){
+ /*if(aStep->GetTrack()->GetTrackID()==1){
  		if(aStep->GetPreStepPoint()->GetProcessDefinedStep()!=0){
  		if(aStep->GetTrack()->GetNextVolume()->GetName()=="crystal" && aStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName()=="Transportation"){
  		G4int eventid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
  G4int trackID = aStep->GetTrack()->GetTrackID();
   G4String volumeName = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName();
- 		G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;
+ 		G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;*/
  
  if(KinEnFile.is_open()){
  
  KinEnFile<< eventid<< "\t" << kineticEnergy << "\t" <<trackID<<G4endl;
- };}
+ }
  	}
  
  
-  };}
-
- 
+  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
