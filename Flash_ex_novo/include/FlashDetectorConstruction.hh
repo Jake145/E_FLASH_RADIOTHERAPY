@@ -36,7 +36,7 @@
 #include "G4Box.hh"
 #include "G4UserLimits.hh"
 #include "Applicator80BeamLine.hh"
-#include "FlashSensitiveDetector.hh"
+#include "FlashSensitiveDetector_opt.hh"
 class G4VPhysicalVolume; //definisco la classe del volume fisico
 class G4LogicalVolume; //definisco la classe del volume logico
 class Applicator80BeamLine;
