@@ -1,4 +1,4 @@
-#include "FlashSensitiveDetector_opt.hh"
+#include "FlashSensitiveDetector.hh"
 
 #include "G4Step.hh"
 
@@ -8,7 +8,7 @@
 
 #include "G4TouchableHistory.hh"
 
-FlashSensitiveDetector_opt::FlashSensitiveDetector_opt(G4String name):G4VSensitiveDetector(name),collectionID(-1)
+ FlashSensitiveDetector::FlashSensitiveDetector(G4String name,G4bool Kinetic_or_Optic):G4VSensitiveDetector(name,Kinetic_or_Optic),collectionID(-1), Kin_Opt(Kinetic_or_Optic)
 {
 collectionName.insert("FlashHitsCollection");
 
@@ -38,7 +38,7 @@ G4 cherenkov = 0;
   G4Track aTrack= aStep->GetTrack()
   
   
-
+	if (Kin_Opt==false){
   //newHit->SetStripNo(  touchable->GetReplicaNumber(0) );
 
   newHit->SetPosition( aStep->GetPreStepPoint()->GetPosition() );
@@ -61,14 +61,29 @@ G4 cherenkov = 0;
   cherenkov+=1;
 
     newHit->SetProcess(aTrack->GetCreatorProcess()->GetProcessName());}
-  else newHit->SetProcess("Irrelevant secondary");};
+   else newHit->SetProcess("Irrelevant secondary");
     
-    
+         };
     
     
     newHit->SetScintilCount(scintillation);
-    newHit->SetCherenkovCount(cherenkov);
-    
+     newHit->SetCherenkovCount(cherenkov);};
+         if (Kin_Opt==true){  
+   //newHit->SetEdep(aStep->GetTotalEnergyDeposit());
+
+  //newHit->SetStripNo(  touchable->GetReplicaNumber(0) );
+    if ( preStep->GetStepStatus() == fGeomBoundary ){
+
+  newHit->SetParticle( aTrack->GetDefinition() );
+
+  newHit->SetPosition( aStep->GetPreStepPoint()->GetPosition() );
+
+  newHit->SetMomentum( aStep->GetPreStepPoint()->GetMomentum() );
+
+  newHit->SetEnergy( aStep->GetPreStepPoint()->GetTotalEnergy() );};
+   }
+
+
     
 
 
