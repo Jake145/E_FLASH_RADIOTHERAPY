@@ -1,4 +1,7 @@
+#ifndef FlashSensitiveDetector_h
+#define FlashsensitiveDetector_h 1
 #include "G4VSensitiveDetector.hh"
+#include "FlashHit.hh"
 class FlashSensitiveDetector : public G4VSensitiveDetector{
 public:
 	FlashSensitiveDetector(G4String name,G4bool Kinetic_or_Optic);
@@ -8,4 +11,6 @@ public:
 	virtual G4bool ProcessHits(G4Step* step,G4TouchableHistory* ROhist);
 	virtual void EndOfEvent(G4HCofThisEvent*HCE);
 	private:FlashHitsCollection * hitsCollection;
-	int collectionID;}
+	int collectionID;};
+	
+#endif

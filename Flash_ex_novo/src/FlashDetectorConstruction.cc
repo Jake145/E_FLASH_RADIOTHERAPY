@@ -57,6 +57,7 @@
 #include "G4OpticalSurface.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4LogicalBorderSurface.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashDetectorConstruction::FlashDetectorConstruction()
@@ -498,7 +499,7 @@ const G4int nEntries_teflon = sizeof(photonEnergy_teflon)/sizeof(G4double);
   
 G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
     //                 
-  G4LogicalVolume* logicCryst = 
+   logicCryst = 
     new G4LogicalVolume(solidCryst,          //its solid
                         cryst_mat,           //its material
                         "CrystalLV");        //its name
@@ -671,7 +672,7 @@ G4LogicalVolume* logicwrapper_little =
   G4Tubs* opticfiber_core =
     new G4Tubs("OF_core", 0.*cm, opticfiber_core_radius, opticfiber_core_dx/2, 0., CLHEP::twopi);
       
-  G4LogicalVolume* opticfiber_core_log =                         
+   opticfiber_core_log =                         
     new G4LogicalVolume(opticfiber_core,       //its solid
                         PMMA,         //its material
                         "OF_core_LV");         //its name
@@ -811,6 +812,36 @@ void FlashDetectorConstruction::ConstructSDandField()
   G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
   SetSensitiveDetector("CrystalLV",cryst);
+  
+  G4String SDname_cr_kin;
+    G4String SDname_cr_opt;
+      G4String SDname_of_opt;
+
+  FlashSensitiveDetector* sd_cr_kin = new FlashSensitiveDetector(SDname_cr_kin = "Kinetic_crystal",true);
+  G4SDManager* SDman_cr_k = G4SDManager::GetSDMpointer();
+
+  SDman_cr_k->AddNewDetector( sd_cr_kin );
+
+  logicCryst->SetSensitiveDetector(sd_cr_kin);
+  
+  FlashSensitiveDetector* sd_cr_opt = new FlashSensitiveDetector(SDname_cr_opt = "Optic_crystal",false);
+  G4SDManager* SDman_cr_opt = G4SDManager::GetSDMpointer();
+
+  SDman_cr_opt->AddNewDetector( sd_cr_opt );
+
+  logicCryst->SetSensitiveDetector(sd_cr_opt);
+  
+  
+  
+  FlashSensitiveDetector* sd_of_opt = new FlashSensitiveDetector(SDname_of_opt = "Optic_crystal",false);
+  G4SDManager* SDman_of_opt = G4SDManager::GetSDMpointer();
+
+  SDman_of_opt->AddNewDetector( sd_of_opt );
+
+  opticfiber_core_log->SetSensitiveDetector(sd_of_opt);
+  
+  
+  
   
   //G4MultiFunctionalDetector* optfiber = new G4MultiFunctionalDetector("fiberSD");
  // G4SDManager::GetSDMpointer()->AddNewDetector(optfiber); 

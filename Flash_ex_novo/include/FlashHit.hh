@@ -1,5 +1,4 @@
 #ifndef FlashHit_h
-
 #define FlashHit_h 1
 
  
@@ -13,6 +12,7 @@
 #include "G4ThreeVector.hh"
 
 #include "G4ParticleDefinition.hh"
+
 
  
 
@@ -44,11 +44,11 @@ class FlashHit : public G4VHit
 
   private:
 	
-      G4String Pname;
+      G4String      Pname;
       
-      G4int ChK;
+      G4int         ChK;
       
-      G4int Scint;
+      G4int 	    Scint;
 	
       G4int         stripNo;
 
@@ -65,24 +65,29 @@ class FlashHit : public G4VHit
  
 
   public:
-  	inline void SetCherenkovCount(G4int CherenkovCount)
-  	{ChK=CherenkovCount;}
+      inline void SetCherenkovCount(G4int CherenkovCount)
+     
+      { ChK=CherenkovCount; }
   	
-  	inline void G4int GetCherenkovCount
-  	{return ChK;}
+      inline  G4int GetCherenkovCount()
+     
+      { return ChK; }
   	
-  	inline void SetScintilCount(G4int ScintilCount)
-  	{Scint=ScintilCount;}
+      inline void SetScintilCount(G4int ScintilCount)
+     
+      { Scint=ScintilCount; }
   	
-  	inline void G4int GetScintilCount
-  	{return Scint;}
+      inline  G4int GetScintilCount()
+     
+      { return Scint; }
   	  	
+      inline void SetProcess(G4String ProcessName)
   	
-  	inline void SetProcess(G4String ProcessName)
-  	{Pname=ProcessName;}
+      { Pname=ProcessName; }
   	
-	inline G4String GetProcessName
-	{return Pname;}
+      inline G4String GetProcessName()
+	
+      { return Pname; }
 	
       inline void SetStripNo(G4int strip)
 
@@ -134,6 +139,6 @@ class FlashHit : public G4VHit
 
 };
 
- 
-
 typedef G4THitsCollection<FlashHit> FlashHitsCollection;
+
+#endif
