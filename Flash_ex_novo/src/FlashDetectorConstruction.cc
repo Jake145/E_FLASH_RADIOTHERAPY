@@ -28,7 +28,7 @@
 /// \brief Implementation of the FlashDetectorConstruction class
 
 #include "FlashDetectorConstruction.hh"
-#include "FlashHit.hh"
+//#include "FlashHit.hh"
 #include "G4RunManager.hh"
 
 #include "G4Region.hh"
@@ -841,12 +841,12 @@ void FlashDetectorConstruction::ConstructSDandField()
   
   G4String SDname_of_opt;
    G4SDManager* SDman_of_opt = G4SDManager::GetSDMpointer();
-  G4VSensitiveDetector* sd_of_opt = new FlashSensitiveDetector(SDname_of_opt = "Optic_fiber");
+  FlashSensitiveDetector* sd_of_opt = new FlashSensitiveDetector(SDname_of_opt = "Optic_fiber");
 
 
   SDman_of_opt->AddNewDetector( sd_of_opt );
-  SetSensitiveDetector("OF_core_LV",sd_of_opt);
-  //opticfiber_core_log->SetSensitiveDetector(sd_of_opt);
+  //SetSensitiveDetector("OF_core_LV",sd_of_opt);
+  opticfiber_core_log->SetSensitiveDetector(sd_of_opt);
   
   
   //G4MultiFunctionalDetector* optfiber = new G4MultiFunctionalDetector("fiberSD");
