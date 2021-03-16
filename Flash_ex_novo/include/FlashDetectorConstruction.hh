@@ -45,6 +45,7 @@ class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe de
 {
   public:
       G4VPhysicalVolume* physicalTreatmentRoom;
+      FlashSensitiveDetector* sd_of_opt;
   //FlashDetectorConstruction();
     void ConstructPhantom();
     FlashDetectorConstruction(); //costruttore ci passo il puntatore al mondo

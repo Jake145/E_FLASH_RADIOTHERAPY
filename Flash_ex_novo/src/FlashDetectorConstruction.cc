@@ -58,7 +58,7 @@
 #include "G4MaterialPropertiesTable.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "FlashSensitiveDetector.hh"
-#include "G4VSensitiveDetector.hh"
+//#include "G4VSensitiveDetector.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashDetectorConstruction::FlashDetectorConstruction()
@@ -839,14 +839,14 @@ void FlashDetectorConstruction::ConstructSDandField()
   logicCryst->SetSensitiveDetector(sd_cr_opt);
   */
   
-  G4String SDname_of_opt;
+  //G4String SDname_of_opt;
    G4SDManager* SDman_of_opt = G4SDManager::GetSDMpointer();
-  FlashSensitiveDetector* sd_of_opt = new FlashSensitiveDetector(SDname_of_opt = "Optic_fiber");
+   sd_of_opt = new FlashSensitiveDetector("Optic_fiber");
 
 
   SDman_of_opt->AddNewDetector( sd_of_opt );
-  //SetSensitiveDetector("OF_core_LV",sd_of_opt);
-  opticfiber_core_log->SetSensitiveDetector(sd_of_opt);
+  SetSensitiveDetector("OF_core_LV",sd_of_opt,true);
+  //opticfiber_core_log->SetSensitiveDetector(sd_of_opt);
   
   
   //G4MultiFunctionalDetector* optfiber = new G4MultiFunctionalDetector("fiberSD");
