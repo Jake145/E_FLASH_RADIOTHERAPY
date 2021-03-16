@@ -8,9 +8,9 @@
 
 #include "G4TouchableHistory.hh"
 
- FlashSensitiveDetector::FlashSensitiveDetector(G4String name,G4bool Kinetic_or_Optic):G4VSensitiveDetector(name,Kinetic_or_Optic),collectionID(-1), Kin_Opt(Kinetic_or_Optic)
+ FlashSensitiveDetector::FlashSensitiveDetector(G4String name):G4VSensitiveDetector(name),collectionID(-1),collectionName("FlashHitsCollection")
 {
-collectionName.insert("FlashHitsCollection");
+//collectionName.insert("FlashHitsCollection");
 
 }
 
@@ -38,8 +38,9 @@ G4 cherenkov = 0;
   G4Track aTrack= aStep->GetTrack()
   
   
-	if (Kin_Opt==false){
+	
   //newHit->SetStripNo(  touchable->GetReplicaNumber(0) );
+  newHit->SetParticle( aTrack->GetDefinition() );
 
   newHit->SetPosition( aStep->GetPreStepPoint()->GetPosition() );
 
@@ -67,21 +68,13 @@ G4 cherenkov = 0;
     
     
     newHit->SetScintilCount(scintillation);
-     newHit->SetCherenkovCount(cherenkov);};
-         if (Kin_Opt==true){  
-   //newHit->SetEdep(aStep->GetTotalEnergyDeposit());
+     newHit->SetCherenkovCount(cherenkov);
+         
+    if ( preStep->GetStepStatus() == fGeomBoundary ){newHit->SetStatus("incident particle");}
+    else {newHit->SetStatus("not incident particle");}
 
-  //newHit->SetStripNo(  touchable->GetReplicaNumber(0) );
-    if ( preStep->GetStepStatus() == fGeomBoundary ){
-
-  newHit->SetParticle( aTrack->GetDefinition() );
-
-  newHit->SetPosition( aStep->GetPreStepPoint()->GetPosition() );
-
-  newHit->SetMomentum( aStep->GetPreStepPoint()->GetMomentum() );
-
-  newHit->SetEnergy( aStep->GetPreStepPoint()->GetTotalEnergy() );};
-   }
+  
+   
 
 
     
