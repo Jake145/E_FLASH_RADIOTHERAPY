@@ -505,7 +505,7 @@ G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
 G4RotationMatrix rotm  = G4RotationMatrix();
     rotm.rotateY(90*deg); 
     
-    G4ThreeVector position = G4ThreeVector(-80.0*mm,  0.*mm,0.*mm);     
+    G4ThreeVector position = G4ThreeVector(-3*mm,  0.*mm,0.*mm);     
     G4Transform3D transform = G4Transform3D(rotm,position);
                                     
    G4VPhysicalVolume* phys_cryst = new G4PVPlacement(transform,logicCryst,            
@@ -515,7 +515,7 @@ G4RotationMatrix rotm  = G4RotationMatrix();
 //OOOOOOOOOOOooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoooooooooooo
 //costruiamo il wrap in teflon
 
- G4double wrap=0.2*mm; 
+ G4double wrap=0.02*mm; 
 G4Box* big_cover_top_bottom = new G4Box("big_cover", (dZ+wrap)/2+wrap/2, wrap, (dX+wrap)/2);
 G4Box* big_cover_sides = new G4Box("sides_cover", wrap/2, dY/2, (dX+wrap)/2);
 G4Box* little_cover = new G4Box("little_cover",dZ/2,dY/2,wrap);

@@ -37,6 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4Threading.hh"
+#include "G4OpticalPhoton.hh"
 #include <string>
 #include <sstream>
 //#include "FlashAnalysis.hh"
@@ -64,9 +65,10 @@ FlashSteppingAction::~FlashSteppingAction()
 void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
 
-
- G4String volumeName = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName();
- if(volumeName == "CrystalLV"){
+ G4StepPoint* preStep = aStep->GetPreStepPoint();
+  if ( preStep->GetStepStatus() == fGeomBoundary ){
+ G4String volumeName = preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
+ if(volumeName == "CrystalLV"&&aStep->GetTrack()->GetTrackID()==1){
  G4int eventid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
  G4int trackID = aStep->GetTrack()->GetTrackID();
@@ -90,8 +92,13 @@ void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
  
  
   }
+G4Track* track = aStep->GetTrack();
+G4ParticleDefinition* particleType = track->GetDefinition();
+/*
+if (track->GetTrackID()!=1 && particleType == G4OpticalPhoton::OpticalPhotonDefinition()){if(preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()!="CrystalLV"&&preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()!="OF_core_LV"){ track->SetTrackStatus(fStopAndKill); }
+  }*/
 
- 
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

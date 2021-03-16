@@ -57,15 +57,17 @@ FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
   { // particle is optical photon
     if(aTrack->GetParentID()>0)
     { // particle is secondary
-
+	if (aTrack->GetTrackStatus()!=fStopAndKill){
     	if(aTrack->GetVolume()->GetName()=="OF_clad_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
 
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation")
+      if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation"){
         fScintillationCounter++;
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
+        G4cout<<"found a scintillation in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;}
+      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
         fCerenkovCounter++;
+                G4cout<<"found a cherenkov in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;}
     }
-  }}
+  }}}
   return fUrgent;
 }
 

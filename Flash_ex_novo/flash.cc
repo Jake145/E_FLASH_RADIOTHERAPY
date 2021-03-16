@@ -61,7 +61,7 @@ int main(int argc,char** argv)
 
   // Optionally: choose a different Random engine...
   //
-  // G4Random::setTheEngine(new CLHEP::MTwistEngine);
+   G4Random::setTheEngine(new CLHEP::MTwistEngine);
 
   // Construct the default run manager
   //
@@ -71,7 +71,7 @@ int main(int argc,char** argv)
 //  G4RunManager* runManager = new G4RunManager;
 //#endif
 // Comment to unset the seed.
-  // G4Random::setTheSeed(548235486);
+   G4Random::setTheSeed(548235486);
 
   // Set mandatory initialization classes
   //
