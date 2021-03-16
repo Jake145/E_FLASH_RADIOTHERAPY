@@ -40,12 +40,12 @@ class G4VPhysicalVolume; //definisco la classe del volume fisico
 class G4LogicalVolume; //definisco la classe del volume logico
 class Applicator80BeamLine;
 class G4VSensitiveDetector;
-class FlashSensitiveDetector;
+class FSensitiveDetector;
 class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe della costruzione del detector e del fantoccio
 {
   public:
       G4VPhysicalVolume* physicalTreatmentRoom;
-      FlashSensitiveDetector* sd_of_opt;
+
   //FlashDetectorConstruction();
     void ConstructPhantom();
     FlashDetectorConstruction(); //costruttore ci passo il puntatore al mondo
@@ -58,6 +58,7 @@ class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe de
     
  
     private:
+          FSensitiveDetector* sd_of_opt;
      Applicator80BeamLine* Collimator;
 	G4LogicalVolume* opticfiber_core_log;
 	G4LogicalVolume* logicCryst;

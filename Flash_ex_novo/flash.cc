@@ -47,7 +47,7 @@
 #include "FlashActionInitialization.hh"
 #include "FlashAnalysis.hh"
 #include "Applicator80BeamLine.hh"
-#include "FlashSensitiveDetector.hh"
+#include "FSensitiveDetector.hh"
 #include "G4TScoreNtupleWriterMessenger.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

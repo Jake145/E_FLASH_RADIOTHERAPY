@@ -1,4 +1,4 @@
-#include "FlashSensitiveDetector.hh"
+#include "FSensitiveDetector.hh"
 
 #include "G4Step.hh"
 
@@ -8,13 +8,13 @@
 
 #include "G4TouchableHistory.hh"
 
- FlashSensitiveDetector::FlashSensitiveDetector(G4String name):G4VSensitiveDetector(name),collectionID(-1)
+ FSensitiveDetector::FSensitiveDetector(G4String name):G4VSensitiveDetector(name),collectionID(-1)
 {
 collectionName.insert("FlashHitsCollection");
 
 }
 
-void FlashSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
+void FSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 {
 
  if (collectionID < 0) collectionID = GetCollectionID(0);
@@ -24,7 +24,7 @@ void FlashSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
   }
   
   
- G4bool FlashSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*ROhist) {
+ G4bool FSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*ROhist) {
 
 G4int scintillation = 0;
 G4 cherenkov = 0;
@@ -89,6 +89,6 @@ G4 cherenkov = 0;
 
   return true;}
  
- void FlashSensitiveDetector::EndOfEvent(G4HCofThisEvent* HCE) {
+ void FSensitiveDetector::EndOfEvent(G4HCofThisEvent* HCE) {
  
  }

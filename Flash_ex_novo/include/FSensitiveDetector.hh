@@ -1,5 +1,5 @@
-#ifndef FlashSensitiveDetector_h
-#define FlashsensitiveDetector_h 1
+#ifndef FSensitiveDetector_h
+#define FSensitiveDetector_h 1
 #include "G4VSensitiveDetector.hh"
 #include "FlashHit.hh"
 
@@ -9,11 +9,11 @@ class G4TouchableHistory;
 
 /// Flash sensitive detector
 
-class FlashSensitiveDetector : public G4VSensitiveDetector
+class FSensitiveDetector : public G4VSensitiveDetector
 {
 public:
-    FlashSensitiveDetector(G4String name);
-    virtual ~FlashSensitiveDetector();
+    FSensitiveDetector(G4String name);
+    virtual ~FSensitiveDetector();
     
     virtual void Initialize(G4HCofThisEvent*HCE);
     virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);

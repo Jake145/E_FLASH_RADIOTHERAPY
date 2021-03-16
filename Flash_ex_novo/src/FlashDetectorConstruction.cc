@@ -32,32 +32,37 @@
 #include "G4RunManager.hh"
 
 #include "G4Region.hh"
-#include "G4Cons.hh"
-#include "G4Orb.hh"
-#include "G4Sphere.hh"
-#include "G4Trd.hh"
-
+#include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "G4SDManager.hh"
+
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
-#include "G4Region.hh"
 #include "G4PVPlacement.hh"
-#include "G4RotationMatrix.hh"
-#include "G4Transform3D.hh"
-#include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSDoseDeposit.hh"
+#include "G4PVParameterised.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
+#include "G4GeometryTolerance.hh"
+#include "G4GeometryManager.hh"
+
+#include "G4UserLimits.hh"
+
 #include "G4VisAttributes.hh"
-#include "G4PhysicalConstants.hh"
+#include "G4Colour.hh"
+
+#include "G4SystemOfUnits.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "Applicator80BeamLine.hh"
 #include "G4OpticalSurface.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4LogicalBorderSurface.hh"
-#include "FlashSensitiveDetector.hh"
+#include "FSensitiveDetector.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4PSEnergyDeposit.hh"
+#include "G4PhysicalConstants.hh"
 //#include "G4VSensitiveDetector.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -796,6 +801,7 @@ OFcoreRegion->AddRootLogicalVolume(opticfiber_core_log);
 G4Region* OFcladRegion = new G4Region("OF_clad_reg");
 opticfiber_clad_log->SetRegion(OFcladRegion);
 OFcladRegion->AddRootLogicalVolume(opticfiber_clad_log);
+
   return physicalTreatmentRoom;
   
   
@@ -824,14 +830,14 @@ void FlashDetectorConstruction::ConstructSDandField()
     G4String SDname_cr_opt;
 
 
-  FlashSensitiveDetector* sd_cr_kin = new FlashSensitiveDetector(SDname_cr_kin = "Kinetic_crystal",true);
+  FSensitiveDetector* sd_cr_kin = new FSensitiveDetector(SDname_cr_kin = "Kinetic_crystal",true);
   G4SDManager* SDman_cr_k = G4SDManager::GetSDMpointer();
 
   SDman_cr_k->AddNewDetector( sd_cr_kin );
 
   logicCryst->SetSensitiveDetector(sd_cr_kin);
   
-  FlashSensitiveDetector* sd_cr_opt = new FlashSensitiveDetector(SDname_cr_opt = "Optic_crystal",false);
+  FSensitiveDetector* sd_cr_opt = new FSensitiveDetector(SDname_cr_opt = "Optic_crystal",false);
   G4SDManager* SDman_cr_opt = G4SDManager::GetSDMpointer();
 
   SDman_cr_opt->AddNewDetector( sd_cr_opt );
@@ -839,9 +845,9 @@ void FlashDetectorConstruction::ConstructSDandField()
   logicCryst->SetSensitiveDetector(sd_cr_opt);
   */
   
-  //G4String SDname_of_opt;
+  G4String SDname_of_opt="Optic_fiber";
    G4SDManager* SDman_of_opt = G4SDManager::GetSDMpointer();
-   sd_of_opt = new FlashSensitiveDetector("Optic_fiber");
+   sd_of_opt = new FSensitiveDetector(SDname_of_opt);
 
 
   SDman_of_opt->AddNewDetector( sd_of_opt );

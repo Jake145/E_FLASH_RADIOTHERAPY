@@ -146,4 +146,18 @@ class FlashHit : public G4VHit
 
 typedef G4THitsCollection<FlashHit> FlashHitsCollection;
 
+extern G4ThreadLocal G4Allocator<FlashHit>* FlashHitAllocator;
+
+inline void* FlashHit::operator new(size_t)
+{
+    if (!FlashHitAllocator)
+        FlashHitAllocator = new G4Allocator<FlashHit>;
+    return (void*)FlashHitAllocator->MallocSingle();
+}
+
+inline void FlashHit::operator delete(void*aHit)
+{
+    FlashHitAllocator->FreeSingle((FlashHit*) aHit);
+}
+
 #endif

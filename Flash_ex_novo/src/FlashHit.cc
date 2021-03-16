@@ -23,93 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: FlashHit.cc 76474 2013-11-11 10:36:34Z gcosmo $
 //
 /// \file FlashHit.cc
 /// \brief Implementation of the FlashHit class
 
 #include "FlashHit.hh"
-#include "G4UnitsTable.hh"
+
 #include "G4VVisManager.hh"
+#include "G4VisAttributes.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
-#include "G4VisAttributes.hh"
-
-#include <iomanip>
-
-G4ThreadLocal G4Allocator<FlashHit>* FlashHitAllocator=0;
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UIcommand.hh"
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashHit::FlashHit()
- : G4VHit(),
-   fTrackID(-1),
-   fChamberNb(-1),
-   fEdep(0.),
-   fPos(G4ThreeVector())
+G4ThreadLocal G4Allocator<FlashHit>* FlashHitAllocator;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+FlashHit::FlashHit(G4int i,G4double t)
+: G4VHit(), fId(i), fTime(t)
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-FlashHit::~FlashHit() {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-FlashHit::FlashHit(const FlashHit& right)
-  : G4VHit()
-{
-  fTrackID   = right.fTrackID;
-  fChamberNb = right.fChamberNb;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const FlashHit& FlashHit::operator=(const FlashHit& right)
-{
-  fTrackID   = right.fTrackID;
-  fChamberNb = right.fChamberNb;
-  fEdep      = right.fEdep;
-  fPos       = right.fPos;
-
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4bool FlashHit::operator==(const FlashHit& right) const
-{
-  return ( this == &right ) ? true : false;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void FlashHit::Draw()
-{
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4Circle circle(fPos);
-    circle.SetScreenSize(4.);
-    circle.SetFillStyle(G4Circle::filled);
-    G4Colour colour(1.,0.,0.);
-    G4VisAttributes attribs(colour);
-    circle.SetVisAttributes(attribs);
-    pVVisManager->Draw(circle);
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void FlashHit::Print()
 {
-  G4cout
-     << "  trackID: " << fTrackID << " chamberNb: " << fChamberNb
-     << "Edep: "
-     << std::setw(7) << G4BestUnit(fEdep,"Energy")
-     << " Position: "
-     << std::setw(7) << G4BestUnit( fPos,"Length")
-     << G4endl;
+    G4cout << "  Flash[" << fId << "] " << fTime/ns << " (nsec)" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
