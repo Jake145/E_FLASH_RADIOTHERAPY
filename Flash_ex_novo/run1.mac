@@ -18,7 +18,7 @@
 #########################
 #########################
 /gps/particle e-
-/gps/pos/type Beam
+/gps/pos/type Plane
 /gps/pos/rot1 0 0 1
 /gps/pos/rot2 0 1 0 
 /gps/pos/shape Circle

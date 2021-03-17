@@ -505,7 +505,7 @@ G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
 G4RotationMatrix rotm  = G4RotationMatrix();
     rotm.rotateY(90*deg); 
     
-    G4ThreeVector position = G4ThreeVector(-1100.*mm,  0.*mm,0.*mm);     
+    G4ThreeVector position = G4ThreeVector(-1300.*mm,  0.*mm,0.*mm);     
     G4Transform3D transform = G4Transform3D(rotm,position);
                                     
    G4VPhysicalVolume* phys_cryst = new G4PVPlacement(transform,logicCryst,            
