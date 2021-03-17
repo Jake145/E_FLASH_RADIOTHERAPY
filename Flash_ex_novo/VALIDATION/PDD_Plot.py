@@ -10,7 +10,7 @@ from tsmoothie.smoother import *
 #so far the best one is dose_newcuts with binning 40 40 40 and size 4 8 8 cm
 
 #df = pd.read_csv('dose_newcuts_5deg_newlist.csv',names=['X','Y','Z','dose [Gy]','dosesq [Gy^2]','entry'])
-df = pd.read_csv('./oldruns/dose_newcuts.csv',names=['X','Y','Z','dose [Gy]','dosesq [Gy^2]','entry'])
+df = pd.read_csv('dose.csv',names=['X','Y','Z','dose [Gy]','dosesq [Gy^2]','entry'])
 
 distance_val,validation_dose=np.loadtxt('novac11PDD.txt',unpack=True)
 distancer50,doser50=np.loadtxt('r50.txt',unpack=True)
@@ -23,7 +23,7 @@ distanceprofile=np.linspace(-80,80,len(np.array(df['dose [Gy]'][np.logical_and(d
 
 plt.figure('validation')
 plt.title('PDD simulation vs validation data')
-j=18
+j=15
 plt.xlabel('distance [mm]')
 plt.ylabel('dose [$\%$]')
 plt.grid()

@@ -46,7 +46,7 @@ public:
 public:
   void GeneratePrimaries(G4Event*);
   
-    
+   /* 
 private:
   void SetDefaultPrimaryParticle();
  
@@ -57,7 +57,7 @@ private:
   G4double sigmaZ;
   
   G4double Theta; 
-
+*/
 private:
   G4GeneralParticleSource*    		          particleGun;
 

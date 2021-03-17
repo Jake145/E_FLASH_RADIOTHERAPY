@@ -35,7 +35,7 @@
 #include "globals.hh"
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
-#include "G4ParticleGun.hh"
+//#include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
@@ -45,7 +45,7 @@ FlashPrimaryGeneratorAction::FlashPrimaryGeneratorAction()
   
   particleGun  = new G4GeneralParticleSource();
 
-  SetDefaultPrimaryParticle();  
+ // SetDefaultPrimaryParticle();  
 }  
 
 FlashPrimaryGeneratorAction::~FlashPrimaryGeneratorAction()
@@ -54,7 +54,7 @@ FlashPrimaryGeneratorAction::~FlashPrimaryGeneratorAction()
 
 
 }
-  
+  /*
 void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 {    
   // ****************************
@@ -88,9 +88,9 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   Theta = defaultTheta;
 
 }
-
+*/
 void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
+{/*
   // ****************************************
   // Set the beam angular apread 
   // and spot size
@@ -149,7 +149,7 @@ while (true)  {
   
  
   particleGun ->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection( G4ThreeVector(Mx,My,Mz) );
-  
+  */
 
   // Generate a primary particle
   particleGun -> GeneratePrimaryVertex( anEvent ); 

@@ -32,7 +32,7 @@
 
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
-
+#include <fstream>
 /// Stacking action class : manage the newly generated particles
 ///
 /// One wishes do not track secondary neutrino.Therefore one kills it 
@@ -50,7 +50,7 @@ class FlashStackingAction : public G4UserStackingAction
     virtual void PrepareNewEvent();
 
   private:
-
+	 std::ofstream OpticFile;
     G4int fScintillationCounter;
     G4int fCerenkovCounter;
 };
