@@ -10,7 +10,7 @@ from tsmoothie.smoother import *
 #so far the best one is dose_newcuts with binning 40 40 40 and size 4 8 8 cm
 
 #df = pd.read_csv('dose_newcuts_5deg_newlist.csv',names=['X','Y','Z','dose [Gy]','dosesq [Gy^2]','entry'])
-df = pd.read_csv('./oldruns/dose_newcuts.csv',names=['X','Y','Z','dose [Gy]','dosesq [Gy^2]','entry'])
+df = pd.read_csv('dose.csv',names=['X','Y','Z','dose [Gy]','dosesq [Gy^2]','entry'])
 
 distance_val,validation_dose=np.loadtxt('novac11PDD.txt',unpack=True)
 distancer50,doser50=np.loadtxt('r50.txt',unpack=True)
@@ -50,7 +50,7 @@ plt.plot(distance,np.array(df['dose [Gy]'][np.logical_and(df['Z']==j,df['Y']==j)
 #plt.plot(distance,smoother.data[0], '.k')
 #plt.fill_between(range(len(distance)), low[0], up[0], alpha=0.3)
 plt.legend()
-plt.savefig('pdddata.png')
+#plt.savefig('pdddata.png')
 plt.show()
 
 #k=j+3
@@ -95,7 +95,7 @@ for i in range(a,b):
     plt.plot(distancer50,doser50/np.max(doser50)*100,label='validation',color='green')
     plt.plot(distanceprofile,smoother.smooth_data[0], linestyle='dashed', color='red',label='smoothed curve')
     plt.legend()
-#plt.savefig('r50.png')
+##plt.savefig('r50.png')
 plt.show()
 
 plt.figure('profile50 to save')
@@ -107,7 +107,7 @@ plt.plot(distanceprofile,np.array(df['dose [Gy]'][np.logical_and(df['X']==17,df[
 plt.plot(distancer50,doser50/np.max(doser50)*100,label='validation',color='green',linestyle='dashed')
 #plt.plot(distanceprofile,smoother.smooth_data[0], linestyle='dashed', color='red',label='smoothed curve')
 plt.legend()
-plt.savefig('r50.png')
+#plt.savefig('r50.png')
 plt.show()
 
 
@@ -136,7 +136,7 @@ for i in range(a,b):
     plt.plot(distancer80,doser80/np.max(doser80)*100,label='validation',color='green')
     plt.plot(distanceprofile,smoother.smooth_data[0], linestyle='dashed',           color='red',label='smoothed curve')
     plt.legend()
-    #plt.savefig('r80.png')
+    ##plt.savefig('r80.png')
 plt.show()
 
 plt.figure('profile80 to save')
@@ -149,7 +149,7 @@ plt.plot(distanceprofile,np.array(df['dose [Gy]'][np.logical_and(df['X']==12,df[
 plt.plot(distancer80,doser80/np.max(doser80)*100,label='validation',color='green',linestyle='dashed')
 #plt.plot(distanceprofile,smoother.smooth_data[0], linestyle='dashed', color='red',label='smoothed curve')
 plt.legend()
-plt.savefig('r80.png')
+#plt.savefig('r80.png')
 plt.show()
 
 plt.figure('profiler100')
@@ -178,7 +178,7 @@ for i in range(a,b):
     plt.plot(distanceprofile,smoother.smooth_data[0], linestyle='dashed', color='red',label='smoothed curve')
 
     plt.legend()
-#plt.savefig('r100.png')
+##plt.savefig('r100.png')
 plt.show()
 
 plt.figure('profile100 to save')
@@ -191,5 +191,5 @@ plt.plot(distanceprofile,np.array(df['dose [Gy]'][np.logical_and(df['X']==6,df['
 plt.plot(distancer100,doser100/np.max(doser100)*100,label='validation',color='green',linestyle='dashed')
 #plt.plot(distanceprofile,smoother.smooth_data[0], linestyle='dashed', color='red',label='smoothed curve')
 plt.legend()
-plt.savefig('r100.png')
+#plt.savefig('r100.png')
 plt.show()
