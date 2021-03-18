@@ -96,15 +96,20 @@ void FlashDetectorConstruction::DefineMaterials()
   LYSO->AddElement(Y,2);
   
  G4double energy[]    = {3.061*eV, 2.952*eV, 2.844*eV,2.689*eV,2.551*eV,2.403*eV,2.271*eV};
+ // G4double energy_spect[]    = {3.542*eV, 3.099*eV, 2.817*eV, 2.479*eV,2.254*eV,1.907*eV};
   G4double rindex[]    = {1.833, 1.827, 1.822,1.818,1.813,1.810,1.806};
+  //  G4double emspect[]    = {0., 0.6, 1. ,0.6, 0.2, 0. };
  G4double absorption[] = {136.2*nm, 142.8*nm, 149.84*nm,160.84*nm,160.84*nm,171.84*nm,185.04*nm,198.24*nm}; 
    const G4int nEntries = sizeof(energy)/sizeof(G4double);
-  G4MaterialPropertiesTable*MPT =new G4MaterialPropertiesTable();
+     // const G4int nEntries_spect = sizeof(energy_spect)/sizeof(G4double);
+  G4MaterialPropertiesTable* MPT = new G4MaterialPropertiesTable();
   // property independent of energy
   MPT->AddConstProperty("SCINTILLATIONYIELD", 27600./MeV);
   MPT->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 45.*ns);
+  
   MPT->AddConstProperty("RESOLUTIONSCALE", 1.0);
   // properties that depend on energy
+ // MPT->AddProperty("SCINTILLATIONCOMPONENT1", energy_spect, emspect,nEntries_spect)->SetSpline(true);
   MPT->AddProperty("RINDEX", energy, rindex,nEntries)->SetSpline(true);
   MPT->AddProperty("ABSLENGTH", energy, absorption,nEntries)->SetSpline(true);
   LYSO->SetMaterialPropertiesTable(MPT);
@@ -505,7 +510,7 @@ G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
 G4RotationMatrix rotm  = G4RotationMatrix();
     rotm.rotateY(90*deg); 
     
-    G4ThreeVector position = G4ThreeVector(0.*mm,  0.*mm,0.*mm);     
+    G4ThreeVector position = G4ThreeVector(-80*mm,  0.*mm,0.*mm);     
     G4Transform3D transform = G4Transform3D(rotm,position);
                                     
    G4VPhysicalVolume* phys_cryst = new G4PVPlacement(transform,logicCryst,            
