@@ -23,8 +23,8 @@ class FlashHit : public G4VHit
   public:
 
  
-
       FlashHit();
+      FlashHit(G4int i,G4double t);
 
       ~FlashHit();
 
@@ -36,9 +36,11 @@ class FlashHit : public G4VHit
 
       inline void operator delete(void *aHit);
 
-      void Draw();
 
       void Print();
+
+      G4int fId;
+      G4double fTime;
 
  
 

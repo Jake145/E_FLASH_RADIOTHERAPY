@@ -818,10 +818,10 @@ void FlashDetectorConstruction::ConstructSDandField()
   
   // declare crystal as a MultiFunctionalDetector scorer
   //  
-  G4MultiFunctionalDetector* cryst = new G4MultiFunctionalDetector("crystalSD");
+  FSensitiveDetector* cryst = new FSensitiveDetector("crystalSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
-  G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
-  cryst->RegisterPrimitive(primitiv1);
+  // G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
+  // cryst->RegisterPrimitive(primitiv1);
   SetSensitiveDetector("CrystalLV",cryst);
   
   

@@ -48,9 +48,16 @@ G4ThreadLocal G4Allocator<FlashHit>* FlashHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+FlashHit::FlashHit() {}
+
+
+
 FlashHit::FlashHit(G4int i,G4double t)
 : G4VHit(), fId(i), fTime(t)
 {}
+
+FlashHit::~FlashHit() {};
+
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
