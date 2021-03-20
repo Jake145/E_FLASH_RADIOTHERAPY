@@ -45,15 +45,16 @@ class FlashHit : public G4VHit
  
 
   private:
+  
 	G4String    Stat;
-      G4String      Pname;
+ /*     G4String      Pname;
       
       G4int         ChK;
       
       G4int 	    Scint;
 	
       G4int         stripNo;
-
+*/
       G4ThreeVector position;
 
       G4ThreeVector momentum;
@@ -67,12 +68,13 @@ class FlashHit : public G4VHit
  
 
   public:
+
       inline void SetStatus(G4String Status)
       {Stat=Status;}
-      
+  
       inline G4String GetStatus_Kin()
       {return Stat;}
-      inline void SetCherenkovCount(G4int CherenkovCount)
+   /*     inline void SetCherenkovCount(G4int CherenkovCount)
      
       { ChK=CherenkovCount; }
   	
@@ -103,7 +105,7 @@ class FlashHit : public G4VHit
       inline G4int GetStripNo()
 
       { return stripNo; }
-
+ */
       inline void SetPosition(G4ThreeVector pos)
 
       { position=pos; }

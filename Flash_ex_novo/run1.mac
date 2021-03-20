@@ -131,7 +131,7 @@
 #
 /score/mesh/boxSize 4. 8. 8. cm
 /score/mesh/nBin 40 40 40
-/score/mesh/translate/xyz -164.4 0 0 mm 
+/score/mesh/translate/xyz -159.4 0 0 mm 
 /score/quantity/doseDeposit dose Gy
 
 #

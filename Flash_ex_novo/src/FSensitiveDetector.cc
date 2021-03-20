@@ -30,20 +30,13 @@ void FSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
   
 G4bool FSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*ROhist) {
 
-G4int scintillation = 0;
-G4int cherenkov = 0;
-G4StepPoint* preStep = step->GetPreStepPoint();
 
-G4TouchableHistory* touchable = (G4TouchableHistory*)(preStep->GetTouchable());
 
- 
-
-  FlashHit* newHit = new FlashHit();
+  
   G4Track* aTrack= step->GetTrack();
+  if(aTrack->GetTrackID!=1)return false;
   
-  
-	
-  //newHit->SetStripNo(  touchable->GetReplicaNumber(0) );
+  FlashHit* newHit = new FlashHit();
   newHit->SetParticle( aTrack->GetDefinition() );
 
   newHit->SetPosition( step->GetPreStepPoint()->GetPosition() );
@@ -56,32 +49,6 @@ G4TouchableHistory* touchable = (G4TouchableHistory*)(preStep->GetTouchable());
   
   newHit->SetEdep(step->GetTotalEnergyDeposit());
   
-  if (aTrack->GetTrackID()==1)
-  {
-    newHit->SetProcess("Primary");
-  }
-  else if (aTrack->GetTrackID()!=1 && aTrack->GetParentID()==1)
-  {
-    if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation")
-    {
-    scintillation+=1;
-    newHit->SetProcess(aTrack->GetCreatorProcess()->GetProcessName() );
-    }
-
-    else if (aTrack->GetCreatorProcess()->GetProcessName() == "Cherenkov")
-    {
-    cherenkov+=1;
-    newHit->SetProcess(aTrack->GetCreatorProcess()->GetProcessName());
-    }
-    else
-    {
-      newHit->SetProcess("Irrelevant secondary");
-    }
-  }
- 
-    
-    newHit->SetScintilCount(scintillation);
-     newHit->SetCherenkovCount(cherenkov);
          
     if ( preStep->GetStepStatus() == fGeomBoundary ){newHit->SetStatus("incident particle");}
     else {newHit->SetStatus("not incident particle");}
