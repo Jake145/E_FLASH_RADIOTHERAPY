@@ -54,14 +54,8 @@
 
 FlashSteppingAction::FlashSteppingAction(FlashEventAction* eventAction)
 : G4UserSteppingAction(),fEventAction(eventAction){
-  /*
-  //G4int ThreadNumber=G4Threading::G4GetThreadId();
-std::ostringstream oss;
-oss << "Kinetic_E_crystal_" << ThreadNumber << ".csv" ;
-std::string filename = oss.str();
-  //G4String filename=("Kinetic_E_crystal_%d.csv",ThreadNumber);
-  KinEnFile.open(filename,std::ios_base::app);*/
-  
+ 
+    fExpectedNextStatus = Undefined;
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,8 +76,9 @@ G4ParticleDefinition* particleType = track->GetDefinition();
 if (particleType == G4OpticalPhoton::OpticalPhotonDefinition() && preStepPoint->GetTouchableHandle()->GetVolume()->GetName()=="phantomPhys") track->SetTrackStatus(fStopAndKill);
 
 */
+
   G4Track* theTrack = theStep->GetTrack();
-  
+   if ( theTrack->GetCurrentStepNumber() == 1 ) fExpectedNextStatus = Undefined;
  G4StepPoint* thePrePoint = theStep->GetPreStepPoint();
   G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
 
@@ -92,7 +87,19 @@ if (particleType == G4OpticalPhoton::OpticalPhotonDefinition() && preStepPoint->
 
   G4OpBoundaryProcessStatus boundaryStatus=Undefined;
   static G4ThreadLocal G4OpBoundaryProcess* boundary = nullptr;
-
+if(!boundary){
+    G4ProcessManager* pm
+      = theStep->GetTrack()->GetDefinition()->GetProcessManager();
+    G4int nprocesses = pm->GetProcessListLength();
+    G4ProcessVector* pv = pm->GetProcessList();
+    G4int i;
+    for( i=0;i<nprocesses;i++){
+      if((*pv)[i]->GetProcessName()=="OpBoundary"){
+        boundary = (G4OpBoundaryProcess*)(*pv)[i];
+        break;
+      }
+    }
+  }
  
  G4ParticleDefinition* particleType = theTrack->GetDefinition();
   if(particleType==G4OpticalPhoton::OpticalPhotonDefinition()){
@@ -160,11 +167,7 @@ if (particleType == G4OpticalPhoton::OpticalPhotonDefinition() && preStepPoint->
     }
   }
  
- /*
- if(KinEnFile.is_open()){
- 
- KinEnFile<< eventid<< "\t" << kineticEnergy << "\t" <<trackID<<G4endl;
- }*/
+
  	}
  
  

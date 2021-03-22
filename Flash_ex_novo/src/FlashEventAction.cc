@@ -186,7 +186,7 @@ G4SDManager * SDman_pd = G4SDManager::GetSDMpointer();
 
     G4String colNam_pd;
 
-    collectionID_of = SDman_pd->GetCollectionID("PhotoDiodeSD/PhotoDiodeHitsCollection");
+    collectionID_pd = SDman_pd->GetCollectionID("PhotoDiodeSD/PhotoDiodeHitsCollection");
     
     G4HCofThisEvent * HCE_pd = evt->GetHCofThisEvent();
 

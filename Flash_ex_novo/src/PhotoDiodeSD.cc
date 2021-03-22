@@ -47,7 +47,7 @@ PhotoDiodeSD::PhotoDiodeSD(G4String name)
   : G4VSensitiveDetector(name)
 {
   fphotoCollection = nullptr;
-  collectionName.insert("PhtoDiodeHitsCollection");
+  collectionName.insert("PhotoDiodeHitsCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
