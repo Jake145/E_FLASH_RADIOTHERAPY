@@ -44,12 +44,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashRunAction::FlashRunAction()
-: G4UserRunAction(),fSumEdep(0.)
+: G4UserRunAction(),fSumEdep(0.),fcount_of(0),fcerenkov_of(0),fscintillation_of(0),fcount_pd(0),
+fcerenkov_pd(0),fscintillation_pd(0)
 {
  // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
 
   accumulableManager->RegisterAccumulable(fSumEdep); 
+  accumulableManager->RegisterAccumulable(fcount_of);
+  accumulableManager->RegisterAccumulable(fcerenkov_of);
+  accumulableManager->RegisterAccumulable(fscintillation_of);
+  accumulableManager->RegisterAccumulable(fcount_pd);
+  accumulableManager->RegisterAccumulable(fcerenkov_pd);
+  accumulableManager->RegisterAccumulable(fscintillation_pd); 
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,22 +71,6 @@ void FlashRunAction::BeginOfRunAction(const G4Run*run )
 { 
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
-//oooooooooooooooooooOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOo
-/* //This is for creating the Ntuple. It is not working as expected
-G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
-analysisManager->SetVerboseLevel(1);
-// Open an output file   
-//analysisManager->OpenFile("FLASH_G4"); 
-
-// Creation of ntuple  
-analysisManager->CreateNtuple("MyNtuple", "Kinetic Energy in Detector");
-// X = D in CreateNtupleXColumn stands for G4double (I,F,D,S)  
-analysisManager->CreateNtupleIColumn("Particle_ID");  
-analysisManager->CreateNtupleDColumn("Kinetic_Energy");
-analysisManager->CreateNtupleIColumn("Event");
-analysisManager->CreateNtupleSColumn("LogicalVolume");
-analysisManager->FinishNtuple(); */
-//OOOOOOOOOOOOOOOOOOOOOoooooooooooooOOOoooOOooooooooooooooooooOOOOOOOOOOooooooooOOoooOOOoooOOoooo
 // reset accumulables to their initial values
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Reset();
@@ -121,13 +112,35 @@ void FlashRunAction::EndOfRunAction(const G4Run* run)
      << "--------------------End of Local Run------------------------"
      << G4endl
      << "  The run was " << nofEvents << " events ";
-  }      
+  }  
+      
   G4cout
      
      << " Total Energy in crystal : " << G4BestUnit(fSumEdep.GetValue(),"Energy") 
      << G4endl 
      << "------------------------------------------------------------" << G4endl 
      << G4endl;
+     
+     G4cout
+     
+     << " Total Optic events in optic fiber : " << fcount_of.GetValue()
+     << G4endl 
+
+     << "Total Scintillation in Optic Fiber : " << fscintillation_of.GetValue() <<G4endl
+     << "Total Cerenkov in Optic Fiber : " << fcerenkov_of.GetValue() << G4endl
+     << "------------------------------------------------------------" << G4endl ;
+     
+     G4cout
+     
+     << " Total Optic events in photodiode : " << fcount_pd.GetValue()
+     << G4endl 
+
+     << "Total Scintillation in photodiode : " << fscintillation_pd.GetValue() <<G4endl
+     << "Total Cerenkov in photodiode : " << fcerenkov_pd.GetValue() << G4endl
+     << "------------------------------------------------------------" << G4endl ;
+     
+     
+     
   }
         
   

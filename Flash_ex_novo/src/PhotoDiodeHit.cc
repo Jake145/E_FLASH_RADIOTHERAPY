@@ -41,7 +41,7 @@ G4ThreadLocal G4Allocator<PhotoDiodeHit>* PhotoDiodeHitAllocator=0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhotoDiodeHit::PhotoDiodeHit()
-  : fCerenkov_photo(0),fScintillation_photo(0),fPhotons_photo(0){}
+  : fPhotons_photo(0),fCerenkov_photo(0),fScintillation_photo(0){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

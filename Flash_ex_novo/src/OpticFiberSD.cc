@@ -39,6 +39,7 @@
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
 #include "G4VProcess.hh"
+#include "G4OpticalPhoton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,7 +47,7 @@ OpticFiberSD::OpticFiberSD(G4String name)
   : G4VSensitiveDetector(name)
 {
   foptCollection = nullptr;
-  collectionName.insert("OpticFiberCollection");
+  collectionName.insert("OpticFiberHitsCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,30 +68,33 @@ void OpticFiberSD::Initialize(G4HCofThisEvent* hitsCE){
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool OpticFiberSD::ProcessHits(G4Step* ,G4TouchableHistory* ){
-  return false;
-}
-G4bool OpticFiberSD::ProcessHits_constStep(G4Step* aStep,G4TouchableHistory* ){
+G4bool OpticFiberSD::ProcessHits(G4Step* step,G4TouchableHistory* ){
 
-	G4Track* track = aStep->GetTrack();
+  G4StepPoint* preStepPoint = step->GetPreStepPoint();
+    G4StepPoint* postStepPoint = step->GetPostStepPoint();
+  G4Track* track = step->GetTrack();
 	G4ParticleDefinition* particleType = track->GetDefinition();
 	if (particleType != G4OpticalPhoton::OpticalPhotonDefinition()){
 	return false;
 	}
-	
-	hit = new OpticFiberHit(); 
+	if ( preStepPoint->GetStepStatus() == fGeomBoundary){ //&& preStepPoint->GetTouchableHandle()->GetVolume()->GetName()=="crystal";){
+	OpticFiberHit* hit = new OpticFiberHit(); 
 
     	hit->IncPhotonCount(); 
     	
 	if(track->GetCreatorProcess()->GetProcessName() == "Scintillation"){
 		hit->IncCerenkovCount();
 		}
-	      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
+	      if(track->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
 		hit->IncScintillationCount();
+		
+		    foptCollection->insert( hit );
+		}
 		}
                    
-           return true;
-	}
+           return true;;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

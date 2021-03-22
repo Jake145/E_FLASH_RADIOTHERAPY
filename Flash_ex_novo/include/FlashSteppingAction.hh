@@ -29,7 +29,7 @@
 
 #ifndef FlashSteppingAction_h
 #define FlashSteppingAction_h 1
-
+#include "G4OpBoundaryProcess.hh"
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 #include <fstream>
@@ -50,9 +50,10 @@ class FlashSteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
   private:
-  std::ofstream KinEnFile;
-  G4int ThreadNumber;
-  G4int fparticlecount;
+      G4OpBoundaryProcessStatus fExpectedNextStatus;
+  //std::ofstream KinEnFile;
+  //G4int ThreadNumber;
+  //G4int fparticlecount;
     FlashEventAction*  fEventAction;
     //G4LogicalVolume* fScoringVolume;
 };

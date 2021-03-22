@@ -67,10 +67,10 @@ class PhotoDiodeHit : public G4VHit
     inline G4int GetPhotonCount_photo(){return fPhotons_photo;}
     
     inline void IncCerenkovCount_photo(){fCerenkov_photo++;}
-    inline G4int GetPhotonCount_photo(){return fCerenkov_photo;}
+    inline G4int GetCerenkovCount_photo(){return fCerenkov_photo;}
     
     inline void IncScintillationCount_photo(){fScintillation_photo++;}
-    inline G4int GetPhotonCount_photo(){return fScintillation_photo;}
+    inline G4int GetScintillationCount_photo(){return fScintillation_photo;}
     
 
 

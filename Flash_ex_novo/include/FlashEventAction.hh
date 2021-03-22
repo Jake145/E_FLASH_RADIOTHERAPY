@@ -33,6 +33,10 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 #include "FlashHit.hh"
+#include "OpticFiberHit.hh"
+#include "PhotoDiodeHit.hh"
+
+#include <fstream>
 class FlashRunAction; //definisco la classe Run Action
 
 /// Event action class
@@ -46,16 +50,19 @@ class FlashEventAction : public G4UserEventAction //definisco la Event Action ch
 
     virtual void BeginOfEventAction(const G4Event* event); //definisco la funzione che inizializza 									//l'evento
     virtual void EndOfEventAction(const G4Event* event);	//similmente quello che lo termina
-
+void IncAbsorption(){fAbsorptionCount++;}
+    void IncBoundaryAbsorption(){fBoundaryAbsorptionCount++;}
 
   private:
+    std::ofstream KinEnFile;
     FlashRunAction* fRunAction; 
     G4int fCollID_cryst;
-    G4int collectionID;
-    G4int chKount;
-	G4double DepEn;
-    G4int ScintKount;
-
+    G4int collectionID_cryst;
+    G4int collectionID_of;
+    G4int collectionID_pd;
+    
+G4int fAbsorptionCount;
+G4int fBoundaryAbsorptionCount;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

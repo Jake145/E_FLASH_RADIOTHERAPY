@@ -54,10 +54,25 @@ class FlashRunAction : public G4UserRunAction //dichiaro il run action
 
     //void CountEvent()           { fGoodEvents += 1; };
     void SumEdep(G4double Edep) { fSumEdep += Edep; };  
-
+    void CountPhotons_of(G4int count_of) {fcount_of +=count_of;};
+    void CountCerenkov_of(G4int cerenkov_of) {fcerenkov_of+=cerenkov_of;};
+    void CountScintillation_of(G4int scintillation_of) {fscintillation_of+=scintillation_of;};
+    void CountPhotons_pd(G4int count_pd) {fcount_pd +=count_pd;};
+    void CountCerenkov_pd(G4int cerenkov_pd) {fcerenkov_pd+=cerenkov_pd;};
+    void CountScintillation_pd(G4int scintillation_pd) {fscintillation_pd+=scintillation_pd;};
+    
+ 
 private:
     //G4Accumulable<G4int>    fGoodEvents;
     G4Accumulable<G4double> fSumEdep;  
+    G4Accumulable<G4int> fcount_of;
+        G4Accumulable<G4int> fcerenkov_of;
+            G4Accumulable<G4int> fscintillation_of;
+            
+    G4Accumulable<G4int> fcount_pd;
+        G4Accumulable<G4int> fcerenkov_pd;
+             G4Accumulable<G4int> fscintillation_pd;
+   
 };
 
 #endif

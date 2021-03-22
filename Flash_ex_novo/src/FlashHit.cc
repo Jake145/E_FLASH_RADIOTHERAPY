@@ -56,7 +56,7 @@ FlashHit::FlashHit(G4int i,G4double t)
 : G4VHit(), fId(i), fTime(t)
 {}
 
-FlashHit::~FlashHit() {};
+FlashHit::~FlashHit() {}
 
 
 

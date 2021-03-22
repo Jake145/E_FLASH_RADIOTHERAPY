@@ -67,10 +67,10 @@ class OpticFiberHit : public G4VHit
     inline G4int GetPhotonCount(){return fPhotons;}
     
     inline void IncCerenkovCount(){fCerenkov++;}
-    inline G4int GetPhotonCount(){return fCerenkov;}
+    inline G4int GetCerenkovCount(){return fCerenkov;}
     
     inline void IncScintillationCount(){fScintillation++;}
-    inline G4int GetPhotonCount(){return fScintillation;}
+    inline G4int GetScintillationCount(){return fScintillation;}
     
 
 

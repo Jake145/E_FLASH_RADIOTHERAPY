@@ -41,7 +41,7 @@ G4ThreadLocal G4Allocator<OpticFiberHit>* OpticFiberHitAllocator=0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpticFiberHit::OpticFiberHit()
-  : fCerenkov(0),fScintillation(0),fPhotons(0){}
+  : fPhotons(0),fCerenkov(0),fScintillation(0){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

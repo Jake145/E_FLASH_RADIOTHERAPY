@@ -16,7 +16,7 @@ collectionName.insert("FlashHitsCollection");
 
 }
 
-FSensitiveDetector::~FSensitiveDetector() {};
+FSensitiveDetector::~FSensitiveDetector() {}
 
 void FSensitiveDetector::Initialize(G4HCofThisEvent* HCE)
 {
@@ -34,37 +34,26 @@ G4bool FSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*ROhist) 
 
   
   G4Track* aTrack= step->GetTrack();
-  if(aTrack->GetTrackID!=1)return false;
+  if(aTrack->GetTrackID()!=1)return false;
   
+  G4StepPoint* preStepPoint = step->GetPreStepPoint();
+   if ( preStepPoint->GetStepStatus() == fGeomBoundary ){
   FlashHit* newHit = new FlashHit();
+  //newHit->SetParticle( aTrack->GetDefinition() );
+
+  //newHit->SetPosition( preStepPoint->GetPosition() );
+
+  //newHit->SetMomentum( preStepPoint->GetMomentum() );
+
+  newHit->SetEnergy( preStepPoint->GetTotalEnergy() );
+
   newHit->SetParticle( aTrack->GetDefinition() );
-
-  newHit->SetPosition( step->GetPreStepPoint()->GetPosition() );
-
-  newHit->SetMomentum( step->GetPreStepPoint()->GetMomentum() );
-
-  newHit->SetEnergy( step->GetPreStepPoint()->GetTotalEnergy() );
-
-  newHit->SetParticle( aTrack->GetDefinition() );
   
-  newHit->SetEdep(step->GetTotalEnergyDeposit());
+  //newHit->SetEdep(step->GetTotalEnergyDeposit());
   
-         
-    if ( preStep->GetStepStatus() == fGeomBoundary ){newHit->SetStatus("incident particle");}
-    else {newHit->SetStatus("not incident particle");}
-
-  
-   
-
-
-    
-
-
-  
-   
-
   HitsCollection->insert( newHit );
-
+         
+   }
  
 
   return true;

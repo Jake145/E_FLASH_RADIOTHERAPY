@@ -39,6 +39,7 @@
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
 #include "G4VProcess.hh"
+#include "G4OpticalPhoton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,7 +47,7 @@ PhotoDiodeSD::PhotoDiodeSD(G4String name)
   : G4VSensitiveDetector(name)
 {
   fphotoCollection = nullptr;
-  collectionName.insert("PhtoDiodeCollection");
+  collectionName.insert("PhtoDiodeHitsCollection");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,29 +69,32 @@ void PhotoDiodeSD::Initialize(G4HCofThisEvent* hitsCE){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool PhotoDiodeSD::ProcessHits(G4Step* ,G4TouchableHistory* ){
-  return false;
+return false;
 }
-G4bool PhotoDiodeSD::ProcessHits_constStep(G4Step* aStep,G4TouchableHistory* ){
-
-	G4Track* track = aStep->GetTrack();
+G4bool PhotoDiodeSD::ProcessHits_constStep(const G4Step* aStep, G4TouchableHistory* ){
+G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
+    G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
+  G4Track* track = aStep->GetTrack();
 	G4ParticleDefinition* particleType = track->GetDefinition();
 	if (particleType != G4OpticalPhoton::OpticalPhotonDefinition()){
 	return false;
 	}
-	
-	hit_photo = new PhotoDiodeHit(); 
+	if ( preStepPoint->GetStepStatus() == fGeomBoundary){ // && preStepPoint->GetTouchableHandle()->GetVolume()->GetName()=="OF_core_phys";){ //if we add the volume name prestep should become poststep
+	PhotoDiodeHit* hit_photo = new PhotoDiodeHit(); 
 
     	hit_photo->IncPhotonCount_photo(); 
     	
 	if(track->GetCreatorProcess()->GetProcessName() == "Scintillation"){
 		hit_photo->IncCerenkovCount_photo();
 		}
-	      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
+	      if(track->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
 		hit_photo->IncScintillationCount_photo();
+		fphotoCollection->insert( hit_photo );
+		}
 		}
                    
            return true;
-	}
+                                       }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

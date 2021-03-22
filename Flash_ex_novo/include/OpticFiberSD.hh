@@ -47,12 +47,11 @@ class OpticFiberSD : public G4VSensitiveDetector
 
     virtual void Initialize(G4HCofThisEvent* );
     virtual G4bool ProcessHits(G4Step* aStep, G4TouchableHistory* );
-    G4bool ProcessHits_constStep(const G4Step* ,
-                                 G4TouchableHistory* );
-    virtual void EndOfEvent(G4HCofThisEvent* );
-    virtual void clear();
-    virtual void DrawAll();
-    virtual void PrintAll();
+    
+    //virtual void EndOfEvent(G4HCofThisEvent* );
+    //virtual void clear();
+    //virtual void DrawAll();
+    //virtual void PrintAll();
  
   private:
 
