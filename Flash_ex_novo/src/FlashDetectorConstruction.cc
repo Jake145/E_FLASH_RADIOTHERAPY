@@ -92,41 +92,85 @@ FlashDetectorConstruction::~FlashDetectorConstruction()
 void FlashDetectorConstruction::DefineMaterials()
 {
   G4NistManager* man = G4NistManager::Instance();
-  
+  G4int ncomponents;
   G4bool isotopes = false;
+ G4double prelude_density = 7.4*g/cm3;
+  G4Material* prelude = new G4Material("prelude", prelude_density, ncomponents=4);
+  prelude->AddElement(man->FindOrBuildElement("Lu"),71*perCent);
+  prelude->AddElement(man->FindOrBuildElement("Si"),7*perCent);
+  prelude->AddElement(man->FindOrBuildElement("O"), 18*perCent);
+  prelude->AddElement(man->FindOrBuildElement("Y"), 4*perCent);
+
+    G4Material* scintillator = new G4Material("scintillator", prelude_density , ncomponents=2);
+  scintillator->AddMaterial(prelude,99.81*perCent);
+  scintillator->AddElement(man->FindOrBuildElement("Ce"), 0.19*perCent);
+
+  G4MaterialPropertiesTable *mpt = new G4MaterialPropertiesTable();
+    const G4int num = 20;
+ G4double ene[num]   =  {1.79*eV, 1.85*eV, 1.91*eV, 1.97*eV,
+
+			2.04*eV, 2.11*eV, 2.19*eV, 2.27*eV,
+
+			2.36*eV, 2.45*eV, 2.56*eV, 2.67*eV,
+
+			2.80*eV, 2.94*eV, 3.09*eV, 3.25*eV,
+
+			3.44*eV, 3.65*eV, 3.89*eV, 4.16*eV};
+
+
+
+  G4double fast[num]  =  {0.01, 0.10, 0.20, 0.50,
+
+			0.90, 1.70, 2.90, 5.00,
+
+			8.30, 12.5, 17.0, 22.9,
+
+			26.4, 25.6, 16.8, 4.20,
+
+			0.30, 0.20, 0.10, 0.01};
+
+
+
+  G4double rLyso[num] =  {1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81};
+
+
+
   
-  G4Element*  O = man->FindOrBuildElement("O" , isotopes); 
-  G4Element* Si = man->FindOrBuildElement("Si", isotopes);
-  G4Element* Lu = man->FindOrBuildElement("Lu", isotopes); 
-  G4Element* Y = man->FindOrBuildElement("Y", isotopes); 
-  
-  G4Material* LYSO = new G4Material("Lu2Y2SiO5", 7.1*g/cm3, 4);
-  LYSO->AddElement(Lu, 2);
-  LYSO->AddElement(Si, 1);
-  LYSO->AddElement(O , 5);
-  LYSO->AddElement(Y,2);
-  
- G4double energy[]    = {3.061*eV, 2.952*eV, 2.844*eV,2.689*eV,2.551*eV,2.403*eV,2.271*eV};
- G4double energy_spect[]    = {3.542*eV, 3.099*eV, 2.817*eV, 2.479*eV,2.254*eV,1.907*eV};
- G4double rindex[]    = {1.833, 1.827, 1.822,1.818,1.813,1.810,1.806};
- G4double emspect[]    = {0., 0.6, 1. ,0.6, 0.2, 0. };
- G4double absorption[] = {136.2*nm, 142.8*nm, 149.84*nm,160.84*nm,160.84*nm,171.84*nm,185.04*nm,198.24*nm}; 
-   const G4int nEntries = sizeof(energy)/sizeof(G4double);
-   const G4int nEntries_spect = sizeof(energy_spect)/sizeof(G4double);
-  G4MaterialPropertiesTable* MPT = new G4MaterialPropertiesTable();
-  // property independent of energy
-  MPT->AddConstProperty("SCINTILLATIONYIELD", 27600./MeV);
-  MPT->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 45.*ns);
-  
-  MPT->AddConstProperty("RESOLUTIONSCALE", 1.0);
-  // properties that depend on energy
-  MPT->AddProperty("SCINTILLATIONCOMPONENT1", energy_spect, emspect,nEntries_spect)->SetSpline(true);
-  MPT->AddProperty("RINDEX", energy, rindex,nEntries)->SetSpline(true);
-  MPT->AddProperty("ABSLENGTH", energy, absorption,nEntries)->SetSpline(true);
-  LYSO->SetMaterialPropertiesTable(MPT);
-G4cout << "LYSO G4MaterialPropertiesTable" << G4endl;
-  MPT->DumpTable();
-    
+
+
+
+  G4double abs[num]   =  {3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m};
+
+
+
+  mpt->AddProperty("FASTCOMPONENT", ene, fast, num);
+
+  mpt->AddProperty("RINDEX", ene, rLyso , num);
+
+  mpt->AddProperty("ABSLENGTH", ene, abs, num);
+
+  mpt->AddConstProperty("SCINTILLATIONYIELD",2700/MeV);
+
+  mpt->AddConstProperty("RESOLUTIONSCALE", 1);
+
+  mpt->AddConstProperty("FASTTIMECONSTANT",41*ns);
+  scintillator->SetMaterialPropertiesTable(mpt);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -404,7 +448,7 @@ G4double cryst_dX = 1*cm, cryst_dY = 1*mm, cryst_dZ = 1*mm;
 
 G4NistManager* nist = G4NistManager::Instance();
 
-  G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2Y2SiO5");
+  G4Material* cryst_mat   = nist->FindOrBuildMaterial("scintillator");
   G4Material* PMMA = nist->FindOrBuildMaterial("G4_PLEXIGLASS", 
   isotopes);
   
@@ -532,7 +576,7 @@ G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
 G4RotationMatrix rotm  = G4RotationMatrix();
     rotm.rotateY(90*deg); 
     
-    G4ThreeVector position = G4ThreeVector(-80.0*mm,  0.*mm,0.*mm);     
+    G4ThreeVector position = G4ThreeVector(-90.0*mm,  0.*mm,0.*mm);     
     G4Transform3D transform = G4Transform3D(rotm,position);
                                     
    G4VPhysicalVolume* phys_cryst = new G4PVPlacement(transform,logicCryst,            
@@ -741,7 +785,7 @@ G4LogicalVolume* logicwrapper_little =
 //OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
 // Definiamo ora le ultime tre superfici ottiche interessanti
 
-
+/*
 G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator");
   opcore_scint->SetType(dielectric_LUTDAVIS);
   opcore_scint->SetFinish(Polished_LUT);
@@ -769,7 +813,7 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
   G4OpticalSurface* opticalSurface_8 = dynamic_cast <G4OpticalSurface*>
         (core_clad->GetSurface(physcore,physclad)->
                                                        GetSurfaceProperty());
-  if (opticalSurface_8) opticalSurface_8->DumpInfo();   
+  if (opticalSurface_8) opticalSurface_8->DumpInfo();   */
   
   //Ora creaiamo il photodetector
   

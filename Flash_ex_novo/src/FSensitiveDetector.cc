@@ -50,7 +50,7 @@ G4bool FSensitiveDetector::ProcessHits(G4Step* step, G4TouchableHistory*ROhist) 
   newHit->SetParticle( aTrack->GetDefinition() );
   
   //newHit->SetEdep(step->GetTotalEnergyDeposit());
-  
+  G4cout<<"New hit with energy: "<<preStepPoint->GetTotalEnergy()<<G4endl;
   HitsCollection->insert( newHit );
          
    }

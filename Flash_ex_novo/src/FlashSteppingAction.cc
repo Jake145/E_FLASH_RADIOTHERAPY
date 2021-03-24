@@ -81,7 +81,8 @@ if (particleType == G4OpticalPhoton::OpticalPhotonDefinition() && preStepPoint->
    if ( theTrack->GetCurrentStepNumber() == 1 ) fExpectedNextStatus = Undefined;
  G4StepPoint* thePrePoint = theStep->GetPreStepPoint();
   G4VPhysicalVolume* thePrePV = thePrePoint->GetPhysicalVolume();
-
+ G4ParticleDefinition* particleType = theTrack->GetDefinition();
+  if(particleType==G4OpticalPhoton::OpticalPhotonDefinition()){
   G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
   G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
 
@@ -101,14 +102,13 @@ if(!boundary){
     }
   }
  
- G4ParticleDefinition* particleType = theTrack->GetDefinition();
-  if(particleType==G4OpticalPhoton::OpticalPhotonDefinition()){
+
     //Optical photon only
 
     if(thePrePV->GetName()!="OF_core_phys"&& thePostPV->GetName()=="photodiode"){
      
       theTrack->SetTrackStatus(fStopAndKill);}
-
+	if(thePostPV->GetName()=="photodiode"){
     //Was the photon absorbed by the absorption process
     if(thePostPoint->GetProcessDefinedStep()->GetProcessName()
        =="OpAbsorption"){
@@ -165,7 +165,7 @@ if(!boundary){
       }
       
     }
-  }
+  }}
  
 
  	}
