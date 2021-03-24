@@ -51,6 +51,8 @@ class FlashSteppingAction : public G4UserSteppingAction
 
   private:
   std::ofstream KinEnFile;
+    std::ofstream OpticFiber;
+      std::ofstream Photodiode;
   G4int ThreadNumber;
   G4int fparticlecount;
     FlashEventAction*  fEventAction;

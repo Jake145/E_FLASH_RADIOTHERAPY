@@ -67,10 +67,12 @@ FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 
       if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation"){
         fScintillationCounter++;
-        G4cout<<"found a scintillation in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;}
+        //G4cout<<"found a scintillation in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
+        }
       if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
         fCerenkovCounter++;
-                G4cout<<"found a cherenkov in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;}
+                //G4cout<<"found a cherenkov in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
+                }
     //}
   }}}
   return fUrgent;
@@ -88,7 +90,7 @@ void FlashStackingAction::NewStage()
          << fCerenkovCounter << G4endl;} */
 if(OpticFile.is_open()){
  
- OpticFile<< G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()<< "\t" << fScintillationCounter << "\t" <<fCerenkovCounter<<G4endl;
+ OpticFile<< "event ID: "<<G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()<<"\t"<< "scintillation events:" <<fScintillationCounter<<"\t"<< "Cerenkov events: "<<fCerenkovCounter<<G4endl;
  }
  	}
 

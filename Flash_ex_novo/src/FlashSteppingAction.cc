@@ -30,7 +30,7 @@
 #include "FlashSteppingAction.hh"
 #include "FlashEventAction.hh"
 #include "FlashDetectorConstruction.hh"
-
+#include "FlashRunAction.hh"
 #include "G4Step.hh"
 #include "G4Event.hh"
 #include "G4RunManager.hh"
@@ -49,55 +49,96 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction* eventAction)
   //G4int ThreadNumber=G4Threading::G4GetThreadId();
 std::ostringstream oss;
 oss << "Kinetic_E_crystal_" << ThreadNumber << ".csv" ;
-std::string filename = oss.str();
-  //G4String filename=("Kinetic_E_crystal_%d.csv",ThreadNumber);
-  KinEnFile.open(filename,std::ios_base::app);
+std::string filename_1 = oss.str();
+
+  KinEnFile.open(filename_1,std::ios_base::app);
+  
+std::ostringstream oss_of;
+oss_of << "Optic_fiber" << ThreadNumber << ".csv" ;
+std::string filename_2 = oss_of.str();
+
+  OpticFiber.open(filename_2,std::ios_base::app);
+  
+std::ostringstream oss_pd;
+oss_pd << "Photodetector_" << ThreadNumber << ".csv" ;
+std::string filename_3 = oss_pd.str();
+
+  Photodiode.open(filename_3,std::ios_base::app);
   
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashSteppingAction::~FlashSteppingAction()
-{KinEnFile.close();}
+{
+KinEnFile.close();
+OpticFiber.close();
+Photodiode.close();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-
- G4StepPoint* postStep = aStep->GetPostStepPoint();
-  if ( postStep->GetStepStatus() == fGeomBoundary ){
- G4String volumeName = postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
- if(volumeName == "CrystalLV"&&aStep->GetTrack()->GetTrackID() == 1){
+//analizziamo i primari che incidono sul cristallo
  G4int eventid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+ G4StepPoint* postStep = aStep->GetPostStepPoint();
+  G4int trackID = aStep->GetTrack()->GetTrackID();
+  if ( postStep->GetStepStatus() == fGeomBoundary ){
+
+   G4String volumeName = postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
+ if(volumeName == "CrystalLV"&&aStep->GetTrack()->GetTrackID() == 1){
+
  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
- G4int trackID = aStep->GetTrack()->GetTrackID();
+
  
  G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;
  
- /*if(aStep->GetTrack()->GetTrackID()==1){
- 		if(aStep->GetPreStepPoint()->GetProcessDefinedStep()!=0){
- 		if(aStep->GetTrack()->GetNextVolume()->GetName()=="crystal" && aStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName()=="Transportation"){
- 		G4int eventid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
- G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
- G4int trackID = aStep->GetTrack()->GetTrackID();
-  G4String volumeName = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName();
- 		G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;*/
  
  if(KinEnFile.is_open()){
  
  KinEnFile<< eventid<< "\t" << kineticEnergy << "\t" <<trackID<<G4endl;
  }
  	}
+ if(volumeName == "OF_core_LV" && aStep->GetTrack()->GetTrackID()!= 1){
+ if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
+  G4cout<< eventid<< "\t" << "Scintillation in core" << "\t" <<trackID<<G4endl;
+if(OpticFiber.is_open()){
  
+ OpticFiber<< eventid<< "\t" << "Scintillation in core" << "\t" <<trackID<<G4endl;
+ }
+ }
+else if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
+ G4cout<< eventid<< "\t" << "Cerenkov in core" << "\t" <<trackID<<G4endl;
+if(OpticFiber.is_open()){
  
+ OpticFiber<< eventid<< "\t" << "Cerenkov in core" << "\t" <<trackID<<G4endl;
+ }
+ }
+ }
+ if(volumeName == "Photodiode_LV" && aStep->GetTrack()->GetTrackID()!= 1){
+ if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
+  G4cout<< eventid<< "\t" << "Scintillation in Photodiode" << "\t" <<trackID<<G4endl;
+if(Photodiode.is_open()){
+ 
+ Photodiode<< eventid<< "\t" << "Scintillation in Photodiode" << "\t" <<trackID<<G4endl;
+ }
+ }
+else if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
+ G4cout<< eventid<< "\t" << "cerenkov in Photodiode" << "\t" <<trackID<<G4endl;
+if(Photodiode.is_open()){
+ 
+ Photodiode<< eventid<< "\t" << "cerenkov in Photodiode" << "\t" <<trackID<<G4endl;
+ }
+ }
+ else{ 
+  G4cout<< eventid<< "\t" << "Secondary in Photodiode" << "\t" <<trackID<<G4endl;
+ if(Photodiode.is_open()){
+ 
+ Photodiode<< eventid<< "\t" << "Secondary in Photodiode" << "\t" <<trackID<<G4endl;
+ } }
+ }
   }
-//G4Track* track = aStep->GetTrack();
-//G4ParticleDefinition* particleType = track->GetDefinition();
-/*
-if (track->GetTrackID()!=1 && particleType == G4OpticalPhoton::OpticalPhotonDefinition()){if(preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()!="CrystalLV"&&preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()!="OF_core_LV"){ track->SetTrackStatus(fStopAndKill); }
-  }*/
-
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -440,11 +440,7 @@ red = new G4VisAttributes(G4Colour(0/255., 255/255. ,0/255.));
 G4double cryst_dX = 1*cm, cryst_dY = 1*mm, cryst_dZ = 1*mm;
   G4double gap = 0*mm;        //a gap for wrapping, change to add gap
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap ;
-// optic fiber
-  //
-  G4double opticfiber_core_dx= 5*cm;
-   G4double opticfiber_core_diameter=0.98*mm;
-   G4double optic_fiber_clad_diameter=2.2*mm;
+
 
 G4NistManager* nist = G4NistManager::Instance();
 
@@ -566,6 +562,48 @@ const G4int nEntries_teflon = sizeof(photonEnergy_teflon)/sizeof(G4double);
   fPethylene2->AddElement(fH,nH_eth);
   fPethylene2->AddElement(fC,nC_eth);
   
+  //--------------------------------------------------
+  // Fluorinated Polyethylene
+  //--------------------------------------------------
+G4double photonEnergy[] =
+  {2.00*eV,2.03*eV,2.06*eV,2.09*eV,2.12*eV,
+   2.15*eV,2.18*eV,2.21*eV,2.24*eV,2.27*eV,
+   2.30*eV,2.33*eV,2.36*eV,2.39*eV,2.42*eV,
+   2.45*eV,2.48*eV,2.51*eV,2.54*eV,2.57*eV,
+   2.60*eV,2.63*eV,2.66*eV,2.69*eV,2.72*eV,
+   2.75*eV,2.78*eV,2.81*eV,2.84*eV,2.87*eV,
+   2.90*eV,2.93*eV,2.96*eV,2.99*eV,3.02*eV,
+   3.05*eV,3.08*eV,3.11*eV,3.14*eV,3.17*eV,
+   3.20*eV,3.23*eV,3.26*eV,3.29*eV,3.32*eV,
+   3.35*eV,3.38*eV,3.41*eV,3.44*eV,3.47*eV};
+
+  const G4int nEntries = sizeof(photonEnergy)/sizeof(G4double);
+
+   G4double refractiveIndexClad2[] =
+   { 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42};
+
+   assert(sizeof(refractiveIndexClad2) == sizeof(photonEnergy));
+   G4double absClad[] =
+  {20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m};
+
+  assert(sizeof(absClad) == sizeof(photonEnergy));
+
+  // Add entries into properties table
+  G4MaterialPropertiesTable* mptClad2 = new G4MaterialPropertiesTable();
+  mptClad2->AddProperty("RINDEX",photonEnergy,refractiveIndexClad2,nEntries);
+  mptClad2->AddProperty("ABSLENGTH",photonEnergy,absClad,nEntries);
+
+  fPethylene2->SetMaterialPropertiesTable(mptClad2);
+
+  
   
 G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
     //                 
@@ -583,89 +621,9 @@ G4RotationMatrix rotm  = G4RotationMatrix();
                       "crystalphys",         
                       phantomLogicalVolume,
                       false,0);  
-//OOOOOOOOOOOooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoooooooooooo
-//costruiamo il wrap in teflon
-/*
- G4double wrap=0.2*mm; 
-G4Box* big_cover_top_bottom = new G4Box("big_cover", (dZ+wrap)/2+wrap/2, wrap, (dX+wrap)/2);
-G4Box* big_cover_sides = new G4Box("sides_cover", wrap/2, dY/2, (dX+wrap)/2);
-G4Box* little_cover = new G4Box("little_cover",dZ/2,dY/2,wrap);
 
 
-
-                     
-  G4LogicalVolume* logicwrapper_long = 
-    new G4LogicalVolume(big_cover_top_bottom,          //its solid
-                        TEFLON,           //its material
-                        "wrapperLVbig");        //its name
-G4RotationMatrix rotm_wrap_up  = G4RotationMatrix();
-    rotm_wrap_up.rotateY(90*deg); 
-    
-    G4ThreeVector position_wrap_up = G4ThreeVector(-3*wrap/2,(dY)/2+wrap,0*mm);     
-    G4Transform3D transform_warp_up = G4Transform3D(rotm_wrap_up,position_wrap_up);
-                                    
-   G4VPhysicalVolume* phys_wrap_up = new G4PVPlacement(transform_warp_up,logicwrapper_long,            
-                      "wrapperphysup",         
-                      logicCryst,
-                      false,0); 
-
-G4RotationMatrix rotm_wrap_down  = G4RotationMatrix();
-    rotm_wrap_down.rotateY(90*deg); 
-    
-    G4ThreeVector position_wrap_down = G4ThreeVector(-3*wrap/2,-((dY)/2+wrap),0*mm);      
-    G4Transform3D transform_warp_down = G4Transform3D(rotm_wrap_down,position_wrap_down);
-                                    
-   G4VPhysicalVolume* phys_wrap_down = new G4PVPlacement(transform_warp_down,logicwrapper_long,            
-                      "wrapperphysdown",         
-                      logicCryst,
-                      false,0); 
-                      
-G4LogicalVolume* logicwrapper_side = 
-    new G4LogicalVolume(big_cover_sides,          //its solid
-                        TEFLON,           //its material
-                        "wrapperLVside");        //its name       
-G4RotationMatrix rotm_wrap_side_r  = G4RotationMatrix();
-    rotm_wrap_side_r.rotateY(90*deg); 
-    
-    G4ThreeVector position_wrap_side_r = G4ThreeVector(-3*wrap/2,0.*mm,dZ/2+wrap/2);     
-    G4Transform3D transform_warp_side_r = G4Transform3D(rotm_wrap_side_r,position_wrap_side_r);
-                                    
-   G4VPhysicalVolume* phys_wrap_r = new G4PVPlacement(transform_warp_side_r,logicwrapper_side,            
-                      "wrapperphysright",         
-                      logicCryst,
-                      false,0); 
-
-G4RotationMatrix rotm_wrap_side_l  = G4RotationMatrix();
-    rotm_wrap_side_l.rotateY(90*deg); 
-    
-    
-    G4ThreeVector position_wrap_side_l = G4ThreeVector(-3*wrap/2,0*mm,-(dZ/2+wrap/2));       
-    G4Transform3D transform_warp_side_l = G4Transform3D(rotm_wrap_side_l,position_wrap_side_l);
-                                    
-   G4VPhysicalVolume* phys_wrap_l = new G4PVPlacement(transform_warp_side_l,logicwrapper_side,            
-                      "wrapperphysleft",         
-                      logicCryst,
-                      false,0);        
-
-G4LogicalVolume* logicwrapper_little = 
-    new G4LogicalVolume(little_cover,          //its solid
-                        TEFLON,           //its material
-                        "wrapperLVlittle");        //its name
- 
- G4RotationMatrix rotm_wrap_little  = G4RotationMatrix();
-    rotm_wrap_little.rotateY(90*deg); 
-    
-    G4ThreeVector position_wrap_little = G4ThreeVector(-dX/2-wrap,0*mm,0*mm);     
-    G4Transform3D transform_warp_little = G4Transform3D(rotm_wrap_little,position_wrap_little);
-                                    
-   G4VPhysicalVolume* phys_wrap_little = new G4PVPlacement(transform_warp_little,logicwrapper_little,            
-                      "wrapperphyslittle",         
-                      logicCryst,
-                      false,0);           
-  */  
-    //OOOOOOOOOOOOOOOOOooooooooooooooOOOOOOOOOOOOOOOOOOOOOooooooooooooooooOOO 
-
-   /*G4OpticalSurface* opteflonSurface_up = new G4OpticalSurface("teflonSurface_up");
+   G4OpticalSurface* opteflonSurface_up = new G4OpticalSurface("teflonSurface_up");
   opteflonSurface_up->SetType(dielectric_LUTDAVIS);
   opteflonSurface_up->SetFinish(PolishedTeflon_LUT);
   opteflonSurface_up->SetModel(DAVIS);
@@ -673,71 +631,21 @@ G4LogicalVolume* logicwrapper_little =
   G4LogicalBorderSurface* teflonSurface_up=
           new G4LogicalBorderSurface("teflonSurface_up",
                                  phys_cryst,physicalTreatmentRoom,opteflonSurface_up);
-
- G4OpticalSurface* opticalSurface_2 = dynamic_cast <G4OpticalSurface*>
-        (teflonSurface_up->GetSurface(phys_wrap_up,phys_cryst)->
-                                                       GetSurfaceProperty());
-  if (opticalSurface_2) opticalSurface_2->DumpInfo();  
+                                 
+ // optic fiber
+  //
+  G4double opticfiber_core_dx= 5*cm;
+   G4double opticfiber_core_diameter=0.98*mm;
+   G4double optic_fiber_clad_diameter=2.2*mm;
+      G4double optic_fiber_cladding_diameter=1.*mm;
+                          ////////////////////
+                         
+G4Tubs* opticfiber_cladding =
+    new G4Tubs("OF_clad", opticfiber_core_diameter/2,optic_fiber_cladding_diameter/2, opticfiber_core_dx/2, 0., twopi);                        
   
-  
-  G4OpticalSurface* opteflonSurface_down = new G4OpticalSurface("teflonSurface_down");
-  opteflonSurface_down->SetType(dielectric_LUTDAVIS);
-  opteflonSurface_down->SetFinish(Rough_LUT);
-  opteflonSurface_down->SetModel(DAVIS);
+                          ////////////////////       
+    
 
-  G4LogicalBorderSurface* teflonSurface_down=
-          new G4LogicalBorderSurface("teflonSurface_down",
-                                 phys_wrap_down,phys_cryst,opteflonSurface_down);
-
-  G4OpticalSurface* opticalSurface_3 = dynamic_cast <G4OpticalSurface*>
-        (teflonSurface_down->GetSurface(phys_wrap_down,phys_cryst)->
-                                                       GetSurfaceProperty());
-  if (opticalSurface_3) opticalSurface_3->DumpInfo();  
-  
-  
-  G4OpticalSurface* opteflonSurface_right = new G4OpticalSurface("teflonSurface_right");
-  opteflonSurface_right->SetType(dielectric_LUTDAVIS);
-  opteflonSurface_right->SetFinish(Rough_LUT);
-  opteflonSurface_right->SetModel(DAVIS);
-
-  G4LogicalBorderSurface* teflonSurface_right=
-          new G4LogicalBorderSurface("teflonSurface_right",
-                                 phys_wrap_r,phys_cryst,opteflonSurface_right);
-
-  G4OpticalSurface* opticalSurface_4 = dynamic_cast <G4OpticalSurface*>
-        (teflonSurface_right->GetSurface(phys_wrap_r,phys_cryst)->
-                                                       GetSurfaceProperty());
-  if (opticalSurface_4) opticalSurface_4->DumpInfo();  
-  
-  G4OpticalSurface* opteflonSurface_left = new G4OpticalSurface("teflonSurface_left");
-  opteflonSurface_left->SetType(dielectric_LUTDAVIS);
-  opteflonSurface_left->SetFinish(Rough_LUT);
-  opteflonSurface_left->SetModel(DAVIS);
-
-  G4LogicalBorderSurface* teflonSurface_left=
-          new G4LogicalBorderSurface("teflonSurface_right",
-                                 phys_wrap_l,phys_cryst,opteflonSurface_left);
-
-  G4OpticalSurface* opticalSurface_5 = dynamic_cast <G4OpticalSurface*>
-        (teflonSurface_left->GetSurface(phys_wrap_l,phys_cryst)->
-                                                       GetSurfaceProperty());
-  if (opticalSurface_5) opticalSurface_5->DumpInfo();  
-  
- G4OpticalSurface* opteflonSurface_back = new G4OpticalSurface("teflonSurface_back");
-  opteflonSurface_back->SetType(dielectric_LUTDAVIS);
-  opteflonSurface_back->SetFinish(Rough_LUT);
-  opteflonSurface_back->SetModel(DAVIS);
-
-  G4LogicalBorderSurface* teflonSurface_back=
-          new G4LogicalBorderSurface("teflonSurface_back",
-                                 phys_wrap_little,phys_cryst,opteflonSurface_back);
-
-  G4OpticalSurface* opticalSurface_6 = dynamic_cast <G4OpticalSurface*>
-        (teflonSurface_back->GetSurface(phys_wrap_little,phys_cryst)->
-                                                       GetSurfaceProperty());
-  if (opticalSurface_6) opticalSurface_6->DumpInfo();  */
-
-//OOOOOOOOOOOOOOOOOOOoooooooooooooooooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOO  
                       
   G4Tubs* opticfiber_core =
     new G4Tubs("OF_core", 0.*cm, opticfiber_core_diameter/2, opticfiber_core_dx/2, 0., CLHEP::twopi);
@@ -747,8 +655,14 @@ G4LogicalVolume* logicwrapper_little =
                         PMMA,         //its material
                         "OF_core_LV");         //its name
   G4Tubs* opticfiber_clad =
-    new G4Tubs("OF_clad", opticfiber_core_diameter/2,optic_fiber_clad_diameter/2, opticfiber_core_dx/2, 0., twopi);
-      
+    new G4Tubs("OF_clad", opticfiber_core_diameter/2,(optic_fiber_clad_diameter-optic_fiber_cladding_diameter)/2, opticfiber_core_dx/2, 0., twopi);
+    
+    
+      G4LogicalVolume* opticfiber_cladding_log =                         
+    new G4LogicalVolume(opticfiber_cladding,       //its solid
+                        fPethylene2,         //its material
+                        "OF_cladding_LV");         //its name
+                        
   G4LogicalVolume* opticfiber_clad_log =                         
     new G4LogicalVolume(opticfiber_clad,       //its solid
                         PE,         //its material
@@ -775,13 +689,25 @@ G4LogicalVolume* logicwrapper_little =
                       "outerfiber",                
                       logicCryst,false,0);                 
                             
-   G4VPhysicalVolume* physcore = new G4PVPlacement(transform_opt,                     
+   G4VPhysicalVolume* physcore = new G4PVPlacement(transform_clad,                     
                            //position
                           opticfiber_core_log,            
 
                           "OF_core_phys",                
 
-                          opticfiber_clad_log,false,0); 
+                          logicCryst,false,0); 
+  G4VPhysicalVolume* claddingcore = new G4PVPlacement(transform_clad,                     
+                           //position
+                          opticfiber_cladding_log,            
+
+                          "OF_core_phys",                
+
+                          logicCryst,false,0); 
+     
+                          
+   G4LogicalBorderSurface* teflonSurface_of=
+          new G4LogicalBorderSurface("teflonSurface_of",
+                                 phys_cryst,physcore,opteflonSurface_up);
 //OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
 // Definiamo ora le ultime tre superfici ottiche interessanti
 
@@ -800,7 +726,7 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
                                                        GetSurfaceProperty());
   if (opticalSurface_7) opticalSurface_7->DumpInfo();   
   
-  
+   */
   G4OpticalSurface* opcore_clad = new G4OpticalSurface("OpticFiberandClad");
   opcore_clad->SetType(dielectric_LUTDAVIS);
   opcore_clad->SetFinish(Polished_LUT);
@@ -813,7 +739,7 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
   G4OpticalSurface* opticalSurface_8 = dynamic_cast <G4OpticalSurface*>
         (core_clad->GetSurface(physcore,physclad)->
                                                        GetSurfaceProperty());
-  if (opticalSurface_8) opticalSurface_8->DumpInfo();   */
+  if (opticalSurface_8) opticalSurface_8->DumpInfo();  
   
   //Ora creaiamo il photodetector
   
@@ -855,13 +781,26 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
                                        G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"),
                                        "PhotoDiode_LV");
  
-  new G4PVPlacement(transform_pd, fPhotocath_log,"photodiode",
+  G4VPhysicalVolume* photophys = new G4PVPlacement(transform_pd, fPhotocath_log,"photodiode",
                                     opticfiber_core_log,false,0);
  
  
   //**Create logical skin surfaces
     new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
   
+  G4OpticalSurface* opcore_pd = new G4OpticalSurface("OpticFiberandp");
+  opcore_pd->SetType(dielectric_LUTDAVIS);
+  opcore_pd->SetFinish(Polished_LUT);
+  opcore_pd->SetModel(DAVIS);
+
+  G4LogicalBorderSurface* core_pd=
+          new G4LogicalBorderSurface("opfibpd",
+                                 physcore,photophys,opcore_pd);
+
+  G4OpticalSurface* opticalSurface_9 = dynamic_cast <G4OpticalSurface*>
+        (core_pd->GetSurface(physcore,photophys)->
+                                                       GetSurfaceProperty());
+  if (opticalSurface_9) opticalSurface_9->DumpInfo();  
   
   
   
@@ -894,9 +833,9 @@ G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
   /*  logicwrapper_long->SetVisAttributes(skyBlue1);
         logicwrapper_side->SetVisAttributes(skyBlue1);
             logicwrapper_little->SetVisAttributes(skyBlue1);*/
-    opticfiber_core_log -> SetVisAttributes(skyBlue1);
-    opticfiber_clad_log -> SetVisAttributes(red);
-
+    opticfiber_core_log -> SetVisAttributes(red);
+    opticfiber_clad_log -> SetVisAttributes(skyBlue1);
+	    opticfiber_cladding_log -> SetVisAttributes(green);
     
    G4double maxStep_det = 0.1*mm;
   fStepLimit = new G4UserLimits(maxStep_det);
