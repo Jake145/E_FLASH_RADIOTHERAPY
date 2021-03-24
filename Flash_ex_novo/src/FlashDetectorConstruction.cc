@@ -28,35 +28,46 @@
 /// \brief Implementation of the FlashDetectorConstruction class
 
 #include "FlashDetectorConstruction.hh"
-
+//#include "FlashHit.hh"
 #include "G4RunManager.hh"
 
 #include "G4Region.hh"
-#include "G4Cons.hh"
-#include "G4Orb.hh"
-#include "G4Sphere.hh"
-#include "G4Trd.hh"
-
+#include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "G4SDManager.hh"
+
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
-#include "G4Region.hh"
 #include "G4PVPlacement.hh"
-#include "G4RotationMatrix.hh"
-#include "G4Transform3D.hh"
-#include "G4SDManager.hh"
-#include "G4MultiFunctionalDetector.hh"
-#include "G4VPrimitiveScorer.hh"
-#include "G4PSEnergyDeposit.hh"
-#include "G4PSDoseDeposit.hh"
+#include "G4PVParameterised.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
+#include "G4GeometryTolerance.hh"
+#include "G4GeometryManager.hh"
+
+#include "G4UserLimits.hh"
+
 #include "G4VisAttributes.hh"
-#include "G4PhysicalConstants.hh"
+#include "G4Colour.hh"
+
+#include "G4SystemOfUnits.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "Applicator80BeamLine.hh"
 #include "G4OpticalSurface.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4LogicalBorderSurface.hh"
+//#include "FSensitiveDetector.hh"
+//#include "OpticFiberSD.hh"
+//#include "PhotoDiodeSD.hh"
+#include "G4VPrimitiveScorer.hh"
+#include "G4PSEnergyDeposit.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4VisAttributes.hh"
+//#include "G4VSensitiveDetector.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashDetectorConstruction::FlashDetectorConstruction()
@@ -81,42 +92,85 @@ FlashDetectorConstruction::~FlashDetectorConstruction()
 void FlashDetectorConstruction::DefineMaterials()
 {
   G4NistManager* man = G4NistManager::Instance();
-  
+  G4int ncomponents;
   G4bool isotopes = false;
-  
-  G4Element*  O = man->FindOrBuildElement("O" , isotopes); 
-  G4Element* Si = man->FindOrBuildElement("Si", isotopes);
-  G4Element* Lu = man->FindOrBuildElement("Lu", isotopes); 
-  G4Element* Y = man->FindOrBuildElement("Y", isotopes); 
-  
-  G4Material* LYSO = new G4Material("Lu2Y2SiO5", 7.1*g/cm3, 4);
-  LYSO->AddElement(Lu, 2);
-  LYSO->AddElement(Si, 1);
-  LYSO->AddElement(O , 5);
-  LYSO->AddElement(Y,2);
-  
- G4double energy[]    = {3.061*eV, 2.952*eV, 2.844*eV,2.689*eV,2.551*eV,2.403*eV,2.271*eV};
- // G4double energy_spect[]    = {3.542*eV, 3.099*eV, 2.817*eV, 2.479*eV,2.254*eV,1.907*eV};
-  G4double rindex[]    = {1.833, 1.827, 1.822,1.818,1.813,1.810,1.806};
-  //  G4double emspect[]    = {0., 0.6, 1. ,0.6, 0.2, 0. };
- G4double absorption[] = {136.2*nm, 142.8*nm, 149.84*nm,160.84*nm,160.84*nm,171.84*nm,185.04*nm,198.24*nm}; 
-   const G4int nEntries = sizeof(energy)/sizeof(G4double);
-     // const G4int nEntries_spect = sizeof(energy_spect)/sizeof(G4double);
-  G4MaterialPropertiesTable* MPT = new G4MaterialPropertiesTable();
-  // property independent of energy
-  MPT->AddConstProperty("SCINTILLATIONYIELD", 27600./MeV);
-  MPT->AddConstProperty("SCINTILLATIONTIMECONSTANT1", 45.*ns);
-  
-  MPT->AddConstProperty("RESOLUTIONSCALE", 1.0);
-  // properties that depend on energy
- // MPT->AddProperty("SCINTILLATIONCOMPONENT1", energy_spect, emspect,nEntries_spect)->SetSpline(true);
-  MPT->AddProperty("RINDEX", energy, rindex,nEntries)->SetSpline(true);
-  MPT->AddProperty("ABSLENGTH", energy, absorption,nEntries)->SetSpline(true);
-  LYSO->SetMaterialPropertiesTable(MPT);
-G4cout << "LYSO G4MaterialPropertiesTable" << G4endl;
-  MPT->DumpTable();
+ G4double prelude_density = 7.4*g/cm3;
+  G4Material* prelude = new G4Material("prelude", prelude_density, ncomponents=4);
+  prelude->AddElement(man->FindOrBuildElement("Lu"),71*perCent);
+  prelude->AddElement(man->FindOrBuildElement("Si"),7*perCent);
+  prelude->AddElement(man->FindOrBuildElement("O"), 18*perCent);
+  prelude->AddElement(man->FindOrBuildElement("Y"), 4*perCent);
 
-    
+    G4Material* scintillator = new G4Material("scintillator", prelude_density , ncomponents=2);
+  scintillator->AddMaterial(prelude,99.81*perCent);
+  scintillator->AddElement(man->FindOrBuildElement("Ce"), 0.19*perCent);
+
+  G4MaterialPropertiesTable *mpt = new G4MaterialPropertiesTable();
+    const G4int num = 20;
+ G4double ene[num]   =  {1.79*eV, 1.85*eV, 1.91*eV, 1.97*eV,
+
+			2.04*eV, 2.11*eV, 2.19*eV, 2.27*eV,
+
+			2.36*eV, 2.45*eV, 2.56*eV, 2.67*eV,
+
+			2.80*eV, 2.94*eV, 3.09*eV, 3.25*eV,
+
+			3.44*eV, 3.65*eV, 3.89*eV, 4.16*eV};
+
+
+
+  G4double fast[num]  =  {0.01, 0.10, 0.20, 0.50,
+
+			0.90, 1.70, 2.90, 5.00,
+
+			8.30, 12.5, 17.0, 22.9,
+
+			26.4, 25.6, 16.8, 4.20,
+
+			0.30, 0.20, 0.10, 0.01};
+
+
+
+  G4double rLyso[num] =  {1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81,
+
+			1.81, 1.81, 1.81, 1.81};
+
+
+
+  
+
+
+
+  G4double abs[num]   =  {3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m,
+
+			3.5*m, 3.5*m, 3.5*m, 3.5*m};
+
+
+
+  mpt->AddProperty("FASTCOMPONENT", ene, fast, num);
+
+  mpt->AddProperty("RINDEX", ene, rLyso , num);
+
+  mpt->AddProperty("ABSLENGTH", ene, abs, num);
+
+  mpt->AddConstProperty("SCINTILLATIONYIELD",2700/MeV);
+
+  mpt->AddConstProperty("RESOLUTIONSCALE", 1);
+
+  mpt->AddConstProperty("FASTTIMECONSTANT",41*ns);
+  scintillator->SetMaterialPropertiesTable(mpt);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -389,12 +443,12 @@ G4double cryst_dX = 1*cm, cryst_dY = 1*mm, cryst_dZ = 1*mm;
 // optic fiber
   //
   G4double opticfiber_core_dx= 5*cm;
-   G4double opticfiber_core_radius=0.98*mm;
-   G4double optic_fiber_clad_radius=1*mm;
+   G4double opticfiber_core_diameter=0.98*mm;
+   G4double optic_fiber_clad_diameter=2.2*mm;
 
 G4NistManager* nist = G4NistManager::Instance();
 
-  G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2Y2SiO5");
+  G4Material* cryst_mat   = nist->FindOrBuildMaterial("scintillator");
   G4Material* PMMA = nist->FindOrBuildMaterial("G4_PLEXIGLASS", 
   isotopes);
   
@@ -484,7 +538,7 @@ G4double photonEnergy_fib[] =
 
   PE->SetMaterialPropertiesTable(mptClad);
   
-  G4Material* TEFLON = nist->FindOrBuildMaterial("G4_TEFLON",isotopes);  
+/*  G4Material* TEFLON = nist->FindOrBuildMaterial("G4_TEFLON",isotopes);  
                    
 G4double photonEnergy_teflon[] =
             { 7.897*eV,7.208*eV, 6.702*eV,  4.999*eV};
@@ -497,20 +551,32 @@ const G4int nEntries_teflon = sizeof(photonEnergy_teflon)/sizeof(G4double);
   G4cout << "Teflon G4MaterialPropertiesTable" << G4endl;
   myMPT3->DumpTable();
 
-  TEFLON->SetMaterialPropertiesTable(myMPT3);
+  TEFLON->SetMaterialPropertiesTable(myMPT3);*/
   
+  //fluorinated polymer
+  G4int polyeth = 1;
+  G4int nC_eth = 2*polyeth;
+  G4int nH_eth = 4*polyeth;
+  G4double z, a, density;
+  fH = new G4Element("H", "H", z=1., a=1.01*g/mole);
+  fC = new G4Element("C", "C", z=6., a=12.01*g/mole);
+  fN = new G4Element("N", "N", z=7., a= 14.01*g/mole);
+  fO = new G4Element("O"  , "O", z=8., a= 16.00*g/mole);
+  fPethylene2 = new G4Material("Pethylene2", 1400*kg/m3,2);
+  fPethylene2->AddElement(fH,nH_eth);
+  fPethylene2->AddElement(fC,nC_eth);
   
   
 G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
     //                 
-  G4LogicalVolume* logicCryst = 
+   logicCryst = 
     new G4LogicalVolume(solidCryst,          //its solid
                         cryst_mat,           //its material
                         "CrystalLV");        //its name
 G4RotationMatrix rotm  = G4RotationMatrix();
     rotm.rotateY(90*deg); 
     
-    G4ThreeVector position = G4ThreeVector(-80*mm,  0.*mm,0.*mm);     
+    G4ThreeVector position = G4ThreeVector(-90.0*mm,  0.*mm,0.*mm);     
     G4Transform3D transform = G4Transform3D(rotm,position);
                                     
    G4VPhysicalVolume* phys_cryst = new G4PVPlacement(transform,logicCryst,            
@@ -519,8 +585,8 @@ G4RotationMatrix rotm  = G4RotationMatrix();
                       false,0);  
 //OOOOOOOOOOOooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOoooooooooooo
 //costruiamo il wrap in teflon
-
- G4double wrap=0.02*mm; 
+/*
+ G4double wrap=0.2*mm; 
 G4Box* big_cover_top_bottom = new G4Box("big_cover", (dZ+wrap)/2+wrap/2, wrap, (dX+wrap)/2);
 G4Box* big_cover_sides = new G4Box("sides_cover", wrap/2, dY/2, (dX+wrap)/2);
 G4Box* little_cover = new G4Box("little_cover",dZ/2,dY/2,wrap);
@@ -596,19 +662,19 @@ G4LogicalVolume* logicwrapper_little =
                       "wrapperphyslittle",         
                       logicCryst,
                       false,0);           
-    
+  */  
     //OOOOOOOOOOOOOOOOOooooooooooooooOOOOOOOOOOOOOOOOOOOOOooooooooooooooooOOO 
 
-  G4OpticalSurface* opteflonSurface_up = new G4OpticalSurface("teflonSurface_up");
+   /*G4OpticalSurface* opteflonSurface_up = new G4OpticalSurface("teflonSurface_up");
   opteflonSurface_up->SetType(dielectric_LUTDAVIS);
-  opteflonSurface_up->SetFinish(Rough_LUT);
+  opteflonSurface_up->SetFinish(PolishedTeflon_LUT);
   opteflonSurface_up->SetModel(DAVIS);
 
   G4LogicalBorderSurface* teflonSurface_up=
           new G4LogicalBorderSurface("teflonSurface_up",
-                                 phys_wrap_up,phys_cryst,opteflonSurface_up);
+                                 phys_cryst,physicalTreatmentRoom,opteflonSurface_up);
 
-  G4OpticalSurface* opticalSurface_2 = dynamic_cast <G4OpticalSurface*>
+ G4OpticalSurface* opticalSurface_2 = dynamic_cast <G4OpticalSurface*>
         (teflonSurface_up->GetSurface(phys_wrap_up,phys_cryst)->
                                                        GetSurfaceProperty());
   if (opticalSurface_2) opticalSurface_2->DumpInfo();  
@@ -669,19 +735,19 @@ G4LogicalVolume* logicwrapper_little =
   G4OpticalSurface* opticalSurface_6 = dynamic_cast <G4OpticalSurface*>
         (teflonSurface_back->GetSurface(phys_wrap_little,phys_cryst)->
                                                        GetSurfaceProperty());
-  if (opticalSurface_6) opticalSurface_6->DumpInfo();  
+  if (opticalSurface_6) opticalSurface_6->DumpInfo();  */
 
 //OOOOOOOOOOOOOOOOOOOoooooooooooooooooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOO  
                       
   G4Tubs* opticfiber_core =
-    new G4Tubs("OF_core", 0.*cm, opticfiber_core_radius, opticfiber_core_dx/2, 0., CLHEP::twopi);
+    new G4Tubs("OF_core", 0.*cm, opticfiber_core_diameter/2, opticfiber_core_dx/2, 0., CLHEP::twopi);
       
-  G4LogicalVolume* opticfiber_core_log =                         
+   opticfiber_core_log =                         
     new G4LogicalVolume(opticfiber_core,       //its solid
                         PMMA,         //its material
                         "OF_core_LV");         //its name
   G4Tubs* opticfiber_clad =
-    new G4Tubs("OF_clad", opticfiber_core_radius,optic_fiber_clad_radius, opticfiber_core_dx/2, 0., twopi);
+    new G4Tubs("OF_clad", opticfiber_core_diameter/2,optic_fiber_clad_diameter/2, opticfiber_core_dx/2, 0., twopi);
       
   G4LogicalVolume* opticfiber_clad_log =                         
     new G4LogicalVolume(opticfiber_clad,       //its solid
@@ -713,16 +779,16 @@ G4LogicalVolume* logicwrapper_little =
                            //position
                           opticfiber_core_log,            
 
-                          "OF_clad_phys",                
+                          "OF_core_phys",                
 
                           opticfiber_clad_log,false,0); 
 //OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
 // Definiamo ora le ultime tre superfici ottiche interessanti
 
-
+/*
 G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator");
   opcore_scint->SetType(dielectric_LUTDAVIS);
-  opcore_scint->SetFinish(Rough_LUT);
+  opcore_scint->SetFinish(Polished_LUT);
   opcore_scint->SetModel(DAVIS);
 
   G4LogicalBorderSurface* core_scint=
@@ -737,7 +803,7 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
   
   G4OpticalSurface* opcore_clad = new G4OpticalSurface("OpticFiberandClad");
   opcore_clad->SetType(dielectric_LUTDAVIS);
-  opcore_clad->SetFinish(Rough_LUT);
+  opcore_clad->SetFinish(Polished_LUT);
   opcore_clad->SetModel(DAVIS);
 
   G4LogicalBorderSurface* core_clad=
@@ -747,8 +813,60 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
   G4OpticalSurface* opticalSurface_8 = dynamic_cast <G4OpticalSurface*>
         (core_clad->GetSurface(physcore,physclad)->
                                                        GetSurfaceProperty());
-  if (opticalSurface_8) opticalSurface_8->DumpInfo();   
+  if (opticalSurface_8) opticalSurface_8->DumpInfo();   */
   
+  //Ora creaiamo il photodetector
+  
+  G4double ephoton[] = {7.0*eV, 7.14*eV};
+  const G4int num = sizeof(ephoton)/sizeof(G4double);
+  G4double photocath_EFF[]={1.,1.}; //Enables 'detection' of photons
+  assert(sizeof(photocath_EFF) == sizeof(ephoton));
+  G4double photocath_ReR[]={1.92,1.92};
+  assert(sizeof(photocath_ReR) == sizeof(ephoton));
+  G4double photocath_ImR[]={1.69,1.69};
+  assert(sizeof(photocath_ImR) == sizeof(ephoton));
+  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
+  photocath_mt->AddProperty("EFFICIENCY",ephoton,photocath_EFF,num);
+  photocath_mt->AddProperty("REALRINDEX",ephoton,photocath_ReR,num);
+  photocath_mt->AddProperty("IMAGINARYRINDEX",ephoton,photocath_ImR,num);
+  G4OpticalSurface* photocath_opsurf=
+    new G4OpticalSurface("photocath_opsurf",glisur,polished,
+                         dielectric_metal);
+  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
+
+
+//****************** Build Photodiode
+  G4double innerRadius_pmt = 0.*cm;
+  G4double startAngle_pmt = 0.*deg;
+  G4double spanningAngle_pmt = 360.*deg;
+  G4double height_pmt = 0.1*cm;
+ 
+  //the "photocathode" is a metal slab at the back of the glass that
+  //is only a very rough approximation of the real thing since it only
+  //absorbs or detects the photons based on the efficiency set below
+  fPhotocath = new G4Tubs("photocath_tube",innerRadius_pmt,opticfiber_core_diameter/2,
+                          height_pmt/2,startAngle_pmt,spanningAngle_pmt);
+                          
+ G4RotationMatrix rotm_pd  = G4RotationMatrix();
+    rotm_pd.rotateY(0*deg); 
+    G4Transform3D transform_pd = G4Transform3D(rotm_pd,G4ThreeVector(0,0,(opticfiber_core_dx/2 + height_pmt/2)));
+    
+  fPhotocath_log = new G4LogicalVolume(fPhotocath,
+                                       G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"),
+                                       "PhotoDiode_LV");
+ 
+  new G4PVPlacement(transform_pd, fPhotocath_log,"photodiode",
+                                    opticfiber_core_log,false,0);
+ 
+ 
+  //**Create logical skin surfaces
+    new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
+  
+  
+  
+  
+  
+  //
 
  /* 
 
@@ -772,10 +890,10 @@ G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
    
     G4VisAttributes * skyBlue1 = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
      skyBlue1->SetVisibility(true);
-   // logicCryst -> SetVisAttributes(red);
-    logicwrapper_long->SetVisAttributes(skyBlue1);
+    logicCryst -> SetVisAttributes(red);
+  /*  logicwrapper_long->SetVisAttributes(skyBlue1);
         logicwrapper_side->SetVisAttributes(skyBlue1);
-            logicwrapper_little->SetVisAttributes(skyBlue1);
+            logicwrapper_little->SetVisAttributes(skyBlue1);*/
     opticfiber_core_log -> SetVisAttributes(skyBlue1);
     opticfiber_clad_log -> SetVisAttributes(red);
 
@@ -799,7 +917,12 @@ OFcoreRegion->AddRootLogicalVolume(opticfiber_core_log);
 G4Region* OFcladRegion = new G4Region("OF_clad_reg");
 opticfiber_clad_log->SetRegion(OFcladRegion);
 OFcladRegion->AddRootLogicalVolume(opticfiber_clad_log);
+
   return physicalTreatmentRoom;
+  
+  
+  
+  
    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -809,25 +932,42 @@ void FlashDetectorConstruction::ConstructSDandField()
 {
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
   
-  // declare crystal as a MultiFunctionalDetector scorer
-  //  
+  
   G4MultiFunctionalDetector* cryst = new G4MultiFunctionalDetector("crystalSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
   G4VPrimitiveScorer* primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
   SetSensitiveDetector("CrystalLV",cryst);
   
-  //G4MultiFunctionalDetector* optfiber = new G4MultiFunctionalDetector("fiberSD");
- // G4SDManager::GetSDMpointer()->AddNewDetector(optfiber); 
-  //SetSensitiveDetector("OF_core_LV",optfiber);
   
-  // declare patient as a MultiFunctionalDetector scorer
-  //  
-  //G4MultiFunctionalDetector* patient = new G4MultiFunctionalDetector("Phantom");
-  //G4SDManager::GetSDMpointer()->AddNewDetector(phantom);
-  //G4VPrimitiveScorer* primitiv2 = new G4PSDoseDeposit("dose");
-  //patient->RegisterPrimitive(primitiv2);
-  //SetSensitiveDetector("phantomLog",phantom);
+ 
+  
+  /*G4String SDname_of_cryst="CrystSD";
+   G4SDManager* SDman_of_cryst = G4SDManager::GetSDMpointer();
+   sd_of_cryst = new FSensitiveDetector(SDname_of_cryst);
+
+
+  SDman_of_cryst->AddNewDetector( sd_of_cryst );
+  SetSensitiveDetector("CrystalLV",sd_of_cryst);
+  
+  
+  G4String SDname_of_of="OpticFiberSD";
+   G4SDManager* SDman_of_of = G4SDManager::GetSDMpointer();
+   sd_of_of = new OpticFiberSD(SDname_of_of);
+
+
+  SDman_of_of->AddNewDetector( sd_of_of );
+  SetSensitiveDetector("OF_core_LV",sd_of_of);
+  
+  G4String SDname_of_pd="PhotoDiodeSD";
+   G4SDManager* SDman_of_pd = G4SDManager::GetSDMpointer();
+   sd_of_pd = new PhotoDiodeSD(SDname_of_pd);
+
+
+  SDman_of_pd->AddNewDetector( sd_of_pd );
+  SetSensitiveDetector("PhotoDiode_LV",sd_of_pd);*/
+  
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
