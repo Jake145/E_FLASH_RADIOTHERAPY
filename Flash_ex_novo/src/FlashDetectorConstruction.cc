@@ -171,13 +171,176 @@ void FlashDetectorConstruction::DefineMaterials()
 
   mpt->AddConstProperty("FASTTIMECONSTANT",41*ns);
   scintillator->SetMaterialPropertiesTable(mpt);
+  
+  
+  //fluorinated polymer
+  G4int polyeth = 1;
+  G4int nC_eth = 2*polyeth;
+  G4int nH_eth = 4*polyeth;
+  G4double z, a, density;
+  fH = new G4Element("H", "H", z=1., a=1.01*g/mole);
+  fC = new G4Element("C", "C", z=6., a=12.01*g/mole);
+  fN = new G4Element("N", "N", z=7., a= 14.01*g/mole);
+  fO = new G4Element("O"  , "O", z=8., a= 16.00*g/mole);
+  fPethylene2 = new G4Material("Pethylene2", 1400*kg/m3,2);
+  fPethylene2->AddElement(fH,nH_eth);
+  fPethylene2->AddElement(fC,nC_eth);
+  
+  //--------------------------------------------------
+  // Fluorinated Polyethylene
+  //--------------------------------------------------
+G4double PhotonEnergy[] =
+  {2.00*eV,2.03*eV,2.06*eV,2.09*eV,2.12*eV,
+   2.15*eV,2.18*eV,2.21*eV,2.24*eV,2.27*eV,
+   2.30*eV,2.33*eV,2.36*eV,2.39*eV,2.42*eV,
+   2.45*eV,2.48*eV,2.51*eV,2.54*eV,2.57*eV,
+   2.60*eV,2.63*eV,2.66*eV,2.69*eV,2.72*eV,
+   2.75*eV,2.78*eV,2.81*eV,2.84*eV,2.87*eV,
+   2.90*eV,2.93*eV,2.96*eV,2.99*eV,3.02*eV,
+   3.05*eV,3.08*eV,3.11*eV,3.14*eV,3.17*eV,
+   3.20*eV,3.23*eV,3.26*eV,3.29*eV,3.32*eV,
+   3.35*eV,3.38*eV,3.41*eV,3.44*eV,3.47*eV};
+
+  const G4int nEntries = sizeof(PhotonEnergy)/sizeof(G4double);
+
+   G4double refractiveIndexClad2[] =
+   { 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
+     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42};
+
+   assert(sizeof(refractiveIndexClad2) == sizeof(PhotonEnergy));
+   G4double absClad[] =
+  {20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m};
+
+  assert(sizeof(absClad) == sizeof(PhotonEnergy));
+
+  // Add entries into properties table
+  G4MaterialPropertiesTable* mptClad2 = new G4MaterialPropertiesTable();
+  mptClad2->AddProperty("RINDEX",PhotonEnergy,refractiveIndexClad2,nEntries);
+  mptClad2->AddProperty("ABSLENGTH",PhotonEnergy,absClad,nEntries);
+
+  fPethylene2->SetMaterialPropertiesTable(mptClad2);
+  
+   nist = G4NistManager::Instance();
+    cryst_mat   = nist->FindOrBuildMaterial("scintillator");
+   PMMA = nist->FindOrBuildMaterial("G4_PLEXIGLASS", 
+  isotopes);
+  
+  //--------------------------------------------------
+  //  PMMA for fibers
+  //--------------------------------------------------
+G4double photonEnergy_fib[] =
+  {2.00*eV,2.03*eV,2.06*eV,2.09*eV,2.12*eV,
+   2.15*eV,2.18*eV,2.21*eV,2.24*eV,2.27*eV,
+   2.30*eV,2.33*eV,2.36*eV,2.39*eV,2.42*eV,
+   2.45*eV,2.48*eV,2.51*eV,2.54*eV,2.57*eV,
+   2.60*eV,2.63*eV,2.66*eV,2.69*eV,2.72*eV,
+   2.75*eV,2.78*eV,2.81*eV,2.84*eV,2.87*eV,
+   2.90*eV,2.93*eV,2.96*eV,2.99*eV,3.02*eV,
+   3.05*eV,3.08*eV,3.11*eV,3.14*eV,3.17*eV,
+   3.20*eV,3.23*eV,3.26*eV,3.29*eV,3.32*eV,
+   3.35*eV,3.38*eV,3.41*eV,3.44*eV,3.47*eV};
+
+  const G4int nEntries_fib = sizeof(photonEnergy_fib)/sizeof(G4double);
+  
+  G4double refractiveIndex_fiber[] =
+  { 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
+    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
+    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
+    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
+    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60};
+
+  assert(sizeof(refractiveIndex_fiber) == sizeof(photonEnergy_fib));
+
+  G4double abs_fiber[] =
+  {5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,
+   5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,
+   5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,1.10*m,
+   1.10*m,1.10*m,1.10*m,1.10*m,1.10*m,1.10*m, 1.*mm, 1.*mm, 1.*mm, 1.*mm,
+    1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm};
+
+  assert(sizeof(abs_fiber) == sizeof(photonEnergy_fib));
+
+ /* G4double emission_fib[] =
+  {0.05, 0.10, 0.30, 0.50, 0.75, 1.00, 1.50, 1.85, 2.30, 2.75,
+   3.25, 3.80, 4.50, 5.20, 6.00, 7.00, 8.50, 9.50, 11.1, 12.4,
+   12.9, 13.0, 12.8, 12.3, 11.1, 11.0, 12.0, 11.0, 17.0, 16.9,
+   15.0, 9.00, 2.50, 1.00, 0.05, 0.00, 0.00, 0.00, 0.00, 0.00,
+   0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00};
+
+  assert(sizeof(emission_fib) == sizeof(photonEnergy_fib)); */
+
+  // Add entries into properties table
+  G4MaterialPropertiesTable* mpt_fiber = new G4MaterialPropertiesTable();
+  mpt_fiber->
+           AddProperty("RINDEX",photonEnergy_fib,refractiveIndex_fiber,nEntries_fib);
+
+  mpt_fiber->AddProperty("ABSLENGTH",photonEnergy_fib,abs_fiber,nEntries_fib);
+  //mptWLSfiber->AddProperty("WLSCOMPONENT",photonEnergy_fib,emissionFib,nEntries_fib);
+
+
+  PMMA->SetMaterialPropertiesTable(mpt_fiber);
+  G4cout << "PMMA G4MaterialPropertiesTable" << G4endl;
+  mpt_fiber->DumpTable();
+
+  
+   PE = nist->FindOrBuildMaterial("G4_POLYETHYLENE", 
+  isotopes);  
+  
+  G4double refractiveIndex_Clad[] =
+  { 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
+    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
+    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
+    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
+    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49};
+
+  assert(sizeof(refractiveIndex_Clad) == sizeof(photonEnergy_fib));
+
+  G4double abs_Clad[] =
+  {20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
+   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m};
+
+  assert(sizeof(abs_Clad) == sizeof(photonEnergy_fib));
+
+  // Add entries into properties table
+  G4MaterialPropertiesTable* mptClad = new G4MaterialPropertiesTable();
+  mptClad->AddProperty("RINDEX",photonEnergy_fib,refractiveIndex_Clad,nEntries_fib);
+  mptClad->AddProperty("ABSLENGTH",photonEnergy_fib,abs_Clad,nEntries_fib);
+
+  PE->SetMaterialPropertiesTable(mptClad);
+  
+/*  G4Material* TEFLON = nist->FindOrBuildMaterial("G4_TEFLON",isotopes);  
+                   
+G4double photonEnergy_teflon[] =
+            { 7.897*eV,7.208*eV, 6.702*eV,  4.999*eV};
+  G4double refractiveIndex3[] =
+            { 1.432, 1.308, 1.364, 1.329};
+const G4int nEntries_teflon = sizeof(photonEnergy_teflon)/sizeof(G4double);
+  G4MaterialPropertiesTable* myMPT3 = new G4MaterialPropertiesTable();
+  myMPT3->AddProperty("RINDEX", photonEnergy_teflon, refractiveIndex3, nEntries_teflon);
+
+  G4cout << "Teflon G4MaterialPropertiesTable" << G4endl;
+  myMPT3->DumpTable();
+
+  TEFLON->SetMaterialPropertiesTable(myMPT3);*/
+  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void FlashDetectorConstruction::ConstructPhantom(){
 
 
-G4NistManager* nist = G4NistManager::Instance();
+
 G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
 // ------------ Generate & Add Material Properties Table ------------
@@ -386,7 +549,7 @@ G4VPhysicalVolume* FlashDetectorConstruction::Construct()
   G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   // Air
 //
-/*
+
 G4double photonEnergy_air[] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
@@ -409,7 +572,7 @@ const G4int nEntries_air = sizeof(photonEnergy_air)/sizeof(G4double);
   G4cout << "Air G4MaterialPropertiesTable" << G4endl;
   myMPT2->DumpTable();
 
-  airNist->SetMaterialPropertiesTable(myMPT2); */
+  airNist->SetMaterialPropertiesTable(myMPT2); 
   
   G4Box* treatmentRoom = new G4Box("TreatmentRoom",worldX,worldY,worldZ);
   G4LogicalVolume* logicTreatmentRoom = new G4LogicalVolume(treatmentRoom, 
@@ -442,167 +605,10 @@ G4double cryst_dX = 1*cm, cryst_dY = 1*mm, cryst_dZ = 1*mm;
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap ;
 
 
-G4NistManager* nist = G4NistManager::Instance();
 
-  G4Material* cryst_mat   = nist->FindOrBuildMaterial("scintillator");
-  G4Material* PMMA = nist->FindOrBuildMaterial("G4_PLEXIGLASS", 
-  isotopes);
+
+ 
   
-  //--------------------------------------------------
-  //  PMMA for fibers
-  //--------------------------------------------------
-G4double photonEnergy_fib[] =
-  {2.00*eV,2.03*eV,2.06*eV,2.09*eV,2.12*eV,
-   2.15*eV,2.18*eV,2.21*eV,2.24*eV,2.27*eV,
-   2.30*eV,2.33*eV,2.36*eV,2.39*eV,2.42*eV,
-   2.45*eV,2.48*eV,2.51*eV,2.54*eV,2.57*eV,
-   2.60*eV,2.63*eV,2.66*eV,2.69*eV,2.72*eV,
-   2.75*eV,2.78*eV,2.81*eV,2.84*eV,2.87*eV,
-   2.90*eV,2.93*eV,2.96*eV,2.99*eV,3.02*eV,
-   3.05*eV,3.08*eV,3.11*eV,3.14*eV,3.17*eV,
-   3.20*eV,3.23*eV,3.26*eV,3.29*eV,3.32*eV,
-   3.35*eV,3.38*eV,3.41*eV,3.44*eV,3.47*eV};
-
-  const G4int nEntries_fib = sizeof(photonEnergy_fib)/sizeof(G4double);
-  
-  G4double refractiveIndex_fiber[] =
-  { 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
-    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
-    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
-    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60,
-    1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60, 1.60};
-
-  assert(sizeof(refractiveIndex_fiber) == sizeof(photonEnergy_fib));
-
-  G4double abs_fiber[] =
-  {5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,
-   5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,
-   5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,5.40*m,1.10*m,
-   1.10*m,1.10*m,1.10*m,1.10*m,1.10*m,1.10*m, 1.*mm, 1.*mm, 1.*mm, 1.*mm,
-    1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm, 1.*mm};
-
-  assert(sizeof(abs_fiber) == sizeof(photonEnergy_fib));
-
- /* G4double emission_fib[] =
-  {0.05, 0.10, 0.30, 0.50, 0.75, 1.00, 1.50, 1.85, 2.30, 2.75,
-   3.25, 3.80, 4.50, 5.20, 6.00, 7.00, 8.50, 9.50, 11.1, 12.4,
-   12.9, 13.0, 12.8, 12.3, 11.1, 11.0, 12.0, 11.0, 17.0, 16.9,
-   15.0, 9.00, 2.50, 1.00, 0.05, 0.00, 0.00, 0.00, 0.00, 0.00,
-   0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00};
-
-  assert(sizeof(emission_fib) == sizeof(photonEnergy_fib)); */
-
-  // Add entries into properties table
-  G4MaterialPropertiesTable* mpt_fiber = new G4MaterialPropertiesTable();
-  mpt_fiber->
-           AddProperty("RINDEX",photonEnergy_fib,refractiveIndex_fiber,nEntries_fib);
-
-  mpt_fiber->AddProperty("ABSLENGTH",photonEnergy_fib,abs_fiber,nEntries_fib);
-  //mptWLSfiber->AddProperty("WLSCOMPONENT",photonEnergy_fib,emissionFib,nEntries_fib);
-
-
-  PMMA->SetMaterialPropertiesTable(mpt_fiber);
-  G4cout << "PMMA G4MaterialPropertiesTable" << G4endl;
-  mpt_fiber->DumpTable();
-
-  
-  G4Material* PE = nist->FindOrBuildMaterial("G4_POLYETHYLENE", 
-  isotopes);  
-  
-  G4double refractiveIndex_Clad[] =
-  { 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-    1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49};
-
-  assert(sizeof(refractiveIndex_Clad) == sizeof(photonEnergy_fib));
-
-  G4double abs_Clad[] =
-  {20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m};
-
-  assert(sizeof(abs_Clad) == sizeof(photonEnergy_fib));
-
-  // Add entries into properties table
-  G4MaterialPropertiesTable* mptClad = new G4MaterialPropertiesTable();
-  mptClad->AddProperty("RINDEX",photonEnergy_fib,refractiveIndex_Clad,nEntries_fib);
-  mptClad->AddProperty("ABSLENGTH",photonEnergy_fib,abs_Clad,nEntries_fib);
-
-  PE->SetMaterialPropertiesTable(mptClad);
-  
-/*  G4Material* TEFLON = nist->FindOrBuildMaterial("G4_TEFLON",isotopes);  
-                   
-G4double photonEnergy_teflon[] =
-            { 7.897*eV,7.208*eV, 6.702*eV,  4.999*eV};
-  G4double refractiveIndex3[] =
-            { 1.432, 1.308, 1.364, 1.329};
-const G4int nEntries_teflon = sizeof(photonEnergy_teflon)/sizeof(G4double);
-  G4MaterialPropertiesTable* myMPT3 = new G4MaterialPropertiesTable();
-  myMPT3->AddProperty("RINDEX", photonEnergy_teflon, refractiveIndex3, nEntries_teflon);
-
-  G4cout << "Teflon G4MaterialPropertiesTable" << G4endl;
-  myMPT3->DumpTable();
-
-  TEFLON->SetMaterialPropertiesTable(myMPT3);*/
-  
-  //fluorinated polymer
-  G4int polyeth = 1;
-  G4int nC_eth = 2*polyeth;
-  G4int nH_eth = 4*polyeth;
-  G4double z, a, density;
-  fH = new G4Element("H", "H", z=1., a=1.01*g/mole);
-  fC = new G4Element("C", "C", z=6., a=12.01*g/mole);
-  fN = new G4Element("N", "N", z=7., a= 14.01*g/mole);
-  fO = new G4Element("O"  , "O", z=8., a= 16.00*g/mole);
-  fPethylene2 = new G4Material("Pethylene2", 1400*kg/m3,2);
-  fPethylene2->AddElement(fH,nH_eth);
-  fPethylene2->AddElement(fC,nC_eth);
-  
-  //--------------------------------------------------
-  // Fluorinated Polyethylene
-  //--------------------------------------------------
-G4double photonEnergy[] =
-  {2.00*eV,2.03*eV,2.06*eV,2.09*eV,2.12*eV,
-   2.15*eV,2.18*eV,2.21*eV,2.24*eV,2.27*eV,
-   2.30*eV,2.33*eV,2.36*eV,2.39*eV,2.42*eV,
-   2.45*eV,2.48*eV,2.51*eV,2.54*eV,2.57*eV,
-   2.60*eV,2.63*eV,2.66*eV,2.69*eV,2.72*eV,
-   2.75*eV,2.78*eV,2.81*eV,2.84*eV,2.87*eV,
-   2.90*eV,2.93*eV,2.96*eV,2.99*eV,3.02*eV,
-   3.05*eV,3.08*eV,3.11*eV,3.14*eV,3.17*eV,
-   3.20*eV,3.23*eV,3.26*eV,3.29*eV,3.32*eV,
-   3.35*eV,3.38*eV,3.41*eV,3.44*eV,3.47*eV};
-
-  const G4int nEntries = sizeof(photonEnergy)/sizeof(G4double);
-
-   G4double refractiveIndexClad2[] =
-   { 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-     1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42};
-
-   assert(sizeof(refractiveIndexClad2) == sizeof(photonEnergy));
-   G4double absClad[] =
-  {20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,
-   20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m,20.0*m};
-
-  assert(sizeof(absClad) == sizeof(photonEnergy));
-
-  // Add entries into properties table
-  G4MaterialPropertiesTable* mptClad2 = new G4MaterialPropertiesTable();
-  mptClad2->AddProperty("RINDEX",photonEnergy,refractiveIndexClad2,nEntries);
-  mptClad2->AddProperty("ABSLENGTH",photonEnergy,absClad,nEntries);
-
-  fPethylene2->SetMaterialPropertiesTable(mptClad2);
-
   
   
 G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, dZ/2);
@@ -775,12 +781,36 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
   photocath_mt->AddProperty("REALRINDEX",ephoton,photocath_ReR,num);
   photocath_mt->AddProperty("IMAGINARYRINDEX",ephoton,photocath_ImR,num);
   
-  G4OpticalSurface* photocath_opsurf=
+  /*G4OpticalSurface* photocath_opsurf=
     new G4OpticalSurface("photocath_opsurf",glisur,polished,
                          dielectric_dielectric);
-  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
+  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);*/
 
-
+//****************** Build Photodiode coupling (Air)
+  G4double innerRadius_air = 0.*cm;
+  G4double startAngle_air = 0.*deg;
+  G4double spanningAngle_air = 360.*deg;
+  G4double height_air = 0.01*cm;
+  
+ 
+  //the "photocathode" is a metal slab at the back of the glass that
+  //is only a very rough approximation of the real thing since it only
+  //absorbs or detects the photons based on the efficiency set below
+  G4Tubs* air_coupling = new G4Tubs("photocath_tube",innerRadius_air,opticfiber_core_diameter/2,
+                          height_air/2,startAngle_air,spanningAngle_air);
+                          
+ G4RotationMatrix rotm_air  = G4RotationMatrix();
+    rotm_air.rotateY(0*deg); 
+    G4Transform3D transform_air = G4Transform3D(rotm_air,G4ThreeVector(0,0,(opticfiber_core_dx/2 + height_air/2)));
+    
+  G4LogicalVolume* air_coupling_log = new G4LogicalVolume(air_coupling,
+                                       airNist,
+                                       "Air_coupling_LV");
+ 
+  G4VPhysicalVolume* couplingphys = new G4PVPlacement(transform_air, air_coupling_log,"couplingphys",
+                                    opticfiber_core_log,false,0);
+                                    
+                                    
 //****************** Build Photodiode
   G4double innerRadius_pmt = 0.*cm;
   G4double startAngle_pmt = 0.*deg;
@@ -795,18 +825,18 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
                           
  G4RotationMatrix rotm_pd  = G4RotationMatrix();
     rotm_pd.rotateY(0*deg); 
-    G4Transform3D transform_pd = G4Transform3D(rotm_pd,G4ThreeVector(0,0,(opticfiber_core_dx/2 + height_pmt/2)));
+    G4Transform3D transform_pd = G4Transform3D(rotm_pd,G4ThreeVector(0,0,(height_air/2 + height_pmt/2)));
     
   fPhotocath_log = new G4LogicalVolume(fPhotocath,
                                        PMMA,
                                        "PhotoDiode_LV");
  
   G4VPhysicalVolume* photophys = new G4PVPlacement(transform_pd, fPhotocath_log,"photodiode",
-                                    opticfiber_core_log,false,0);
+                                    air_coupling_log,false,0);
  
  
   //**Create logical skin surfaces
-    new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
+    //new G4LogicalSkinSurface("photocath_surf",fPhotocath_log,photocath_opsurf);
   
   G4OpticalSurface* opcore_pd = new G4OpticalSurface("OpticFiberandp");
   opcore_pd->SetType(dielectric_LUTDAVIS);
@@ -845,11 +875,30 @@ G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
 
         */ 
 
-
-   
+G4VisAttributes* white = new G4VisAttributes( G4Colour());
+  white -> SetVisibility(true);
+  //white -> SetForceSolid(true);
+	
+ G4VisAttributes* blue = new G4VisAttributes(G4Colour(0. ,0. ,1.));
+  blue -> SetVisibility(true);
+  //blue -> SetForceSolid(true);
+	
+ G4VisAttributes* gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
+  gray-> SetVisibility(true);
+  //gray-> SetForceSolid(true);
+	
+  
+	
+ G4VisAttributes* yellow = new G4VisAttributes(G4Colour(1., 1., 0. ));
+  yellow-> SetVisibility(true);
+  //yellow-> SetForceSolid(true);
+	
+  
     G4VisAttributes * skyBlue1 = new G4VisAttributes( G4Colour(135/255. , 206/255. ,  235/255. ));
      skyBlue1->SetVisibility(true);
     logicCryst -> SetVisAttributes(red);
+    air_coupling_log->SetVisAttributes(yellow);
+    fPhotocath_log->SetVisAttributes(blue);
   /*  logicwrapper_long->SetVisAttributes(skyBlue1);
         logicwrapper_side->SetVisAttributes(skyBlue1);
             logicwrapper_little->SetVisAttributes(skyBlue1);*/

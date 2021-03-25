@@ -100,7 +100,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
  KinEnFile<< eventid<< "\t" << kineticEnergy << "\t" <<trackID<<G4endl;
  }
  	}
- if(volumeName == "OF_core_LV" && aStep->GetTrack()->GetTrackID()!= 1){
+ if(volumeName == "OF_core_LV" && aStep->GetTrack()->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()){
  if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
   //G4cout<< eventid<< "\t" << "Scintillation in core" << "\t" <<trackID<<G4endl;
 if(OpticFiber.is_open()){
@@ -116,7 +116,7 @@ if(OpticFiber.is_open()){
  }
  }
  }
- if(volumeName == "photocath_surf"  && aStep->GetTrack()->GetTrackID()!= 1){
+ if(volumeName == "Photodiode_LV"  && aStep->GetTrack()->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()){
  if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
   G4cout<< eventid<< "\t" << "Scintillation in Photodiode" << "\t" <<trackID<<G4endl;
 if(Photodiode.is_open()){

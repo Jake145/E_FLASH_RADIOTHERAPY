@@ -43,13 +43,14 @@ class G4VPhysicalVolume; //definisco la classe del volume fisico
 class G4LogicalVolume; //definisco la classe del volume logico
 class Applicator80BeamLine;
 class G4VSensitiveDetector;
+class G4NistManager;
 class G4Tubs;
 class G4Box;
 class G4Element;
 class G4VisAttributes;
-class FSensitiveDetector;
-class OpticFiberSD;
-class PhotoDiodeSD;
+//class FSensitiveDetector;
+//class OpticFiberSD;
+//class PhotoDiodeSD;
 class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe della costruzione del detector e del fantoccio
 {
   public:
@@ -67,9 +68,9 @@ class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe de
     
  
     private:
-          FSensitiveDetector* sd_of_cryst;
-          OpticFiberSD* sd_of_of;
-          PhotoDiodeSD* sd_of_pd;
+          //FSensitiveDetector* sd_of_cryst;
+         // OpticFiberSD* sd_of_of;
+          //PhotoDiodeSD* sd_of_pd;
      Applicator80BeamLine* Collimator;
 	G4LogicalVolume* opticfiber_core_log;
 	G4LogicalVolume* logicCryst;
@@ -91,10 +92,11 @@ class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe de
     
     G4Element* fC;
     G4Element* fH;
-    
+    G4NistManager* nist;
     G4Material* fPethylene2;
-    
-    
+    G4Material* cryst_mat;
+    G4Material* PMMA;
+    G4Material* PE;
     G4Tubs* fPhotocath;
 
 

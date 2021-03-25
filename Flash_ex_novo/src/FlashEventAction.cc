@@ -56,7 +56,7 @@ FlashEventAction::~FlashEventAction() //distruttore
 
 void FlashEventAction::BeginOfEventAction(const G4Event*)
 {    
-  
+  G4cout<<"Starting event: "<<  G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()<<G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +79,7 @@ G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
      edep = *(itr->second);};
     if (edep > 0.) fRunAction->SumEdep(edep);
   
+  G4cout<<"Ending event: "<<  G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()<<G4endl;
   
 }
 
