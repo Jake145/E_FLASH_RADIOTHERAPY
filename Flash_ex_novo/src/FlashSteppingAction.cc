@@ -92,7 +92,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
 
  
- G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;
+ //G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID<< " "<< "kineticEnergy--->"<<  " " <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< " "<< G4endl;
  
  
  if(KinEnFile.is_open()){
@@ -102,21 +102,21 @@ void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
  	}
  if(volumeName == "OF_core_LV" && aStep->GetTrack()->GetTrackID()!= 1){
  if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
-  G4cout<< eventid<< "\t" << "Scintillation in core" << "\t" <<trackID<<G4endl;
+  //G4cout<< eventid<< "\t" << "Scintillation in core" << "\t" <<trackID<<G4endl;
 if(OpticFiber.is_open()){
  
  OpticFiber<< eventid<< "\t" << "Scintillation in core" << "\t" <<trackID<<G4endl;
  }
  }
 else if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
- G4cout<< eventid<< "\t" << "Cerenkov in core" << "\t" <<trackID<<G4endl;
+ //G4cout<< eventid<< "\t" << "Cerenkov in core" << "\t" <<trackID<<G4endl;
 if(OpticFiber.is_open()){
  
  OpticFiber<< eventid<< "\t" << "Cerenkov in core" << "\t" <<trackID<<G4endl;
  }
  }
  }
- if(volumeName == "Photodiode_LV" && aStep->GetTrack()->GetTrackID()!= 1){
+ if(volumeName == "photocath_surf"  && aStep->GetTrack()->GetTrackID()!= 1){
  if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
   G4cout<< eventid<< "\t" << "Scintillation in Photodiode" << "\t" <<trackID<<G4endl;
 if(Photodiode.is_open()){

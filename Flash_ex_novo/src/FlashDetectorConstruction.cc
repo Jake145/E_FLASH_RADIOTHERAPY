@@ -182,7 +182,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
 // ------------ Generate & Add Material Properties Table ------------
 // 
-/*
+
   G4double photonEnergy[] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
@@ -220,7 +220,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
   assert(sizeof(absorption) == sizeof(photonEnergy));
 
-  G4double scintilFast[] =
+ /* G4double scintilFast[] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
@@ -236,14 +236,14 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
               4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
               7.00, 6.00, 5.00, 4.00 };
 
-  assert(sizeof(scintilSlow) == sizeof(photonEnergy));
+  assert(sizeof(scintilSlow) == sizeof(photonEnergy));*/
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
 
   myMPT1->AddProperty("RINDEX",       photonEnergy, refractiveIndex1,nEntries)
         ->SetSpline(true);
   myMPT1->AddProperty("ABSLENGTH",    photonEnergy, absorption,     nEntries)
         ->SetSpline(true);
-  myMPT1->AddProperty("FASTCOMPONENT",photonEnergy, scintilFast,     nEntries)
+  /*myMPT1->AddProperty("FASTCOMPONENT",photonEnergy, scintilFast,     nEntries)
         ->SetSpline(true);
   myMPT1->AddProperty("SLOWCOMPONENT",photonEnergy, scintilSlow,     nEntries)
         ->SetSpline(true);
@@ -252,7 +252,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT", 1.*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
-  myMPT1->AddConstProperty("YIELDRATIO",0.8);
+  myMPT1->AddConstProperty("YIELDRATIO",0.8);*/
 
   G4double energy_water[] = {
      1.56962*eV, 1.58974*eV, 1.61039*eV, 1.63157*eV,
@@ -312,7 +312,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   myMPT1->DumpTable();
 
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
-  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV); */
+  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV); 
   
 G4double phantomSizeX=20.0*cm, phantomSizeY=20.0*cm, phantomSizeZ=20.0*cm;
 G4ThreeVector phantomPosition = G4ThreeVector(-99.4*mm,  0.*mm,0.*mm);
@@ -631,6 +631,14 @@ G4RotationMatrix rotm  = G4RotationMatrix();
   G4LogicalBorderSurface* teflonSurface_up=
           new G4LogicalBorderSurface("teflonSurface_up",
                                  phys_cryst,physicalTreatmentRoom,opteflonSurface_up);
+    G4LogicalBorderSurface* teflonSurface_down=
+          new G4LogicalBorderSurface("teflonSurface_down",physicalTreatmentRoom,
+                                 phys_cryst,opteflonSurface_up);
+                                 
+  G4OpticalSurface* opticalSurface_teflon = dynamic_cast <G4OpticalSurface*>
+        (teflonSurface_up->GetSurface(phys_cryst,physicalTreatmentRoom)->
+                                                       GetSurfaceProperty());
+  if (opticalSurface_teflon) opticalSurface_teflon->DumpInfo();  
                                  
  // optic fiber
   //
@@ -704,10 +712,18 @@ G4Tubs* opticfiber_cladding =
 
                           logicCryst,false,0); 
      
-                          
-   G4LogicalBorderSurface* teflonSurface_of=
-          new G4LogicalBorderSurface("teflonSurface_of",
-                                 phys_cryst,physcore,opteflonSurface_up);
+   G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator");
+  opcore_scint->SetType(dielectric_LUTDAVIS);
+  opcore_scint->SetFinish(Polished_LUT);
+  opcore_scint->SetModel(DAVIS);
+   G4LogicalBorderSurface* core_scint_up=
+          new G4LogicalBorderSurface("teflonSurface_of_up",
+                                 phys_cryst,physcore,opcore_scint);
+         G4LogicalBorderSurface* core_scint_down=
+          new G4LogicalBorderSurface("teflonSurface_of_down",
+                                 physcore,phys_cryst,opcore_scint);
+                                 
+      
 //OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
 // Definiamo ora le ultime tre superfici ottiche interessanti
 
@@ -732,12 +748,15 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
   opcore_clad->SetFinish(Polished_LUT);
   opcore_clad->SetModel(DAVIS);
 
-  G4LogicalBorderSurface* core_clad=
-          new G4LogicalBorderSurface("opfibclad",
+  G4LogicalBorderSurface* core_clad_up=
+          new G4LogicalBorderSurface("opfibclad_up",
                                  physcore,physclad,opcore_clad);
+  G4LogicalBorderSurface* core_clad_down=
+          new G4LogicalBorderSurface("opfibclad_down",physclad,
+                                 physcore,opcore_clad);
 
   G4OpticalSurface* opticalSurface_8 = dynamic_cast <G4OpticalSurface*>
-        (core_clad->GetSurface(physcore,physclad)->
+        (core_clad_up->GetSurface(physcore,physclad)->
                                                        GetSurfaceProperty());
   if (opticalSurface_8) opticalSurface_8->DumpInfo();  
   
@@ -755,9 +774,10 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
   photocath_mt->AddProperty("EFFICIENCY",ephoton,photocath_EFF,num);
   photocath_mt->AddProperty("REALRINDEX",ephoton,photocath_ReR,num);
   photocath_mt->AddProperty("IMAGINARYRINDEX",ephoton,photocath_ImR,num);
+  
   G4OpticalSurface* photocath_opsurf=
     new G4OpticalSurface("photocath_opsurf",glisur,polished,
-                         dielectric_metal);
+                         dielectric_dielectric);
   photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
 
 
@@ -778,7 +798,7 @@ G4OpticalSurface* opcore_scint = new G4OpticalSurface("OpticFiberandScintillator
     G4Transform3D transform_pd = G4Transform3D(rotm_pd,G4ThreeVector(0,0,(opticfiber_core_dx/2 + height_pmt/2)));
     
   fPhotocath_log = new G4LogicalVolume(fPhotocath,
-                                       G4NistManager::Instance()->FindOrBuildMaterial("G4_Si"),
+                                       PMMA,
                                        "PhotoDiode_LV");
  
   G4VPhysicalVolume* photophys = new G4PVPlacement(transform_pd, fPhotocath_log,"photodiode",

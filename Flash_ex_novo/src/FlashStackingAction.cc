@@ -63,7 +63,8 @@ FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
     if(aTrack->GetParentID()>0)
     { // particle is secondary
 	//if (aTrack->GetTrackStatus()!=fStopAndKill){
-    	if(aTrack->GetVolume()->GetName()=="OF_core_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
+    	//if(aTrack->GetVolume()->GetName()=="OF_core_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
+    	if(aTrack->GetVolume()->GetName()=="crystalphys"){
 
       if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation"){
         fScintillationCounter++;
