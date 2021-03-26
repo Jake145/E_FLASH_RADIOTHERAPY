@@ -83,10 +83,12 @@ void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
 //analizziamo i primari che incidono sul cristallo
  G4int eventid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
  G4StepPoint* postStep = aStep->GetPostStepPoint();
+ G4StepPoint* preStep= aStep->GetPreStepPoint();
   G4int trackID = aStep->GetTrack()->GetTrackID();
   if ( postStep->GetStepStatus() == fGeomBoundary ){
 
    G4String volumeName = postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
+   G4String prevolumeName = preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
  if(volumeName == "CrystalLV"&&aStep->GetTrack()->GetTrackID() == 1){
 
  G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
@@ -100,7 +102,8 @@ void FlashSteppingAction::UserSteppingAction(const G4Step* aStep)
  KinEnFile<< eventid<< "\t" << kineticEnergy << "\t" <<trackID<<G4endl;
  }
  	}
- if(volumeName == "OF_core_LV" && aStep->GetTrack()->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()){
+if(aStep->GetTrack()->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()){
+ if(volumeName == "OF_core_LV" && prevolumeName=="CrystalLV"){
  if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
   //G4cout<< eventid<< "\t" << "Scintillation in core" << "\t" <<trackID<<G4endl;
 if(OpticFiber.is_open()){
@@ -116,7 +119,7 @@ if(OpticFiber.is_open()){
  }
  }
  }
- if(volumeName == "Photodiode_LV"  && aStep->GetTrack()->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition()){
+ if(volumeName == "Photodiode_LV"  &&  prevolumeName=="Air_coupling_LV"){
  if(aStep->GetTrack()->GetCreatorProcess()->GetProcessName() == "Scintillation"){
   G4cout<< eventid<< "\t" << "Scintillation in Photodiode" << "\t" <<trackID<<G4endl;
 if(Photodiode.is_open()){
@@ -139,6 +142,7 @@ if(Photodiode.is_open()){
  } }
  }
   }
+ }
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

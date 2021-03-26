@@ -383,7 +383,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
   assert(sizeof(absorption) == sizeof(photonEnergy));
 
- /* G4double scintilFast[] =
+  /*G4double scintilFast[] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
@@ -415,7 +415,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT", 1.*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
-  myMPT1->AddConstProperty("YIELDRATIO",0.8);*/
+  myMPT1->AddConstProperty("YIELDRATIO",0.8); */
 
   G4double energy_water[] = {
      1.56962*eV, 1.58974*eV, 1.61039*eV, 1.63157*eV,
@@ -475,7 +475,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   myMPT1->DumpTable();
 
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
-  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV); 
+  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
   
 G4double phantomSizeX=20.0*cm, phantomSizeY=20.0*cm, phantomSizeZ=20.0*cm;
 G4ThreeVector phantomPosition = G4ThreeVector(-99.4*mm,  0.*mm,0.*mm);
@@ -549,7 +549,7 @@ G4VPhysicalVolume* FlashDetectorConstruction::Construct()
   G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   // Air
 //
-
+/*
 G4double photonEnergy_air[] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
@@ -572,7 +572,7 @@ const G4int nEntries_air = sizeof(photonEnergy_air)/sizeof(G4double);
   G4cout << "Air G4MaterialPropertiesTable" << G4endl;
   myMPT2->DumpTable();
 
-  airNist->SetMaterialPropertiesTable(myMPT2); 
+  airNist->SetMaterialPropertiesTable(myMPT2); */
   
   G4Box* treatmentRoom = new G4Box("TreatmentRoom",worldX,worldY,worldZ);
   G4LogicalVolume* logicTreatmentRoom = new G4LogicalVolume(treatmentRoom, 
@@ -714,7 +714,7 @@ G4Tubs* opticfiber_cladding =
                            //position
                           opticfiber_cladding_log,            
 
-                          "OF_core_phys",                
+                          "OF_clad_phys",                
 
                           logicCryst,false,0); 
      
@@ -883,9 +883,9 @@ G4VisAttributes* white = new G4VisAttributes( G4Colour());
   blue -> SetVisibility(true);
   //blue -> SetForceSolid(true);
 	
- G4VisAttributes* gray = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
-  gray-> SetVisibility(true);
-  //gray-> SetForceSolid(true);
+ G4VisAttributes* grey = new G4VisAttributes( G4Colour(0.5, 0.5, 0.5 ));
+  grey-> SetVisibility(true);
+  //grey-> SetForceSolid(true);
 	
   
 	
