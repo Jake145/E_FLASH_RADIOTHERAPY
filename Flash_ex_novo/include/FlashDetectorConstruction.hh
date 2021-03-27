@@ -96,6 +96,7 @@ class FlashDetectorConstruction : public G4VUserDetectorConstruction //classe de
     G4Material* fPethylene2;
     G4Material* cryst_mat;
     G4Material* PMMA;
+        G4Material* PMMA_optic;
     G4Material* PE;
     G4Tubs* fPhotocath;
 

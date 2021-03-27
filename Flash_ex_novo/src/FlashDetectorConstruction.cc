@@ -415,7 +415,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT", 1.*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
-  myMPT1->AddConstProperty("YIELDRATIO",0.8); */
+  myMPT1->AddConstProperty("YIELDRATIO",0.8);*/
 
   G4double energy_water[] = {
      1.56962*eV, 1.58974*eV, 1.61039*eV, 1.63157*eV,
@@ -475,7 +475,7 @@ G4Material* phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
   myMPT1->DumpTable();
 
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
-  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
+  phantomMaterial->GetIonisation()->SetBirksConstant(0.126*mm/MeV); 
   
 G4double phantomSizeX=20.0*cm, phantomSizeY=20.0*cm, phantomSizeZ=20.0*cm;
 G4ThreeVector phantomPosition = G4ThreeVector(-99.4*mm,  0.*mm,0.*mm);
