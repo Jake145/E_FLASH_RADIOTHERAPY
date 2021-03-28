@@ -1,0 +1,15 @@
+#class tools::wcsv::ntuple
+#title crystalSD_edep
+#separator 44
+#vector_separator 59
+#column int crystalSD_edep_eventId
+#column int crystalSD_edep_cell
+#column double crystalSD_edep_score
+152474,0,0.0138027
+316493,0,0.144238
+332123,0,0.151866
+513356,0,0.0350053
+699356,0,0.074604
+779502,0,0.0507993
+944478,0,0.0483603
+952946,0,0.380975
