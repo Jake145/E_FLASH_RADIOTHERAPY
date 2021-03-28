@@ -30,35 +30,33 @@
 #ifndef FlashRunAction_h
 #define FlashRunAction_h 1
 
-#include "G4UserRunAction.hh"
-#include "G4RunManager.hh"
-#include "globals.hh"
 #include "G4Accumulable.hh"
+#include "G4RunManager.hh"
+#include "G4UserRunAction.hh"
+#include "globals.hh"
 class G4Run; // Dichiaro la classe della run
 
 /// Run action class
 ///
-/// In EndOfRunAction(), it calculates the dose in the selected volume 
+/// In EndOfRunAction(), it calculates the dose in the selected volume
 /// from the energy deposit accumulated via stepping and event actions.
 /// The computed dose is then printed on the screen.
 
-class FlashRunAction : public G4UserRunAction //dichiaro il run action
+class FlashRunAction : public G4UserRunAction // dichiaro il run action
 {
-  public:
-    FlashRunAction(); //costruttore
-    virtual ~FlashRunAction();//distruttore
+public:
+  FlashRunAction();          // costruttore
+  virtual ~FlashRunAction(); // distruttore
 
-    
-    virtual void BeginOfRunAction(const G4Run*);//inizia la run
-    virtual void   EndOfRunAction(const G4Run*);//finisce la run
+  virtual void BeginOfRunAction(const G4Run *); // inizia la run
+  virtual void EndOfRunAction(const G4Run *);   // finisce la run
 
-    //void CountEvent()           { fGoodEvents += 1; };
-    void SumEdep(G4double Edep) { fSumEdep += Edep; };  
+  // void CountEvent()           { fGoodEvents += 1; };
+  void SumEdep(G4double Edep) { fSumEdep += Edep; };
 
 private:
-    //G4Accumulable<G4int>    fGoodEvents;
-    G4Accumulable<G4double> fSumEdep;  
+  // G4Accumulable<G4int>    fGoodEvents;
+  G4Accumulable<G4double> fSumEdep;
 };
 
 #endif
-

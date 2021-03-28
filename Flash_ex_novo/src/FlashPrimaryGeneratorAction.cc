@@ -25,74 +25,66 @@
 //
 // This is the second version of Flash, a Geant4-based application
 //
-// 
+//
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "G4SystemOfUnits.hh"
 #include "FlashPrimaryGeneratorAction.hh"
+#include "G4SystemOfUnits.hh"
 
-
-#include "globals.hh"
 #include "G4Event.hh"
 #include "G4GeneralParticleSource.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
-  
-FlashPrimaryGeneratorAction::FlashPrimaryGeneratorAction()
-{
-  
-  particleGun  = new G4GeneralParticleSource();
+#include "globals.hh"
 
-  SetDefaultPrimaryParticle();  
-}  
+FlashPrimaryGeneratorAction::FlashPrimaryGeneratorAction() {
 
-FlashPrimaryGeneratorAction::~FlashPrimaryGeneratorAction()
-{
-  delete particleGun;
+  particleGun = new G4GeneralParticleSource();
 
-
+  SetDefaultPrimaryParticle();
 }
-  
-void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle()
-{    
+
+FlashPrimaryGeneratorAction::~FlashPrimaryGeneratorAction() {
+  delete particleGun;
+}
+
+void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   // ****************************
   // Default primary particle
   // ****************************
-  
-  // Define primary particles: electrons 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable -> FindParticle("e-");   
-  particleGun -> SetParticleDefinition(particle); 
 
-  //qui definiamo la posizione della sorgente. Il fascio ha forma gaussiana e divergenza 6 gradi. Lo spettro energetico viene dato dalla macro a gps
-  
-  G4double defaultX0 = -1000.0 *CLHEP::mm;                 
+  // Define primary particles: electrons
+  G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition *particle = particleTable->FindParticle("e-");
+  particleGun->SetParticleDefinition(particle);
+
+  // qui definiamo la posizione della sorgente. Il fascio ha forma gaussiana e
+  // divergenza 6 gradi. Lo spettro energetico viene dato dalla macro a gps
+
+  G4double defaultX0 = -1000.0 * CLHEP::mm;
   X0 = defaultX0;
 
-  G4double defaultY0 = 0.0 *CLHEP::mm;  
+  G4double defaultY0 = 0.0 * CLHEP::mm;
   Y0 = defaultY0;
 
-  G4double defaultZ0 = 0.0 *CLHEP::mm;  
+  G4double defaultZ0 = 0.0 * CLHEP::mm;
   Z0 = defaultZ0;
 
-  G4double defaultsigmaY = 1.115  *CLHEP::mm;  
+  G4double defaultsigmaY = 1.115 * CLHEP::mm;
   sigmaY = defaultsigmaY;
 
-  G4double defaultsigmaZ = 1.115  *CLHEP::mm;  
+  G4double defaultsigmaZ = 1.115 * CLHEP::mm;
   sigmaZ = defaultsigmaZ;
 
-  
-  G4double defaultTheta = 5.0 *CLHEP::deg;  
+  G4double defaultTheta = 5.0 * CLHEP::deg;
   Theta = defaultTheta;
-
 }
 
-void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
+void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   // ****************************************
-  // Set the beam angular apread 
+  // Set the beam angular apread
   // and spot size
   // beam spot size
   // ****************************************
@@ -102,59 +94,47 @@ void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double y = Y0;
   G4double z = Z0;
 
-  if ( sigmaY > 0.0 )
-    {
-      y += G4RandGauss::shoot( Y0, sigmaY );
-    }
- 
-  if ( sigmaZ > 0.0 )
-    {
-      z += G4RandGauss::shoot( Z0, sigmaZ );
-    }
-  
-  particleGun -> SetParticlePosition(G4ThreeVector( x , y , z ) );
- 
+  if (sigmaY > 0.0) {
+    y += G4RandGauss::shoot(Y0, sigmaY);
+  }
+
+  if (sigmaZ > 0.0) {
+    z += G4RandGauss::shoot(Z0, sigmaZ);
+  }
+
+  particleGun->SetParticlePosition(G4ThreeVector(x, y, z));
+
   // ********************************************
   // Set the beam energy and energy spread
   // ********************************************
 
-               
-  G4double Mx;    
+  G4double Mx;
   G4double My;
   G4double Mz;
   G4double condition;
-  
-while (true)  {
 
-  
+  while (true) {
 
-  Mx =  CLHEP::RandFlat::shoot(0.7,1);
-  My =  CLHEP::RandFlat::shoot(-0.3,0.3); // ranges good for 0<Theta<20
-  Mz =  CLHEP::RandFlat::shoot(-0.3,0.3);
+    Mx = CLHEP::RandFlat::shoot(0.7, 1);
+    My = CLHEP::RandFlat::shoot(-0.3, 0.3); // ranges good for 0<Theta<20
+    Mz = CLHEP::RandFlat::shoot(-0.3, 0.3);
 
-  condition = std::sqrt(Mx*Mx + My*My + Mz*Mz);
+    condition = std::sqrt(Mx * Mx + My * My + Mz * Mz);
 
- 
-  if (condition < 1)  {
-    Mx = Mx/condition;
-    My = My/condition;
-    Mz = Mz/condition;
+    if (condition < 1) {
+      Mx = Mx / condition;
+      My = My / condition;
+      Mz = Mz / condition;
 
-
-    if (Mx > std::cos(Theta)) { 
-      break;
-        }
+      if (Mx > std::cos(Theta)) {
+        break;
+      }
     }
-}
-  
- 
-  particleGun ->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection( G4ThreeVector(Mx,My,Mz) );
-  
+  }
+
+  particleGun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(
+      G4ThreeVector(Mx, My, Mz));
 
   // Generate a primary particle
-  particleGun -> GeneratePrimaryVertex( anEvent ); 
-} 
-
-
-
-
+  particleGun->GeneratePrimaryVertex(anEvent);
+}

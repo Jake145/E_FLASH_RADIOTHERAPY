@@ -32,105 +32,85 @@
 //#include "FlashDetectorConstruction.hh"
 // #include "FlashRun.hh"
 
-#include "G4RunManager.hh"
-#include "G4Run.hh"
-#include "G4LogicalVolume.hh"
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
+#include "FlashAnalysis.hh"
 #include "G4Accumulable.hh"
 #include "G4AccumulableManager.hh"
-#include "FlashAnalysis.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Run.hh"
+#include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashRunAction::FlashRunAction()
-: G4UserRunAction(),fSumEdep(0.)
-{
- // Register accumulable to the accumulable manager
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+FlashRunAction::FlashRunAction() : G4UserRunAction(), fSumEdep(0.) {
+  // Register accumulable to the accumulable manager
+  G4AccumulableManager *accumulableManager = G4AccumulableManager::Instance();
 
-  accumulableManager->RegisterAccumulable(fSumEdep); 
-  }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-FlashRunAction::~FlashRunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//void FlashRunAction::BeginOfRunAction(const G4Run* run)
-void FlashRunAction::BeginOfRunAction(const G4Run*run )
-{ 
-  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-
-//oooooooooooooooooooOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOo
-/* //This is for creating the Ntuple. It is not working as expected
-G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
-analysisManager->SetVerboseLevel(1);
-// Open an output file   
-//analysisManager->OpenFile("FLASH_G4"); 
-
-// Creation of ntuple  
-analysisManager->CreateNtuple("MyNtuple", "Kinetic Energy in Detector");
-// X = D in CreateNtupleXColumn stands for G4double (I,F,D,S)  
-analysisManager->CreateNtupleIColumn("Particle_ID");  
-analysisManager->CreateNtupleDColumn("Kinetic_Energy");
-analysisManager->CreateNtupleIColumn("Event");
-analysisManager->CreateNtupleSColumn("LogicalVolume");
-analysisManager->FinishNtuple(); */
-//OOOOOOOOOOOOOOOOOOOOOoooooooooooooOOOoooOOooooooooooooooooooOOOOOOOOOOooooooooOOoooOOOoooOOoooo
-// reset accumulables to their initial values
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->Reset();
-  
-  //inform the runManager to save random number seed
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-
+  accumulableManager->RegisterAccumulable(fSumEdep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//void FlashRunAction::EndOfRunAction(const G4Run* run)
-void FlashRunAction::EndOfRunAction(const G4Run* run)
-{
- G4int nofEvents = run->GetNumberOfEvent();
-  if (nofEvents == 0) return;
-  
-  // Merge accumulables 
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+FlashRunAction::~FlashRunAction() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// void FlashRunAction::BeginOfRunAction(const G4Run* run)
+void FlashRunAction::BeginOfRunAction(const G4Run *run) {
+  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
+
+  // oooooooooooooooooooOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOo
+  /* //This is for creating the Ntuple. It is not working as expected
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetVerboseLevel(1);
+  // Open an output file
+  //analysisManager->OpenFile("FLASH_G4");
+
+  // Creation of ntuple
+  analysisManager->CreateNtuple("MyNtuple", "Kinetic Energy in Detector");
+  // X = D in CreateNtupleXColumn stands for G4double (I,F,D,S)
+  analysisManager->CreateNtupleIColumn("Particle_ID");
+  analysisManager->CreateNtupleDColumn("Kinetic_Energy");
+  analysisManager->CreateNtupleIColumn("Event");
+  analysisManager->CreateNtupleSColumn("LogicalVolume");
+  analysisManager->FinishNtuple(); */
+  // OOOOOOOOOOOOOOOOOOOOOoooooooooooooOOOoooOOooooooooooooooooooOOOOOOOOOOooooooooOOoooOOOoooOOoooo
+  // reset accumulables to their initial values
+  G4AccumulableManager *accumulableManager = G4AccumulableManager::Instance();
+  accumulableManager->Reset();
+
+  // inform the runManager to save random number seed
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// void FlashRunAction::EndOfRunAction(const G4Run* run)
+void FlashRunAction::EndOfRunAction(const G4Run *run) {
+  G4int nofEvents = run->GetNumberOfEvent();
+  if (nofEvents == 0)
+    return;
+
+  // Merge accumulables
+  G4AccumulableManager *accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Merge();
 
-  
-  
-          
   // Print results
   //
-  if (IsMaster())
-  {
-    G4cout
-     << G4endl
-     << "--------------------End of Global Run-----------------------"
-     << G4endl
-     << "  The run was " << nofEvents << " events ";
+  if (IsMaster()) {
+    G4cout << G4endl
+           << "--------------------End of Global Run-----------------------"
+           << G4endl << "  The run was " << nofEvents << " events ";
+  } else {
+    G4cout << G4endl
+           << "--------------------End of Local Run------------------------"
+           << G4endl << "  The run was " << nofEvents << " events ";
   }
-  else
-  {
-    G4cout
-     << G4endl
-     << "--------------------End of Local Run------------------------"
-     << G4endl
-     << "  The run was " << nofEvents << " events ";
-  }      
   G4cout
-     
-     << " Total Energy in crystal : " << G4BestUnit(fSumEdep.GetValue(),"Energy") 
-     << G4endl 
-     << "------------------------------------------------------------" << G4endl 
-     << G4endl;
-  }
-        
-  
 
-
-
+      << " Total Energy in crystal : "
+      << G4BestUnit(fSumEdep.GetValue(), "Energy") << G4endl
+      << "------------------------------------------------------------"
+      << G4endl << G4endl;
+}

@@ -28,45 +28,47 @@
 /// \brief Implementation of the FlashActionInitialization class
 
 #include "FlashActionInitialization.hh"
+#include "FlashEventAction.hh"
 #include "FlashPrimaryGeneratorAction.hh"
 #include "FlashRunAction.hh"
-#include "FlashEventAction.hh"
-#include "FlashSteppingAction.hh"
 #include "FlashStackingAction.hh"
+#include "FlashSteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashActionInitialization::FlashActionInitialization() //definisco il costruttore
- : G4VUserActionInitialization()
+FlashActionInitialization::FlashActionInitialization() // definisco il
+                                                       // costruttore
+    : G4VUserActionInitialization() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+FlashActionInitialization::~FlashActionInitialization() // definisco il
+                                                        // distruttore
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashActionInitialization::~FlashActionInitialization() //definisco il distruttore
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void FlashActionInitialization::BuildForMaster() const //definisco il metodo per far funzionare il MT
+void FlashActionInitialization::BuildForMaster()
+    const // definisco il metodo per far funzionare il MT
 {
-  FlashRunAction* runAction = new FlashRunAction;
+  FlashRunAction *runAction = new FlashRunAction;
   SetUserAction(runAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashActionInitialization::Build() const //metodo per costruire il tutto 
+void FlashActionInitialization::Build() const // metodo per costruire il tutto
 {
   SetUserAction(new FlashPrimaryGeneratorAction);
 
-  FlashRunAction* runAction = new FlashRunAction;
+  FlashRunAction *runAction = new FlashRunAction;
   SetUserAction(runAction);
-  
-  FlashEventAction* eventAction = new FlashEventAction(runAction);
+
+  FlashEventAction *eventAction = new FlashEventAction(runAction);
   SetUserAction(eventAction);
-  
+
   SetUserAction(new FlashSteppingAction(eventAction));
-    SetUserAction(new FlashStackingAction);
-}  
+  SetUserAction(new FlashStackingAction);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

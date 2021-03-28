@@ -35,28 +35,25 @@
 #include <fstream>
 /// Stacking action class : manage the newly generated particles
 ///
-/// One wishes do not track secondary neutrino.Therefore one kills it 
+/// One wishes do not track secondary neutrino.Therefore one kills it
 /// immediately, before created particles will  put in a stack.
 
-class FlashStackingAction : public G4UserStackingAction
-{
-  public:
-    FlashStackingAction();
-    virtual ~FlashStackingAction();
+class FlashStackingAction : public G4UserStackingAction {
+public:
+  FlashStackingAction();
+  virtual ~FlashStackingAction();
 
-  public:
-    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
-    virtual void NewStage();
-    virtual void PrepareNewEvent();
+public:
+  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track *aTrack);
+  virtual void NewStage();
+  virtual void PrepareNewEvent();
 
-  private:
-	 std::ofstream OpticFile;
-    G4int fScintillationCounter;
-    G4int fCerenkovCounter;
+private:
+  std::ofstream OpticFile;
+  G4int fScintillationCounter;
+  G4int fCerenkovCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

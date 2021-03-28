@@ -25,7 +25,7 @@
 //
 // This is the second version of Flash, a Geant4-based application
 //
-// 
+//
 //////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef FlashPrimaryGeneratorAction_h
 #define FlashPrimaryGeneratorAction_h 1
@@ -34,35 +34,29 @@
 #include "globals.hh"
 
 class G4GeneralParticleSource;
-class G4Event; 
+class G4Event;
 
-
-class FlashPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
-{
+class FlashPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 public:
-  FlashPrimaryGeneratorAction();    
+  FlashPrimaryGeneratorAction();
   ~FlashPrimaryGeneratorAction();
-  
+
 public:
-  void GeneratePrimaries(G4Event*);
-  
-    
+  void GeneratePrimaries(G4Event *);
+
 private:
   void SetDefaultPrimaryParticle();
- 
+
   G4double X0;
   G4double Y0;
   G4double Z0;
   G4double sigmaY;
   G4double sigmaZ;
-  
-  G4double Theta; 
+
+  G4double Theta;
 
 private:
-  G4GeneralParticleSource*    		          particleGun;
-
+  G4GeneralParticleSource *particleGun;
 };
 
 #endif
-
-

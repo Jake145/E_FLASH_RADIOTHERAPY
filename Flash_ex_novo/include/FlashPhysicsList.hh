@@ -39,8 +39,7 @@
 /// - G4RadioactiveDecayPhysics
 /// - G4EmStandardPhysics
 
-class FlashPhysicsList: public G4VModularPhysicsList
-{
+class FlashPhysicsList : public G4VModularPhysicsList {
 public:
   FlashPhysicsList();
   virtual ~FlashPhysicsList();

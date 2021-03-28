@@ -23,61 +23,67 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// 
+//
 /// \file FlashStackingAction.cc
 /// \brief Implementation of the FlashStackingAction class
 
 #include "FlashStackingAction.hh"
-#include "G4RunManager.hh"
-#include "G4VProcess.hh"
-#include "G4Threading.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "G4RunManager.hh"
+#include "G4Threading.hh"
 #include "G4Track.hh"
+#include "G4VProcess.hh"
 #include "G4ios.hh"
-#include <string>
 #include <sstream>
+#include <string>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashStackingAction::FlashStackingAction()
-  : G4UserStackingAction(),
-    fScintillationCounter(0), fCerenkovCounter(0)
-{std::ostringstream oss_1;
-oss_1 << "Optic_" << G4Threading::G4GetThreadId() << ".csv" ;
-std::string filename_1 = oss_1.str();
-  //G4String filename=("Kinetic_E_crystal_%d.csv",ThreadNumber);
-  OpticFile.open(filename_1,std::ios_base::app);}
+    : G4UserStackingAction(), fScintillationCounter(0), fCerenkovCounter(0) {
+  std::ostringstream oss_1;
+  oss_1 << "Optic_" << G4Threading::G4GetThreadId() << ".csv";
+  std::string filename_1 = oss_1.str();
+  // G4String filename=("Kinetic_E_crystal_%d.csv",ThreadNumber);
+  OpticFile.open(filename_1, std::ios_base::app);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashStackingAction::~FlashStackingAction()
-{OpticFile.close();}
+FlashStackingAction::~FlashStackingAction() { OpticFile.close(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ClassificationOfNewTrack
-FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
-{
-  if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
-  { // particle is optical photon
-    if(aTrack->GetParentID()>0)
-    { // particle is secondary
-	//if (aTrack->GetTrackStatus()!=fStopAndKill){
-    	//if(aTrack->GetVolume()->GetName()=="OF_core_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
-    	if(aTrack->GetVolume()->GetName()=="OF_core_phys"){
+FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
+  if (aTrack->GetDefinition() ==
+      G4OpticalPhoton::OpticalPhotonDefinition()) { // particle is optical
+                                                    // photon
+    if (aTrack->GetParentID() > 0) {                // particle is secondary
+      // if (aTrack->GetTrackStatus()!=fStopAndKill){
+      // if(aTrack->GetVolume()->GetName()=="OF_core_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
+      // if (aTrack->GetVolume()-GetName() ==
+      // "FirstApplicatorFlash"||aTrack->GetVolume()-GetName() ==
+      // "FinalApplicatorFlash") return fKill;
+      if (aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_core_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_clad_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_cladding_LV"){
+        
+      
 
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation"){
-        fScintillationCounter++;
-        //G4cout<<"found a scintillation in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
+        if (aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation") {
+          fScintillationCounter++;
+          // G4cout<<"found a scintillation
+          // in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
         }
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov"){
-        fCerenkovCounter++;
-                //G4cout<<"found a cherenkov in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
-                }
+        if (aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov") {
+          fCerenkovCounter++;
+          G4cout << "found a cherenkov in : "<<" "<<aTrack->GetVolume()->GetName()<<G4endl;
+        }
+      }
+      else 
+      	return fKill;
     }
   }
-  }
-  
+
   return fUrgent;
 }
 
@@ -85,24 +91,29 @@ FlashStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 
 void FlashStackingAction::NewStage()
 
-{if(fScintillationCounter!=0 || fCerenkovCounter!=0){
-/*
-  G4cout << "HEY!!!!!! Number of Scintillation photons produced in this event : "
-         << fScintillationCounter << G4endl;
-  G4cout << "HEYYY!!!!Number of Cerenkov photons produced in this event : "
-         << fCerenkovCounter << G4endl;} */
-if(OpticFile.is_open()){
- 
- OpticFile<< "event ID: "<<G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()<<"\t"<< "scintillation events:" <<fScintillationCounter<<"\t"<< "Cerenkov events: "<<fCerenkovCounter<<G4endl;
- }
- 	}
+{
+  if (fScintillationCounter != 0 || fCerenkovCounter != 0) {
+    /*
+      G4cout << "HEY!!!!!! Number of Scintillation photons produced in this
+      event : "
+             << fScintillationCounter << G4endl;
+      G4cout << "HEYYY!!!!Number of Cerenkov photons produced in this event : "
+             << fCerenkovCounter << G4endl;} */
+    if (OpticFile.is_open()) {
 
+      OpticFile
+          << "event ID: "
+          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
+          << "\t"
+          << "scintillation events:" << fScintillationCounter << "\t"
+          << "Cerenkov events: " << fCerenkovCounter << G4endl;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashStackingAction::PrepareNewEvent()
-{
+void FlashStackingAction::PrepareNewEvent() {
   fScintillationCounter = 0;
   fCerenkovCounter = 0;
 }

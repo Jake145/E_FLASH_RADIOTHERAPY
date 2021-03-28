@@ -33,54 +33,56 @@
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 
-#include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4THitsMap.hh"
 #include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashEventAction::FlashEventAction(FlashRunAction* runAction)
-: G4UserEventAction(),
-  fRunAction(runAction),fCollID_cryst(-1){}
-   //inizializzo il costruttore dando gli argomenti appropriati alle funzioni
- 
+FlashEventAction::FlashEventAction(FlashRunAction *runAction)
+    : G4UserEventAction(), fRunAction(runAction), fCollID_cryst(-1) {}
+// inizializzo il costruttore dando gli argomenti appropriati alle funzioni
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashEventAction::~FlashEventAction() //distruttore
+FlashEventAction::~FlashEventAction() // distruttore
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashEventAction::BeginOfEventAction(const G4Event*)
-{    
-  G4cout<<"Starting event: "<<  G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()<<G4endl;
+void FlashEventAction::BeginOfEventAction(const G4Event *) {
+  G4cout << "Starting event: "
+         << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
+         << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//void FlashEventAction::EndOfEventAction(const G4Event* evt)
-void FlashEventAction::EndOfEventAction(const G4Event* evt)
-{     
-G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  if(!HCE) return;
-  G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
-    fCollID_cryst   = SDMan->GetCollectionID("crystalSD/edep");
-     
-   G4THitsMap<G4double>* evtMap = 
-                     (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_cryst));
-                     
-  std::map<G4int,G4double*>::iterator itr;
-        G4double edep = 0.;           
-  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++){
-    ///G4int copyNb  = (itr->first);
-     edep = *(itr->second);};
-    if (edep > 0.) fRunAction->SumEdep(edep);
-  
-  G4cout<<"Ending event: "<<  G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()<<G4endl;
-  
+// void FlashEventAction::EndOfEventAction(const G4Event* evt)
+void FlashEventAction::EndOfEventAction(const G4Event *evt) {
+  G4HCofThisEvent *HCE = evt->GetHCofThisEvent();
+  if (!HCE)
+    return;
+  G4SDManager *SDMan = G4SDManager::GetSDMpointer();
+  fCollID_cryst = SDMan->GetCollectionID("crystalSD/edep");
+
+  G4THitsMap<G4double> *evtMap =
+      (G4THitsMap<G4double> *)(HCE->GetHC(fCollID_cryst));
+
+  std::map<G4int, G4double *>::iterator itr;
+  G4double edep = 0.;
+  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
+    /// G4int copyNb  = (itr->first);
+    edep = *(itr->second);
+  };
+  if (edep > 0.)
+    fRunAction->SumEdep(edep);
+
+  G4cout << "Ending event: "
+         << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
+         << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

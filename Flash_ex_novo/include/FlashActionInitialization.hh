@@ -34,18 +34,15 @@
 
 /// Classe Action initialization. Serve per il Multithreading
 
-class FlashActionInitialization : public G4VUserActionInitialization
-{
-  public:
-    FlashActionInitialization();
-    virtual ~FlashActionInitialization();
+class FlashActionInitialization : public G4VUserActionInitialization {
+public:
+  FlashActionInitialization();
+  virtual ~FlashActionInitialization();
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+  virtual void BuildForMaster() const;
+  virtual void Build() const;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-    
