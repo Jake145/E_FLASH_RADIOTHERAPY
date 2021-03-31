@@ -30,3 +30,6 @@ There is also a python script to confront experimental PDD with simulation.
 ![r50](/imagesforredame/profiler50.png)
 ## Detector PDD
 ![r100](/imagesforredame/PDD_LYSO.png)
+
+## Scintillation And Cerenkov Ratio 
+![Scintil_over_Cerenk](/Optic_Events.png)

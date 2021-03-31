@@ -4,13 +4,21 @@ import os
 import glob
 import pandas as pd
 
-CURR_DIR = "C:/Users/pensa/Desktop/E_FLASH_RADIOTHERAPY/Analysis"
-datapaths=next(os.walk(CURR_DIR))[1][2:]
+CURR_DIR = "C:/Users/pensa/Desktop/E_FLASH_RADIOTHERAPY/OpticSim_V2"
+event_directories=next(os.walk(CURR_DIR))[1]
+scintillation_directories=glob.glob(os.path.join(CURR_DIR,"Scintillation_*"))
+cerenkov_directories=glob.glob(os.path.join(CURR_DIR,"Cerenkov_*"))
 datapoints=[]
 number_of_events=[]
-for paths in datapaths:
-    number_of_events.append(paths.split("_")[1])
-    path=os.path.join(CURR_DIR,paths)
+scintillation=[]
+incoming_cerenkov=[]
+local_cerenkov=[]
+
+
+
+for index,paths in enumerate(scintillation_directories):
+    number_of_events.append(paths.split("_")[-1])
+    path=paths
     optic_fiber_data=glob.glob(os.path.join(path,"Optic_fiber*.csv"))
     scintil_count=0
     cerenkov_count=0
@@ -25,8 +33,10 @@ for paths in datapaths:
             else:
                 print("Unkwown result")
                 pass
-    print("incoming optical photons scintillation/cerenkov ratio:",scintil_count/cerenkov_count)
+    scintillation.append(scintil_count)
+    incoming_cerenkov.append(cerenkov_count)
 
+    path=cerenkov_directories[index]
     optic_data=glob.glob(os.path.join(path,"Optic_*.csv"))[0:12]
     cerenkov_count_created=0
     for f in optic_data:
@@ -37,14 +47,16 @@ for paths in datapaths:
             cerenkov_count_created+=cerenk_num
         except:
             pass
+    local_cerenkov.append(cerenkov_count_created)
     total_cerenkov=cerenkov_count_created+cerenkov_count
-    print("total scintillation/cerenkov ratio",scintil_count/total_cerenkov)
+    #print("total scintillation/cerenkov ratio",scintil_count/total_cerenkov)
     datapoints.append(scintil_count/total_cerenkov)
+
 
 
 plt.figure("Optic Events")
 plt.title("Scintillation and Cerenkov Ratio at 90°")
-plt.plot(number_of_events[::-1],datapoints[::-1],marker='o',linestyle='dashed',color='blue',label='scint/cerenkov ratio')
+plt.plot(number_of_events,datapoints,marker='o',linestyle='dashed',color='blue',label='scint/cerenkov ratio')
 plt.xlabel("Numero di eventi")
 plt.ylabel("rapporto scintillazione/cerenkov")
 plt.grid()
