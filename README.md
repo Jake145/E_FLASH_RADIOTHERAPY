@@ -14,7 +14,7 @@ With SSD=80cm the applicator is made of a titanium window followed by aluminum m
 ![Spectrum](/imagesforredame/spettronovac.PNG)
 The application uses a custom spectrum for the beam.
 ## Simulated Geometry
-![Geo](/imagesforredame/geant4simulgoodnoev.PNG)
+![Geo](/imagesforredame/rivelatore.PNG)
 The geometry is as described in the optics sheet. In the image the dosimeter composed of the LYSO crystal and the optic fiber.
 
 ## Dose distribution
@@ -22,11 +22,11 @@ The geometry is as described in the optics sheet. In the image the dosimeter com
 The application outputs a 3d dosemap txt file, however one can visualize the distribution at end of run to see if it makes sense.
 
 ## Validation
-![Validation](/Flash_ex_novo/imagesforredame/pdddata.png)
+![Validation](/imagesforredame/pdddata.png)
 There is also a python script to confront experimental PDD with simulation.
 ## Profile 
-![r100](/Flash_ex_novo/imagesforredame/profiler100.png)
-![r80](/Flash_ex_novo/imagesforredame/profiler80.png)
-![r50](/Flash_ex_novo/imagesforredame/profiler50.png)
+![r100](/imagesforredame/profiler100.png)
+![r80](/imagesforredame/profiler80.png)
+![r50](/imagesforredame/profiler50.png)
 ## Detector PDD
-![r100](/Flash_ex_novo/imagesforredame/PDD_LYSO.png)
+![r100](/imagesforredame/PDD_LYSO.png)
