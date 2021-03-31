@@ -79,8 +79,8 @@ FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
           G4cout << "found a cherenkov in : "<<" "<<aTrack->GetVolume()->GetName()<<G4endl;
         }
       }
-      else 
-      	return fKill;
+      //else 
+      	//return fKill; //nel caso si voglia contare gli eventi dentro la fibra si ammazzano quelli fuori
     }
   }
 
