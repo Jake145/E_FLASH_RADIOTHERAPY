@@ -70,6 +70,7 @@ public:
   void SetOuterRadiusFinalApplicatorFlash(G4double);
 
 private:
+  //G4double FieldDimensionFactor; // Valore che determina le dimensioni del campo
   G4VPhysicalVolume *motherPhys;        // mondo fisico
   void SetDefaultDimensions();          // setta le dimensioni di default
   void ConstructApplicator80BeamLine(); // costruisce tutto l'applicatore

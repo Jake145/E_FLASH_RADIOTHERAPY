@@ -148,21 +148,23 @@ void Applicator80BeamLine::SetDefaultDimensions() {
   // skyBlue -> SetForceSolid(true);
   magenta = new G4VisAttributes(G4Colour(255 / 255., 0 / 255., 255 / 255.));
   magenta->SetVisibility(true);
+//
+
 
   // Geometry FIRST APPLICATOR DEFAULTS
 
   G4double defaultOuterRadiusFirstApplicatorFlash = 55. * mm;
   OuterRadiusFirstApplicatorFlash = defaultOuterRadiusFirstApplicatorFlash;
 
-  G4double defaultinnerRadiusFirstApplicatorFlash = 50. * mm;
+  G4double defaultinnerRadiusFirstApplicatorFlash = defaultOuterRadiusFirstApplicatorFlash - 5. * mm;
   innerRadiusFirstApplicatorFlash = defaultinnerRadiusFirstApplicatorFlash;
 
   // Geometry FINAL APPLICATOR DEFAULTS
 
-  G4double defaultOuterRadiusFinalApplicatorFlash = 55. * mm;
+  G4double defaultOuterRadiusFinalApplicatorFlash = defaultOuterRadiusFirstApplicatorFlash;
   OuterRadiusFinalApplicatorFlash = defaultOuterRadiusFinalApplicatorFlash;
 
-  G4double defaultinnerRadiusFinalApplicatorFlash = 50. * mm;
+  G4double defaultinnerRadiusFinalApplicatorFlash = defaultinnerRadiusFirstApplicatorFlash;
   innerRadiusFinalApplicatorFlash = defaultinnerRadiusFinalApplicatorFlash;
 
   // DEFAULT DEFINITION OF THE MATERIALS
@@ -302,7 +304,7 @@ void Applicator80BeamLine::FlashBeamLineTitaniumWindows() {
   G4RotationMatrix rm2;
   rm2.rotateY(phi2);
 
-  const G4double outRadiusFTFlash = 44.75 * mm;
+  const G4double outRadiusFTFlash = 47.75 * mm;
   const G4double innRadiusFTFlash = 8.5 * mm;
   const G4double hightFTFlash = 0.03 * mm;
   const G4double startAngleFTFlash = 0. * deg;
@@ -369,8 +371,8 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   // Junction 5 FIRST APPLICATOR Flash //
   // --------------------------------- //
 
-  const G4double outRadiusGiunz5FinalAppFlash = 60 * mm;
-  const G4double innRadiusGiunz5FinalAppFlash = 55 * mm;
+  const G4double outRadiusGiunz5FinalAppFlash =  OuterRadiusFirstApplicatorFlash + 5 * mm;
+  const G4double innRadiusGiunz5FinalAppFlash = OuterRadiusFirstApplicatorFlash;
   const G4double hightGiunz5FinalAppFlash = 10. * mm;
   const G4double startAngleGiunz5FinalAppFlash = 0. * deg;
   const G4double spanningAngleGiunz5FinalAppFlash = 360. * deg;
@@ -625,8 +627,8 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
 
   // cover disk between monitor piece 4 and first applicator
 
-  const G4double outRadiuscover3Flash = 50.0 * mm;
-  const G4double innRadiuscover3Flash = 24.75 * mm;
+  const G4double outRadiuscover3Flash = innerRadiusFirstApplicatorFlash;
+  const G4double innRadiuscover3Flash = outRadiusGiunz4FinalAppFlash;
   const G4double hightcover3Flash = 0.01 * mm;
   const G4double startAnglecover3Flash = 0. * deg;
   const G4double spanningAnglecover3Flash = 360. * deg;
