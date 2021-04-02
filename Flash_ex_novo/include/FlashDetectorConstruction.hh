@@ -59,7 +59,7 @@ public:
   G4VPhysicalVolume *physicalTreatmentRoom;
 
   // FlashDetectorConstruction();
-  void ConstructPhantom();
+  G4VPhysicalVolume * ConstructPhantom();
   FlashDetectorConstruction(); // costruttore ci passo il puntatore al mondo
   virtual ~FlashDetectorConstruction(); // distruttore
 
@@ -86,6 +86,7 @@ private:
 
   G4LogicalVolume *phantomLogicalVolume;
   G4VPhysicalVolume *phant_phys;
+  G4VPhysicalVolume *phantom_physical;
   G4UserLimits *fStepLimit;
   G4bool fCheckOverlaps; // booleano per vedere se vi sono degli overlap nella
                          // geometria (preso da B3a)

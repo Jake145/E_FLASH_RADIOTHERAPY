@@ -360,7 +360,7 @@ void FlashDetectorConstruction::DefineMaterials() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void FlashDetectorConstruction::ConstructPhantom() {
+G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom() {
 
   G4Material *phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
@@ -388,7 +388,7 @@ void FlashDetectorConstruction::ConstructPhantom() {
 
   assert(sizeof(refractiveIndex1) == sizeof(photonEnergy));
 
-  G4double absorption[] = {
+ /* G4double absorption[] = {
       3.448 * m,  4.082 * m,  6.329 * m,  9.174 * m,  12.346 * m, 13.889 * m,
       15.152 * m, 17.241 * m, 18.868 * m, 20.000 * m, 26.316 * m, 35.714 * m,
       45.455 * m, 47.619 * m, 52.632 * m, 52.632 * m, 55.556 * m, 52.632 * m,
@@ -398,7 +398,7 @@ void FlashDetectorConstruction::ConstructPhantom() {
 
   assert(sizeof(absorption) == sizeof(photonEnergy));
 
-  /*G4double scintilFast[] =
+  G4double scintilFast[] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
@@ -419,9 +419,9 @@ void FlashDetectorConstruction::ConstructPhantom() {
 
   myMPT1->AddProperty("RINDEX", photonEnergy, refractiveIndex1, nEntries)
       ->SetSpline(true);
-  myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption, nEntries)
+  /*myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption, nEntries)
       ->SetSpline(true);
-  /*myMPT1->AddProperty("FASTCOMPONENT",photonEnergy, scintilFast,     nEntries)
+  myMPT1->AddProperty("FASTCOMPONENT",photonEnergy, scintilFast,     nEntries)
         ->SetSpline(true);
   myMPT1->AddProperty("SLOWCOMPONENT",photonEnergy, scintilSlow,     nEntries)
         ->SetSpline(true);
@@ -430,7 +430,7 @@ void FlashDetectorConstruction::ConstructPhantom() {
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT", 1.*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
-  myMPT1->AddConstProperty("YIELDRATIO",0.8);*/
+  myMPT1->AddConstProperty("YIELDRATIO",0.8);
 
   G4double energy_water[] = {
       1.56962 * eV, 1.58974 * eV, 1.61039 * eV, 1.63157 * eV, 1.65333 * eV,
@@ -475,9 +475,9 @@ void FlashDetectorConstruction::ConstructPhantom() {
 
   G4cout << "Water G4MaterialPropertiesTable" << G4endl;
   myMPT1->DumpTable();
-
+phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
-  phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);
+  
 
   G4double phantomSizeX = 20.0 * cm, phantomSizeY = 20.0 * cm,
            phantomSizeZ = 20.0 * cm;
@@ -524,7 +524,7 @@ void FlashDetectorConstruction::ConstructPhantom() {
   fStepLimit = new G4UserLimits(maxStep);
   phantomLogicalVolume->SetUserLimits(fStepLimit);
 
-  // return physicalTreatmentRoom;
+  return phant_phys;
 }
 
 G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
@@ -576,7 +576,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   // The treatment room is invisible in the Visualisation
   logicTreatmentRoom->SetVisAttributes(G4VisAttributes::GetInvisible());
-  ConstructPhantom();
+  phantom_physical=ConstructPhantom();
   // -----------------------------
   // detector
   //------------------------------
@@ -603,26 +603,30 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   G4VPhysicalVolume *phys_cryst = new G4PVPlacement(
       transform, logicCryst, "crystalphys", phantomLogicalVolume, false, 0);
-
+      
+      //what the duck this gives me segfault -->ANSWER: WATER HAS TO HAVE RINDEX!!!!
+//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   G4OpticalSurface *opteflonSurface_up =
-      new G4OpticalSurface("teflonSurface_up");
+      new G4OpticalSurface("teflonSurface");
   opteflonSurface_up->SetType(dielectric_LUTDAVIS);
-  opteflonSurface_up->SetFinish(PolishedTeflon_LUT);
-  opteflonSurface_up->SetModel(DAVIS);
 
-  G4LogicalBorderSurface *teflonSurface_up =
+  opteflonSurface_up->SetModel(DAVIS);
+  opteflonSurface_up->SetFinish(PolishedTeflon_LUT);
+
+
+ G4LogicalBorderSurface *teflonSurface_up =
       new G4LogicalBorderSurface("teflonSurface_up", phys_cryst,
-                                 physicalTreatmentRoom, opteflonSurface_up);
+                                 phantom_physical, opteflonSurface_up);
   G4LogicalBorderSurface *teflonSurface_down =
-      new G4LogicalBorderSurface("teflonSurface_down", physicalTreatmentRoom,
+      new G4LogicalBorderSurface("teflonSurface_down", phantom_physical,
                                  phys_cryst, opteflonSurface_up);
 
   G4OpticalSurface *opticalSurface_teflon = dynamic_cast<G4OpticalSurface *>(
-      teflonSurface_up->GetSurface(phys_cryst, physicalTreatmentRoom)
+      teflonSurface_up->GetSurface(phys_cryst, phantom_physical)
           ->GetSurfaceProperty());
   if (opticalSurface_teflon)
     opticalSurface_teflon->DumpInfo();
-
+//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   // optic fiber
   //
   G4double opticfiber_core_dx = 5 * cm;
@@ -831,10 +835,10 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
    G4LogicalBorderSurface* phantom_clad=
            new G4LogicalBorderSurface("opfibclad",
-                                  phant_phys,physclad,opphantom_clad);
+                                  phantom_physical,physclad,opphantom_clad);
 
    G4OpticalSurface* opticalSurface_9 = dynamic_cast <G4OpticalSurface*>
-         (phantom_clad->GetSurface(phant_phys,physclad)->
+         (phantom_clad->GetSurface(phantom_physical,physclad)->
                                                         GetSurfaceProperty());
    if (opticalSurface_9) opticalSurface_9->DumpInfo();
 

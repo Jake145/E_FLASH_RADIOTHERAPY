@@ -46,7 +46,7 @@
 FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
     : G4UserSteppingAction(), ThreadNumber(G4Threading::G4GetThreadId()),
       fEventAction(eventAction) {
-  // G4int ThreadNumber=G4Threading::G4GetThreadId();
+
   std::ostringstream oss;
   oss << "Kinetic_E_crystal_" << ThreadNumber << ".csv";
   std::string filename_1 = oss.str();
@@ -59,11 +59,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 
   OpticFiber.open(filename_2, std::ios_base::app);
 
-  /*std::ostringstream oss_pd;
-  oss_pd << "Photodetector_" << ThreadNumber << ".csv";
-  std::string filename_3 = oss_pd.str();
-
-  Photodiode.open(filename_3, std::ios_base::app);*/
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,7 +67,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 FlashSteppingAction::~FlashSteppingAction() {
   KinEnFile.close();
   OpticFiber.close();
-  //Photodiode.close();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -129,42 +125,9 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
           }
         }
       }
-     /* if (volumeName == "Photodiode_LV" && prevolumeName == "Air_coupling_LV") {
-        if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName() ==
-            "Scintillation") {
-          G4cout << eventid << "\t"
-                 << "Scintillation in Photodiode"
-                 << "\t" << trackID << G4endl;
-          if (Photodiode.is_open()) {
-
-            Photodiode << eventid << "\t"
-                       << "Scintillation in Photodiode"
-                       << "\t" << trackID << G4endl;
-          }
-        } else if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName() ==
-                   "Cerenkov") {
-          G4cout << eventid << "\t"
-                 << "cerenkov in Photodiode"
-                 << "\t" << trackID << G4endl;
-          if (Photodiode.is_open()) {
-
-            Photodiode << eventid << "\t"
-                       << "cerenkov in Photodiode"
-                       << "\t" << trackID << G4endl;
-          }
-        } else {
-          G4cout << eventid << "\t"
-                 << "Secondary in Photodiode"
-                 << "\t" << trackID << G4endl;
-          if (Photodiode.is_open()) {
-
-            Photodiode << eventid << "\t"
-                       << "Secondary in Photodiode"
-                       << "\t" << trackID << G4endl;
-          }
-        }
-      }*/
-    }
+      else aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+      
+    } 
   }
 }
 

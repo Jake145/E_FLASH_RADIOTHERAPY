@@ -59,7 +59,7 @@ FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
   if (aTrack->GetDefinition() ==
       G4OpticalPhoton::OpticalPhotonDefinition()) { // particle is optical
                                                     // photon
-    if (aTrack->GetParentID() > 0) {                // particle is secondary
+                   // particle is secondary
       // if (aTrack->GetTrackStatus()!=fStopAndKill){
       // if(aTrack->GetVolume()->GetName()=="OF_core_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
       // if (aTrack->GetVolume()-GetName() ==
@@ -79,8 +79,8 @@ FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
           G4cout << "found a cherenkov in : "<<" "<<aTrack->GetVolume()->GetName()<<G4endl;
         }
       }
-      //else 
-      	//return fKill; //nel caso si voglia contare gli eventi dentro la fibra si ammazzano quelli fuori
+      else if (aTrack->GetVolume()->GetLogicalVolume()->GetName() !="CrystalLV"){
+      	return fKill; //nel caso si voglia contare gli eventi dentro la fibra si ammazzano quelli fuori
     }
   }
 
