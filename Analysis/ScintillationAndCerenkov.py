@@ -4,7 +4,7 @@ import os
 import glob
 import pandas as pd
 
-CURR_DIR = "C:/Users/pensa/Desktop/E_FLASH_RADIOTHERAPY/Optic_fix3"
+CURR_DIR = "../Optic_fix4"
 event_directories=next(os.walk(CURR_DIR))[1]
 scintillation_directories=glob.glob(os.path.join(CURR_DIR,"*"))
 #cerenkov_directories=glob.glob(os.path.join(CURR_DIR,"Cerenkov_*"))

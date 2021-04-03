@@ -698,7 +698,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   G4OpticalSurface *opcore_scint =
       new G4OpticalSurface("OpticFiberandScintillator");
   opcore_scint->SetType(dielectric_LUTDAVIS);
-  opcore_scint->SetFinish(Polished_LUT);
+  opcore_scint->SetFinish(PolishedESRGrease_LUT);
   opcore_scint->SetModel(DAVIS);
   G4LogicalBorderSurface *core_scint_up = new G4LogicalBorderSurface(
       "teflonSurface_of_up", phys_cryst, physcore, opcore_scint);

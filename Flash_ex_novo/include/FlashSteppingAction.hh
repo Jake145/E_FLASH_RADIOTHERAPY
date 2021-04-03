@@ -51,7 +51,7 @@ public:
 private:
   std::ofstream KinEnFile;
   std::ofstream OpticFiber;
-  std::ofstream Photodiode;
+  std::ofstream OpticInfo;
   G4int ThreadNumber;
   G4int fparticlecount;
   FlashEventAction *fEventAction;
