@@ -129,9 +129,9 @@
 #  the dose in the phantom
 /score/create/boxMesh boxMesh_1
 #
-/score/mesh/boxSize 4. 8. 8. cm
-/score/mesh/nBin 40 40 40
-/score/mesh/translate/xyz -164.4 0 0 mm 
+/score/mesh/boxSize 5. 0.05 0.5 cm
+/score/mesh/nBin 100 1 1
+/score/mesh/translate/xyz -149.4 0 0 mm 
 /score/quantity/doseDeposit dose Gy
 
 #
@@ -139,9 +139,9 @@
 #
 /score/list  
 
-/run/beamOn	1000000
+#/run/beamOn	1000000
 #/run/beamOn  211950
-#/run/beamOn 5
+/run/beamOn 500000
 
 /score/dumpQuantityToFile boxMesh_1 dose dose.out
-
+#/score/drawProjection boxMesh_1 dose

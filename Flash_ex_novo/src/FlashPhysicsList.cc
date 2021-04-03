@@ -49,6 +49,7 @@ FlashPhysicsList::FlashPhysicsList() : G4VModularPhysicsList() {
   RegisterPhysics(new G4RadioactiveDecayPhysics());
 
   // optical physics
+  //G4int verbose_opt=1;
   RegisterPhysics(new G4OpticalPhysics());
 
   // EM physics
