@@ -125,8 +125,10 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
           }
         }
       }
-      else aStep->GetTrack()->SetTrackStatus(fStopAndKill);
       
+      else if(prevolumeName == "OF_core_LV" && volumeName == "CrystalLV"){ 
+      aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+      }
     } 
   }
 }
