@@ -4,11 +4,13 @@ import os
 import glob
 import pandas as pd
 
-CURR_DIR = "C:/Users/pensa/Desktop/E_FLASH_RADIOTHERAPY/OpticSim_V2"
+CURR_DIR = "C:/Users/pensa/Desktop/E_FLASH_RADIOTHERAPY/Optic_fix3"
 event_directories=next(os.walk(CURR_DIR))[1]
-scintillation_directories=glob.glob(os.path.join(CURR_DIR,"Scintillation_*"))
-cerenkov_directories=glob.glob(os.path.join(CURR_DIR,"Cerenkov_*"))
+scintillation_directories=glob.glob(os.path.join(CURR_DIR,"*"))
+#cerenkov_directories=glob.glob(os.path.join(CURR_DIR,"Cerenkov_*"))
 datapoints=[]
+
+
 number_of_events=[]
 scintillation=[]
 incoming_cerenkov=[]
@@ -17,6 +19,7 @@ local_cerenkov=[]
 
 
 for index,paths in enumerate(scintillation_directories):
+
     number_of_events.append(paths.split("_")[-1])
     path=paths
     optic_fiber_data=glob.glob(os.path.join(path,"Optic_fiber*.csv"))
@@ -24,19 +27,32 @@ for index,paths in enumerate(scintillation_directories):
     cerenkov_count=0
     for f in optic_fiber_data:
         df=pd.read_csv(f,names=["column"])
-
+        track_Ids_s=[]
+        event_Ids_s=[]
+        track_Ids_c=[]
+        event_Ids_c=[]
         for i,item in enumerate(df["column"]):
+
             if item.split("\t")[1] == "Scintillation in core":
-                scintil_count+=1
-            elif item.split("\t")[1] == "Cerenkov in core":
-                cerenkov_count+=1
-            else:
-                print("Unkwown result")
-                pass
+                if item.split("\t")[2] in track_Ids_s and item.split("\t")[0] in event_Ids_s:
+                    pass
+                else:
+                    track_Ids_s.append(item.split("\t")[2])
+                    event_Ids_s.append(item.split("\t")[0])
+                    scintil_count+=1
+            if item.split("\t")[1] == "Cerenkov in core":
+                if item.split("\t")[2] in track_Ids_c and item.split("\t")[0] in event_Ids_c:
+                    pass
+                else:
+                    track_Ids_c.append(item.split("\t")[2])
+                    event_Ids_c.append(item.split("\t")[0])
+                    cerenkov_count+=1
+
+
     scintillation.append(scintil_count)
     incoming_cerenkov.append(cerenkov_count)
 
-    path=cerenkov_directories[index]
+    #path=cerenkov_directories[index]
     optic_data=glob.glob(os.path.join(path,"Optic_*.csv"))[0:12]
     cerenkov_count_created=0
     for f in optic_data:
@@ -49,7 +65,7 @@ for index,paths in enumerate(scintillation_directories):
             pass
     local_cerenkov.append(cerenkov_count_created)
     total_cerenkov=cerenkov_count_created+cerenkov_count
-    #print("total scintillation/cerenkov ratio",scintil_count/total_cerenkov)
+    print("total scintillation/cerenkov ratio",scintil_count/total_cerenkov)
     datapoints.append(scintil_count/total_cerenkov)
 
 
