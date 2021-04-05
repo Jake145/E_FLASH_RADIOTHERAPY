@@ -73,6 +73,7 @@ void FlashEventAction::EndOfEventAction(const G4Event *evt) {
 
   std::map<G4int, G4double *>::iterator itr;
   G4double edep = 0.;
+  G4int Number_of_events=0;
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
     /// G4int copyNb  = (itr->first);
     edep = *(itr->second);

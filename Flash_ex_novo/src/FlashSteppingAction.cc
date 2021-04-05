@@ -85,6 +85,16 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   G4StepPoint *postStep = aStep->GetPostStepPoint();
   G4StepPoint *preStep = aStep->GetPreStepPoint();
   G4int trackID = aStep->GetTrack()->GetTrackID();
+  //Il codice seguente valuta i backscatter, per non contare i primari che lo attraversano uccido
+  // la particella, quindi se non serve valutare i backscatter commenta questo if annidiato.
+  if (preStep->GetStepStatus() == fGeomBoundary){
+        if(preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()== "CrystalLV" &&postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()=="phantomLog"&& aStep->GetTrack()->GetTrackID() == 1)
+    aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+  if (KinEnFile.is_open()) {
+
+        KinEnFile <<"Backscattered Primary"<<"\t"<< eventid  << "\t" << trackID<< G4endl;
+      }
+  }
   if (postStep->GetStepStatus() == fGeomBoundary) {
 
     G4String volumeName =
@@ -92,6 +102,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
     G4String prevolumeName =
         preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
     if (volumeName == "CrystalLV" && aStep->GetTrack()->GetTrackID() == 1) {
+    G4String procName = postStep->GetProcessDefinedStep()->GetProcessName();
 
       G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
 
@@ -102,9 +113,10 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
 
       if (KinEnFile.is_open()) {
 
-        KinEnFile << eventid << "\t" << kineticEnergy << "\t" << trackID
-                  << G4endl;
+        KinEnFile <<"Incoming Energy"<<"\t"<< eventid << "\t" << kineticEnergy << "\t" << trackID
+                  <<"\t"<<procName<< G4endl;
       }
+      
     }
     if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
@@ -140,7 +152,8 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
         if(OpticInfo.is_open()){
-        OpticInfo      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID << " "<< "process--->"<<  " "<<aStep->GetTrack()->GetCreatorProcess()->GetProcessName()<< " "<< "Physical Volume --->"<< "  " <<aStep->GetTrack()->GetVolume()->GetName()<< " "<<"Step Number:"<<" "<<aStep->GetTrack()->GetCurrentStepNumber()<<"Physics process:"<<" "<<aStep->GetPreStepPoint()->GetProcessDefinedStep()<<G4endl;
+        
+        OpticInfo      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID << " "<< "process--->"<<  " "<<aStep->GetTrack()->GetCreatorProcess()->GetProcessName()<< " "<< "Physical Volume --->"<< "  " <<aStep->GetTrack()->GetVolume()->GetName()<< " "<<"Step Number: "<<" "<<aStep->GetTrack()->GetCurrentStepNumber()<<"PreStepVolume: "<<" "<< aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<" "<<"PoststepVolume: "<<" "<< aStep->GetPostStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()  <<G4endl;
 }
         
         }
