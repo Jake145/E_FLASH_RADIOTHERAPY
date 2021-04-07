@@ -85,16 +85,23 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   G4StepPoint *postStep = aStep->GetPostStepPoint();
   G4StepPoint *preStep = aStep->GetPreStepPoint();
   G4int trackID = aStep->GetTrack()->GetTrackID();
+  //IL CODICE COMMENTATO NON FUNZIONA UFFA!
+  
   //Il codice seguente valuta i backscatter, per non contare i primari che lo attraversano uccido
   // la particella, quindi se non serve valutare i backscatter commenta questo if annidiato.
-  if (preStep->GetStepStatus() == fGeomBoundary){
-        if(preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()== "CrystalLV" &&postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()=="phantomLog"&& aStep->GetTrack()->GetTrackID() == 1)
-    aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+  /*if (preStep->GetStepStatus() == fGeomBoundary){
+        if((preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()== "CrystalLV" && postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()!="CrystalLV") ){
+        G4String ProcName = postStep->GetProcessDefinedStep()->GetProcessName();
+    if(aStep->GetTrack()->GetTrackID() == 1){  
   if (KinEnFile.is_open()) {
 
-        KinEnFile <<"Backscattered Primary"<<"\t"<< eventid  << "\t" << trackID<< G4endl;
+        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<<ProcName<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<G4endl;
+      }
+      //aStep->GetTrack()->SetTrackStatus(fStopAndKill);
       }
   }
+  }*/
+  
   if (postStep->GetStepStatus() == fGeomBoundary) {
 
     G4String volumeName =
@@ -149,14 +156,14 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       }
     } 
   }
-  if (aStep->GetTrack()->GetDefinition() ==
+  /*if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
         if(OpticInfo.is_open()){
         
         OpticInfo      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID << " "<< "process--->"<<  " "<<aStep->GetTrack()->GetCreatorProcess()->GetProcessName()<< " "<< "Physical Volume --->"<< "  " <<aStep->GetTrack()->GetVolume()->GetName()<< " "<<"Step Number: "<<" "<<aStep->GetTrack()->GetCurrentStepNumber()<<"PreStepVolume: "<<" "<< aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<" "<<"PoststepVolume: "<<" "<< aStep->GetPostStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()  <<G4endl;
 }
         
-        }
+        }*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
