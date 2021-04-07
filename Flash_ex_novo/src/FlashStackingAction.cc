@@ -65,23 +65,22 @@ FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
       // if (aTrack->GetVolume()-GetName() ==
       // "FirstApplicatorFlash"||aTrack->GetVolume()-GetName() ==
       // "FinalApplicatorFlash") return fKill;
-      if (aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_core_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_clad_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_cladding_LV"){
+      if ((aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_core_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_clad_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_cladding_LV") || aTrack->GetVolume()->GetLogicalVolume()->GetName() == "CrystalLV" ){
         
       
 
         if (aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation") {
           fScintillationCounter++;
-          // G4cout<<"found a scintillation
-          // in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
+           //G4cout<<"found a scintillation in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
         }
         if (aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov") {
           fCerenkovCounter++;
-          G4cout << "found a cherenkov in : "<<" "<<aTrack->GetVolume()->GetName()<<G4endl;
+          //G4cout << "found a cherenkov in : "<<" "<<aTrack->GetVolume()->GetName()<<G4endl;
         }
       }
-      else if (aTrack->GetVolume()->GetLogicalVolume()->GetName() !="CrystalLV"){
-      	return fKill; //nel caso si voglia contare gli eventi dentro la fibra si ammazzano quelli fuori
-    }
+      else 
+      	return fKill; 
+    
   }
 
   return fUrgent;
@@ -93,12 +92,7 @@ void FlashStackingAction::NewStage()
 
 {
   if (fScintillationCounter != 0 || fCerenkovCounter != 0) {
-    /*
-      G4cout << "HEY!!!!!! Number of Scintillation photons produced in this
-      event : "
-             << fScintillationCounter << G4endl;
-      G4cout << "HEYYY!!!!Number of Cerenkov photons produced in this event : "
-             << fCerenkovCounter << G4endl;} */
+   
     if (OpticFile.is_open()) {
 
       OpticFile

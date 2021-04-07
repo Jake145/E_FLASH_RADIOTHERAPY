@@ -53,7 +53,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 
   KinEnFile.open(filename_1, std::ios_base::app);
 
-  std::ostringstream oss_of;
+  /*std::ostringstream oss_of;
   oss_of << "Optic_fiber" << ThreadNumber << ".csv";
   std::string filename_2 = oss_of.str();
 
@@ -63,7 +63,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
   oss_optinfo << "Opticinfo" << ThreadNumber << ".csv";
   std::string filename_3 = oss_optinfo.str();
 
-  OpticInfo.open(filename_3, std::ios_base::app);
+  OpticInfo.open(filename_3, std::ios_base::app);*/
 
   
 }
@@ -73,7 +73,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 FlashSteppingAction::~FlashSteppingAction() {
   KinEnFile.close();
   OpticFiber.close();
-  OpticInfo.close();
+  //OpticInfo.close();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,11 +113,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
 
       G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
 
-      // G4cout      << "Event ID--->"<<  " " <<  eventid<< " "<< "track
-      // ID--->"<<  " " <<  trackID<< " "<< "kineticEnergy--->"<<  " "
-      // <<kineticEnergy<< " "<< "Logical Volume --->"<< "  " << volumeName<< "
-      // "<< G4endl;
-
+    
       if (KinEnFile.is_open()) {
 
         KinEnFile <<"Incoming Energy"<<"\t"<< eventid << "\t" << kineticEnergy << "\t" << trackID
@@ -125,13 +121,12 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       }
       
     }
-    if (aStep->GetTrack()->GetDefinition() ==
+    /*if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
       if (volumeName == "OF_core_LV" && prevolumeName == "CrystalLV") {
         if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName() ==
             "Scintillation") {
-          // G4cout<< eventid<< "\t" << "Scintillation in core" << "\t"
-          // <<trackID<<G4endl;
+          
           if (OpticFiber.is_open()) {
 
             OpticFiber << eventid << "\t"
@@ -140,8 +135,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
           }
         } else if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName() ==
                    "Cerenkov") {
-          // G4cout<< eventid<< "\t" << "Cerenkov in core" << "\t"
-          // <<trackID<<G4endl;
+          
           if (OpticFiber.is_open()) {
 
             OpticFiber << eventid << "\t"
@@ -151,7 +145,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
         }
       }
       
-      else if((volumeName == "OF_clad_LV" && prevolumeName == "CrystalLV")||(volumeName == "OF_cladding_LV" && prevolumeName == "CrystalLV")){ 
+      /*else if((volumeName == "OF_clad_LV" && prevolumeName == "CrystalLV")||(volumeName == "OF_cladding_LV" && prevolumeName == "CrystalLV")){ 
       aStep->GetTrack()->SetTrackStatus(fStopAndKill);
       }
     } 
@@ -161,9 +155,9 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
         if(OpticInfo.is_open()){
         
         OpticInfo      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID << " "<< "process--->"<<  " "<<aStep->GetTrack()->GetCreatorProcess()->GetProcessName()<< " "<< "Physical Volume --->"<< "  " <<aStep->GetTrack()->GetVolume()->GetName()<< " "<<"Step Number: "<<" "<<aStep->GetTrack()->GetCurrentStepNumber()<<"PreStepVolume: "<<" "<< aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<" "<<"PoststepVolume: "<<" "<< aStep->GetPostStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()  <<G4endl;
-}
+}*/
         
-        }*/
+        }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
