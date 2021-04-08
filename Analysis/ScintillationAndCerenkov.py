@@ -4,76 +4,48 @@ import os
 import glob
 import pandas as pd
 
-CURR_DIR = "../Optic_fix4"
+CURR_DIR = "../PhotonsAndField/Photon"
 event_directories=next(os.walk(CURR_DIR))[1]
 scintillation_directories=glob.glob(os.path.join(CURR_DIR,"*"))
 #cerenkov_directories=glob.glob(os.path.join(CURR_DIR,"Cerenkov_*"))
 datapoints=[]
-
-
 number_of_events=[]
-scintillation=[]
-incoming_cerenkov=[]
-local_cerenkov=[]
 
-
+#print(scintillation_directories)
 
 for index,paths in enumerate(scintillation_directories):
 
-    number_of_events.append(paths.split("_")[-1])
+    number_of_events.append(int(paths.split("/")[-1])/1e4)
     path=paths
-    optic_fiber_data=glob.glob(os.path.join(path,"Optic_fiber*.csv"))
-    scintil_count=0
-    cerenkov_count=0
-    for f in optic_fiber_data:
-        df=pd.read_csv(f,names=["column"])
-        track_Ids_s=[]
-        event_Ids_s=[]
-        track_Ids_c=[]
-        event_Ids_c=[]
-        for i,item in enumerate(df["column"]):
-
-            if item.split("\t")[1] == "Scintillation in core":
-                if item.split("\t")[2] in track_Ids_s and item.split("\t")[0] in event_Ids_s:
-                    pass
-                else:
-                    track_Ids_s.append(item.split("\t")[2])
-                    event_Ids_s.append(item.split("\t")[0])
-                    scintil_count+=1
-            if item.split("\t")[1] == "Cerenkov in core":
-                if item.split("\t")[2] in track_Ids_c and item.split("\t")[0] in event_Ids_c:
-                    pass
-                else:
-                    track_Ids_c.append(item.split("\t")[2])
-                    event_Ids_c.append(item.split("\t")[0])
-                    cerenkov_count+=1
-
-
-    scintillation.append(scintil_count)
-    incoming_cerenkov.append(cerenkov_count)
-
-    #path=cerenkov_directories[index]
-    optic_data=glob.glob(os.path.join(path,"Optic_*.csv"))[0:12]
-    cerenkov_count_created=0
+    optic_data=glob.glob(os.path.join(path,"Optic_*.csv"))
+    assert(len(optic_data)!=0)
+    cerenkov=0
+    scintillation=0
     for f in optic_data:
         df=pd.read_csv(f,names=["column"])
-        try:
-            cerenk=str(df["column"][1]).split("/t")[2]
-            cerenk_num=int(cerenk.split(":")[1])
-            cerenkov_count_created+=cerenk_num
-        except:
-            pass
-    local_cerenkov.append(cerenkov_count_created)
-    total_cerenkov=cerenkov_count_created+cerenkov_count
-    print("total scintillation/cerenkov ratio",scintil_count/total_cerenkov)
-    datapoints.append(scintil_count/total_cerenkov)
+        assert(len(df["column"])!=0)
+        for i,item in enumerate(df["column"]):
+           
 
+            
+               
+            cerenk=str(item).split("\t")[2]
+            cerenk_num=int(cerenk.split(":")[1])
+            cerenkov+=cerenk_num		    
+            scint=str(item).split("\t")[1]
+            scint_num=int(scint.split(":")[1])
+            scintillation+=scint_num
+    #print("Scintillation: ",scintillation,"Cerenkov: ",cerenkov)        
+    #print(scintillation/cerenkov)
+    datapoints.append(scintillation/cerenkov)     
+	 
+indexes=np.argsort(np.array(number_of_events))
 
 
 plt.figure("Optic Events")
-plt.title("Scintillation and Cerenkov Ratio at 90°")
-plt.plot(number_of_events,datapoints,marker='o',linestyle='dashed',color='blue',label='scint/cerenkov ratio')
-plt.xlabel("Numero di eventi")
+plt.title("Produced Scintillation and Cerenkov Ratio at 90° and z= 2.5 cm")
+plt.plot(np.array(number_of_events)[indexes],np.array(datapoints)[indexes],marker='o',linestyle='dashed',color='blue',label='scint/cerenkov ratio')
+plt.xlabel("Numero di eventi [10^4]")
 plt.ylabel("rapporto scintillazione/cerenkov")
 plt.grid()
 plt.show()

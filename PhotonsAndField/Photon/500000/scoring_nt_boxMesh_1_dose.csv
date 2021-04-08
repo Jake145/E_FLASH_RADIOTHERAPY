@@ -1,0 +1,7 @@
+#class tools::wcsv::ntuple
+#title boxMesh_1_dose
+#separator 44
+#vector_separator 59
+#column int boxMesh_1_dose_eventId
+#column int boxMesh_1_dose_cell
+#column double boxMesh_1_dose_score
