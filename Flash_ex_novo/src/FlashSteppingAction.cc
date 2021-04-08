@@ -53,7 +53,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 
   KinEnFile.open(filename_1, std::ios_base::app);
 
-  /*std::ostringstream oss_of;
+  std::ostringstream oss_of;
   oss_of << "Optic_fiber" << ThreadNumber << ".csv";
   std::string filename_2 = oss_of.str();
 
@@ -63,7 +63,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
   oss_optinfo << "Opticinfo" << ThreadNumber << ".csv";
   std::string filename_3 = oss_optinfo.str();
 
-  OpticInfo.open(filename_3, std::ios_base::app);*/
+  OpticInfo.open(filename_3, std::ios_base::app);
 
   
 }
@@ -73,7 +73,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 FlashSteppingAction::~FlashSteppingAction() {
   KinEnFile.close();
   OpticFiber.close();
-  //OpticInfo.close();
+  OpticInfo.close();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,7 +121,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       }
       
     }
-    /*if (aStep->GetTrack()->GetDefinition() ==
+    if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
       if (volumeName == "OF_core_LV" && prevolumeName == "CrystalLV") {
         if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName() ==
@@ -147,15 +147,15 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       
       /*else if((volumeName == "OF_clad_LV" && prevolumeName == "CrystalLV")||(volumeName == "OF_cladding_LV" && prevolumeName == "CrystalLV")){ 
       aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-      }
+      }*/
     } 
   }
-  /*if (aStep->GetTrack()->GetDefinition() ==
+  if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
         if(OpticInfo.is_open()){
         
         OpticInfo      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID << " "<< "process--->"<<  " "<<aStep->GetTrack()->GetCreatorProcess()->GetProcessName()<< " "<< "Physical Volume --->"<< "  " <<aStep->GetTrack()->GetVolume()->GetName()<< " "<<"Step Number: "<<" "<<aStep->GetTrack()->GetCurrentStepNumber()<<"PreStepVolume: "<<" "<< aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<" "<<"PoststepVolume: "<<" "<< aStep->GetPostStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()  <<G4endl;
-}*/
+}
         
         }
 }

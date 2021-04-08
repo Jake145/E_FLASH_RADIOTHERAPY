@@ -342,7 +342,7 @@ void FlashDetectorConstruction::DefineMaterials() {
 
   PE->SetMaterialPropertiesTable(mptClad);
 
-  /*  G4Material* TEFLON = nist->FindOrBuildMaterial("G4_TEFLON",isotopes);
+    TEFLON = nist->FindOrBuildMaterial("G4_TEFLON",isotopes);
 
   G4double photonEnergy_teflon[] =
               { 7.897*eV,7.208*eV, 6.702*eV,  4.999*eV};
@@ -356,7 +356,9 @@ void FlashDetectorConstruction::DefineMaterials() {
     G4cout << "Teflon G4MaterialPropertiesTable" << G4endl;
     myMPT3->DumpTable();
 
-    TEFLON->SetMaterialPropertiesTable(myMPT3);*/
+    TEFLON->SetMaterialPropertiesTable(myMPT3);
+    
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -603,8 +605,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   G4VPhysicalVolume *phys_cryst = new G4PVPlacement(
       transform, logicCryst, "crystalphys", phantomLogicalVolume, false, 0);
-      
-      //what the duck this gives me segfault -->ANSWER: WATER HAS TO HAVE RINDEX!!!!
+     
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   G4OpticalSurface *opteflonSurface_up =
       new G4OpticalSurface("teflonSurface");
@@ -629,7 +630,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   // optic fiber
   //
-  G4double opticfiber_core_dx = 10 * cm;
+  G4double opticfiber_core_dx = 5 * cm;
   G4double opticfiber_core_diameter = 0.98 * mm;
   G4double optic_fiber_clad_diameter = 2.2 * mm;
   G4double optic_fiber_cladding_diameter = 1. * mm;
@@ -704,8 +705,102 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
       "teflonSurface_of_up", phys_cryst, physcore, opcore_scint);
   G4LogicalBorderSurface *core_scint_down = new G4LogicalBorderSurface(
       "teflonSurface_of_down", physcore, phys_cryst, opcore_scint);
-
   // OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
+  G4double fPTFEThickness = 0.3 * mm;
+  G4VSolid * t1= new G4Box("t1",dX/2+fPTFEThickness, dY/2+fPTFEThickness, dZ/2+fPTFEThickness);
+  G4VSolid *t2 = new G4Box("t2",dX, dY, dZ);
+
+  G4ThreeVector zTrans(0, 0,0);
+
+  G4SubtractionSolid* solidFullTeflon = new G4SubtractionSolid("hollowteflon", t1, t2, 0, zTrans);
+
+  //wtf is wrong with this hole
+  G4VSolid *tHole = new G4Tubs("sTeflonHole",
+			       0.0*cm,
+			       optic_fiber_clad_diameter/2,
+			       fPTFEThickness/2,
+			       0.*deg,
+			       360.*deg);
+  G4RotationMatrix*yRot =new G4RotationMatrix;
+
+
+  //yRot->rotateX(90*deg);
+  yRot->rotateY(90*deg);
+  G4ThreeVector zHole((dX/2 + fPTFEThickness), 0,0  );
+
+  G4SubtractionSolid* solidHoleTeflon = new G4SubtractionSolid("hollowHoleteflon", solidFullTeflon, tHole, yRot, zHole);
+ G4LogicalVolume *logicTeflon = new G4LogicalVolume(solidHoleTeflon, TEFLON,"lTeflon",0,0,0);
+ G4VPhysicalVolume *physiTeflon = new G4PVPlacement(0, G4ThreeVector(0,0,0), logicTeflon, "pTeflon", logicCryst, false, 0);
+  
+  
+  //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
+  G4OpticalSurface *scintteflonSurface_up =
+      new G4OpticalSurface("steflonSurface");
+  scintteflonSurface_up->SetType(dielectric_LUTDAVIS);
+
+  scintteflonSurface_up->SetModel(DAVIS);
+  scintteflonSurface_up->SetFinish(PolishedTeflon_LUT);
+
+
+ G4LogicalBorderSurface *ssteflonSurface_up =
+      new G4LogicalBorderSurface("steflonSurface_up", phys_cryst,
+                                 physiTeflon, scintteflonSurface_up);
+  G4LogicalBorderSurface *ssteflonSurface_down =
+      new G4LogicalBorderSurface("steflonSurface_down", physiTeflon,
+                                 phys_cryst, scintteflonSurface_up);
+
+  G4OpticalSurface *scintteflonSurface_up_0 = dynamic_cast<G4OpticalSurface *>(
+      ssteflonSurface_up->GetSurface(phys_cryst, physiTeflon)
+          ->GetSurfaceProperty());
+  if (scintteflonSurface_up_0)
+    scintteflonSurface_up_0->DumpInfo();
+//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
+  //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
+  G4OpticalSurface *phantteflonSurface_up =
+      new G4OpticalSurface("pteflonSurface");
+  phantteflonSurface_up->SetType(dielectric_LUTDAVIS);
+
+  phantteflonSurface_up->SetModel(DAVIS);
+  phantteflonSurface_up->SetFinish(PolishedTeflon_LUT);
+
+
+ G4LogicalBorderSurface *pteflonSurface_up =
+      new G4LogicalBorderSurface("pteflonSurface_up", phant_phys,
+                                 physiTeflon, phantteflonSurface_up);
+  G4LogicalBorderSurface *pteflonSurface_down =
+      new G4LogicalBorderSurface("pteflonSurface_down", physiTeflon,
+                                 phant_phys, phantteflonSurface_up);
+
+  G4OpticalSurface *pteflonSurface_up_0 = dynamic_cast<G4OpticalSurface *>(
+      pteflonSurface_up->GetSurface(phant_phys, physiTeflon)
+          ->GetSurfaceProperty());
+  if (pteflonSurface_up_0)
+    pteflonSurface_up_0->DumpInfo();
+//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
+
+G4OpticalSurface *cladteflonSurface_up =
+      new G4OpticalSurface("cteflonSurface");
+  cladteflonSurface_up->SetType(dielectric_LUTDAVIS);
+
+  cladteflonSurface_up->SetModel(DAVIS);
+  cladteflonSurface_up->SetFinish(PolishedTeflon_LUT);
+
+
+ G4LogicalBorderSurface *cteflonSurface_up =
+      new G4LogicalBorderSurface("cteflonSurface_up", physclad,
+                                 physiTeflon, cladteflonSurface_up);
+  G4LogicalBorderSurface *cteflonSurface_down =
+      new G4LogicalBorderSurface("cteflonSurface_down", physiTeflon,
+                                 physclad, cladteflonSurface_up);
+
+  G4OpticalSurface *cteflonSurface_up_0 = dynamic_cast<G4OpticalSurface *>(
+      cteflonSurface_up->GetSurface(physclad, physiTeflon)
+          ->GetSurfaceProperty());
+  if (cteflonSurface_up_0)
+    cteflonSurface_up_0->DumpInfo();
+ //0000000000000000000000000000000000000000000ooooooooooooooooooooooooooo000000000000000000000000ooo
+
+ 
   // Definiamo ora le ultime tre superfici ottiche interessanti
 
   /*
@@ -877,6 +972,8 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   logicCryst->SetUserLimits(fStepLimit);
 
   logicCryst->SetVisAttributes(green);
+  
+  logicTeflon->SetVisAttributes(red);
 
   Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
 
