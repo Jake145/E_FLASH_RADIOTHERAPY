@@ -629,7 +629,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   // optic fiber
   //
-  G4double opticfiber_core_dx = 5 * cm;
+  G4double opticfiber_core_dx = 10 * cm;
   G4double opticfiber_core_diameter = 0.98 * mm;
   G4double optic_fiber_clad_diameter = 2.2 * mm;
   G4double optic_fiber_cladding_diameter = 1. * mm;
