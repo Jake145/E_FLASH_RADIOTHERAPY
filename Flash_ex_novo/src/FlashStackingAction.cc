@@ -56,6 +56,12 @@ FlashStackingAction::~FlashStackingAction() { OpticFile.close(); }
 
 G4ClassificationOfNewTrack
 FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
+if(aTrack->GetTrackID()>1 && aTrack->GetDefinition() !=
+      G4OpticalPhoton::OpticalPhotonDefinition()){
+      
+      return fKill;
+      
+      }
   if (aTrack->GetDefinition() ==
       G4OpticalPhoton::OpticalPhotonDefinition()) { // particle is optical
                                                     // photon

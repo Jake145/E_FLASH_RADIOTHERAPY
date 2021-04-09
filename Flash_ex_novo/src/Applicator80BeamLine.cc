@@ -150,9 +150,9 @@ void Applicator80BeamLine::SetDefaultDimensions() {
   magenta->SetVisibility(true);
 //
 
-
+initial_pos = -1000 *mm;
   // Geometry FIRST APPLICATOR DEFAULTS
-
+  
   G4double defaultOuterRadiusFirstApplicatorFlash = 55. * mm;
   OuterRadiusFirstApplicatorFlash = defaultOuterRadiusFirstApplicatorFlash;
 
@@ -278,7 +278,7 @@ void Applicator80BeamLine::FlashBeamLineVacuumSource() {
   const G4double hightVSFlash = 0.5 * mm;
   const G4double startAngleVSFlash = 0. * deg;
   const G4double spanningAngleVSFlash = 360. * deg;
-  const G4double XPositionVSFlash = -1000.0 * mm;
+  const G4double XPositionVSFlash = initial_pos;
 
   solidVSFlash =
       new G4Tubs("VSFlash", innRadiusVSFlash, outRadiusVSFlash, hightVSFlash,
@@ -309,7 +309,7 @@ void Applicator80BeamLine::FlashBeamLineTitaniumWindows() {
   const G4double hightFTFlash = 0.03 * mm;
   const G4double startAngleFTFlash = 0. * deg;
   const G4double spanningAngleFTFlash = 360. * deg;
-  const G4double XPositionFTFlash = -999.47 * mm;
+  const G4double XPositionFTFlash = initial_pos +0.53 *mm;
 
   solidFTFlash =
       new G4Tubs("FTFlash", innRadiusFTFlash, outRadiusFTFlash, hightFTFlash,
@@ -335,7 +335,7 @@ void Applicator80BeamLine::FlashBeamLineFirstApplicator() {
   const G4double hightFirstApplicatorFlash = 100. * mm;
   const G4double startAngleFirstApplicatorFlash = 0. * deg;
   const G4double spanningAngleFirstApplicatorFlash = 360. * deg;
-  const G4double firstApplicatorXPositionFlash = -799.44 * mm;
+  const G4double firstApplicatorXPositionFlash = initial_pos +200.56 * mm;
 
   G4double phi6 = 90. * deg;
 
@@ -376,7 +376,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightGiunz5FinalAppFlash = 10. * mm;
   const G4double startAngleGiunz5FinalAppFlash = 0. * deg;
   const G4double spanningAngleGiunz5FinalAppFlash = 360. * deg;
-  const G4double Giunz5FinalAppXPositionFlash = -689.44 * mm;
+  const G4double Giunz5FinalAppXPositionFlash = initial_pos + 310.56 * mm;
 
   solidGiunz5FinalAppFlash = new G4Tubs(
       "Giunz5FinalAppFlash", innRadiusGiunz5FinalAppFlash,
@@ -402,7 +402,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightGiunz4FinalAppFlash = 9.35 * mm;
   const G4double startAngleGiunz4FinalAppFlash = 0. * deg;
   const G4double spanningAngleGiunz4FinalAppFlash = 360. * deg;
-  const G4double Giunz4FinalAppXPositionFlash = -908.79 * mm;
+  const G4double Giunz4FinalAppXPositionFlash = initial_pos + 91.21 * mm;
 
   solidGiunz4FinalAppFlash = new G4Tubs(
       "Giunz4FinalAppFlash", innRadiusGiunz4FinalAppFlash,
@@ -424,7 +424,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightprotector4Flash = 9.35 * mm;
   const G4double startAngleprotector4Flash = 0. * deg;
   const G4double spanningAngleprotector4Flash = 360. * deg;
-  const G4double protector4XPositionFlash = -908.79 * mm;
+  const G4double protector4XPositionFlash = initial_pos+91.21 * mm;
 
   protector4 =
       new G4Tubs("protector4", innRadiusprotector4Flash,
@@ -447,7 +447,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightGiunz3FinalAppFlash = 4.65 * mm;
   const G4double startAngleGiunz3FinalAppFlash = 0. * deg;
   const G4double spanningAngleGiunz3FinalAppFlash = 360. * deg;
-  const G4double Giunz3FinalAppXPositionFlash = -922.79 * mm;
+  const G4double Giunz3FinalAppXPositionFlash = initial_pos+77.21 * mm;
 
   solidGiunz3FinalAppFlash = new G4Tubs(
       "Giunz3FinalAppFlash", innRadiusGiunz3FinalAppFlash,
@@ -471,7 +471,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightprotector3Flash = 4.65 * mm;
   const G4double startAngleprotector3Flash = 0. * deg;
   const G4double spanningAngleprotector3Flash = 360. * deg;
-  const G4double protector3XPositionFlash = -922.79 * mm;
+  const G4double protector3XPositionFlash = Giunz3FinalAppXPositionFlash;
 
   protector3 =
       new G4Tubs("protector3", innRadiusprotector3Flash,
@@ -493,7 +493,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightcover2Flash = 0.01 * mm;
   const G4double startAnglecover2Flash = 0. * deg;
   const G4double spanningAnglecover2Flash = 360. * deg;
-  const G4double cover2XPositionFlash = -918.14 * mm;
+  const G4double cover2XPositionFlash = initial_pos+81.86 * mm;
 
   cover2 = new G4Tubs("cover2", innRadiuscover2Flash, outRadiuscover2Flash,
                       hightcover2Flash, startAnglecover2Flash,
@@ -516,7 +516,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightGiunz2FinalAppFlash = 30 * mm;
   const G4double startAngleGiunz2FinalAppFlash = 0. * deg;
   const G4double spanningAngleGiunz2FinalAppFlash = 360. * deg;
-  const G4double Giunz2FinalAppXPositionFlash = -957.44 * mm;
+  const G4double Giunz2FinalAppXPositionFlash = initial_pos+42.56 * mm;
 
   solidGiunz2FinalAppFlash = new G4Tubs(
       "Giunz2FinalAppFlash", innRadiusGiunz2FinalAppFlash,
@@ -539,7 +539,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightprotector2Flash = 30 * mm;
   const G4double startAngleprotector2Flash = 0. * deg;
   const G4double spanningAngleprotector2Flash = 360. * deg;
-  const G4double protector2XPositionFlash = -957.44 * mm;
+  const G4double protector2XPositionFlash = Giunz2FinalAppXPositionFlash;
 
   protector2 =
       new G4Tubs("protector2", innRadiusprotector2Flash,
@@ -564,7 +564,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightGiunz1FinalAppFlash = 6.0 * mm;
   const G4double startAngleGiunz1FinalAppFlash = 0. * deg;
   const G4double spanningAngleGiunz1FinalAppFlash = 360. * deg;
-  const G4double Giunz1FinalAppXPositionFlash = -993.44 * mm;
+  const G4double Giunz1FinalAppXPositionFlash = initial_pos+6.56 * mm;
 
   solidGiunz1FinalAppFlash = new G4Tubs(
       "Giunz1FinalAppFlash", innRadiusGiunz1FinalAppFlash,
@@ -587,7 +587,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightprotector1Flash = 6.0 * mm;
   const G4double startAngleprotector1Flash = 0. * deg;
   const G4double spanningAngleprotector1Flash = 360. * deg;
-  const G4double protector1XPositionFlash = -993.44 * mm;
+  const G4double protector1XPositionFlash = Giunz1FinalAppXPositionFlash;
 
   protector1 =
       new G4Tubs("protector1", innRadiusprotector1Flash,
@@ -610,7 +610,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightcover1Flash = 0.01 * mm;
   const G4double startAnglecover1Flash = 0. * deg;
   const G4double spanningAnglecover1Flash = 360. * deg;
-  const G4double cover1XPositionFlash = -987.44 * mm;
+  const G4double cover1XPositionFlash = initial_pos+12.56 * mm;
 
   cover1 = new G4Tubs("cover1", innRadiuscover1Flash, outRadiuscover1Flash,
                       hightcover1Flash, startAnglecover1Flash,
@@ -632,7 +632,7 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightcover3Flash = 0.01 * mm;
   const G4double startAnglecover3Flash = 0. * deg;
   const G4double spanningAnglecover3Flash = 360. * deg;
-  const G4double cover3XPositionFlash = -899.44 * mm;
+  const G4double cover3XPositionFlash = initial_pos+100.56 * mm;
 
   cover3 = new G4Tubs("cover3", innRadiuscover3Flash, outRadiuscover3Flash,
                       hightcover3Flash, startAnglecover3Flash,
@@ -658,7 +658,7 @@ void Applicator80BeamLine::FlashBeamLineFinalApplicator() {
   const G4double hightFinalApplicatorFlash = 250.0 * mm;
   const G4double startAngleFinalApplicatorFlash = 0. * deg;
   const G4double spanningAngleFinalApplicatorFlash = 360. * deg;
-  const G4double finalApplicatorXPositionFlash = -449.44 * mm;
+  const G4double finalApplicatorXPositionFlash = initial_pos+550.56 * mm;
 
   G4double phi6 = 90. * deg;
 
@@ -684,28 +684,4 @@ void Applicator80BeamLine::FlashBeamLineFinalApplicator() {
   logFinalApplicatorFlash->SetVisAttributes(magenta);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////// MESSENGER ///////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
 
-void Applicator80BeamLine::SetInnerRadiusFinalApplicatorFlash(
-    G4double value) { /// NB here it isn't enough to set the radius of
-                      /// applicator, but also of all the junctions
-  solidFinalApplicatorFlash->SetInnerRadius(value);
-  solidFirstApplicatorFlash->SetInnerRadius(value);
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4cout << "Inner Radius of the applicator Flash is (mm):"
-         << solidFinalApplicatorFlash->GetInnerRadius() / mm << G4endl;
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-void Applicator80BeamLine::SetOuterRadiusFinalApplicatorFlash(G4double value) {
-  solidFinalApplicatorFlash->SetOuterRadius(value);
-  solidFirstApplicatorFlash->SetOuterRadius(value);
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4cout << "Outer Radius of the final applicator Flash is (mm):"
-         << solidFinalApplicatorFlash->GetOuterRadius() / mm << G4endl;
-}
-
-/////////////////////////////////////////////////////////////////////////////

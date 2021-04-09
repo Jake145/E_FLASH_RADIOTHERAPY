@@ -61,20 +61,14 @@ public:
   void FlashBeamLineJunctions();
   void FlashBeamLineFinalApplicator();
 
-  void SetInnerRadiusFirstApplicatorFlash(
-      G4double); // Fissano i raggi dei pezzi del collimatore
-  void SetOuterRadiusFirstApplicatorFlash(G4double);
-
-  void SetInnerRadiusFinalApplicatorFlash(G4double);
-
-  void SetOuterRadiusFinalApplicatorFlash(G4double);
+  
 
 private:
   //G4double FieldDimensionFactor; // Valore che determina le dimensioni del campo
   G4VPhysicalVolume *motherPhys;        // mondo fisico
   void SetDefaultDimensions();          // setta le dimensioni di default
   void ConstructApplicator80BeamLine(); // costruisce tutto l'applicatore
-
+  G4double initial_pos;
   G4VisAttributes *blue; // colori vari
   G4VisAttributes *gray;
   G4VisAttributes *white;

@@ -89,18 +89,16 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   
   //Il codice seguente valuta i backscatter, per non contare i primari che lo attraversano uccido
   // la particella, quindi se non serve valutare i backscatter commenta questo if annidiato.
-  /*if (preStep->GetStepStatus() == fGeomBoundary){
-        if((preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()== "CrystalLV" && postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()!="CrystalLV") ){
-        G4String ProcName = postStep->GetProcessDefinedStep()->GetProcessName();
-    if(aStep->GetTrack()->GetTrackID() == 1){  
+  if (postStep->GetProcessDefinedStep()->GetProcessName()=="msc"&&aStep->GetTrack()->GetTrackID() == 1){
+        
   if (KinEnFile.is_open()) {
 
-        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<<ProcName<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<G4endl;
+        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<G4endl;
       }
       //aStep->GetTrack()->SetTrackStatus(fStopAndKill);
       }
-  }
-  }*/
+  
+  
   
   if (postStep->GetStepStatus() == fGeomBoundary) {
 
