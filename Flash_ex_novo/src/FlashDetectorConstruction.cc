@@ -511,7 +511,29 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
                                                          GetSurfaceProperty());
     if (opticalSurface) opticalSurface->DumpInfo();
     */
+    
+    
+  //============================DETECTOR_SUPPORT=====================================//
+  
+  G4double support_x=1*cm, wedge_X=1*mm,wedge_Y=1*mm,wedge_Z=1*cm;
+  G4ThreeVector xTrans(-0.9, 0, wedge_Z/2);
+  G4Box* support_whole= new G4Box("Support_w",support_x/2,phantomSizeY/2,phantomSizeZ/2);
+  G4Box* wedge = new G4Box("Wedge",wedge_X/2,wedge_Y/2,wedge_Z/2);
+  G4SubtractionSolid* support_wedged = new G4SubtractionSolid("Wedged_Support",support_whole,wedge,0,xTrans);
+  
+  DetectorSupport =
+      new G4LogicalVolume(support_wedged, PMMA, "SupportLog");
 
+G4RotationMatrix rotmp = G4RotationMatrix();
+  rotmp.rotateY(0 * deg);
+
+  G4ThreeVector positionp = G4ThreeVector((phantomSizeX/2+support_x/2));
+  G4Transform3D transformp = G4Transform3D(rotmp, positionp);
+  
+  G4VPhysicalVolume *DTsupp = new G4PVPlacement(
+      transformp, DetectorSupport, "supportphys", phantomLogicalVolume, false, 0);
+  
+  //=================================================================================//
   G4Region *PhantomRegion = new G4Region("Phantom_reg");
   phantomLogicalVolume->SetRegion(PhantomRegion);
   PhantomRegion->AddRootLogicalVolume(phantomLogicalVolume);
@@ -520,8 +542,11 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   red = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
   red->SetVisibility(true);
 
-  phantomLogicalVolume->SetVisAttributes(red);
+blue = new G4VisAttributes(G4Colour(0 / 255., 0./ 255., 255. / 255.));
+  blue->SetVisibility(true);
 
+  phantomLogicalVolume->SetVisAttributes(red);
+ DetectorSupport->SetVisAttributes(blue);
   G4double maxStep = 0.1 * mm;
   fStepLimit = new G4UserLimits(maxStep);
   phantomLogicalVolume->SetUserLimits(fStepLimit);

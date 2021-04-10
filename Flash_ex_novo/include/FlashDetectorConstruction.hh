@@ -82,10 +82,12 @@ private:
   void DefineMaterials(); // metodo per definire i materiali
   G4VisAttributes *skyBlue;
   G4VisAttributes *red;
+    G4VisAttributes *blue;
   G4VisAttributes *green;
   // G4VPhysicalVolume* motherPhys;
 
   G4LogicalVolume *phantomLogicalVolume;
+    G4LogicalVolume *DetectorSupport;
   G4VPhysicalVolume *phant_phys;
   G4VPhysicalVolume *phantom_physical;
   G4UserLimits *fStepLimit;

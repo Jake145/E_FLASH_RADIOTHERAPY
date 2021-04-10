@@ -169,7 +169,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
 }
 //NB!!!!! Le seguenti righe servono per contare brutalmente i eBrem e eIon, sono da commentare per 
 //per fare le pdd e altro!
- 
+ /*
     //Bremsthralung and fluorescence 
     if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition()){
     
@@ -195,7 +195,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
     }
   }
   aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-  }
+  }*/
 }
 
 
