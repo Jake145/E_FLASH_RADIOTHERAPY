@@ -34,6 +34,8 @@
 #include "G4Event.hh"
 #include "G4LogicalVolume.hh"
 #include "G4OpticalPhoton.hh"
+#include "G4Electron.hh"
+#include "G4Gamma.hh"
 #include "G4RunManager.hh"
 #include "G4Step.hh"
 #include "G4Threading.hh"
@@ -59,11 +61,11 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 
   OpticFiber.open(filename_2, std::ios_base::app);
   
-  std::ostringstream oss_optinfo;
+  /*std::ostringstream oss_optinfo;
   oss_optinfo << "Opticinfo" << ThreadNumber << ".csv";
   std::string filename_3 = oss_optinfo.str();
 
-  OpticInfo.open(filename_3, std::ios_base::app);
+  OpticInfo.open(filename_3, std::ios_base::app);*/
 
   
 }
@@ -72,8 +74,8 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 
 FlashSteppingAction::~FlashSteppingAction() {
   KinEnFile.close();
-  OpticFiber.close();
-  OpticInfo.close();
+ OpticFiber.close();
+ // OpticInfo.close();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,20 +87,28 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   G4StepPoint *postStep = aStep->GetPostStepPoint();
   G4StepPoint *preStep = aStep->GetPreStepPoint();
   G4int trackID = aStep->GetTrack()->GetTrackID();
-  //IL CODICE COMMENTATO NON FUNZIONA UFFA!
   
-  //Il codice seguente valuta i backscatter, per non contare i primari che lo attraversano uccido
-  // la particella, quindi se non serve valutare i backscatter commenta questo if annidiato.
-  if (postStep->GetProcessDefinedStep()->GetProcessName()=="msc"&&aStep->GetTrack()->GetTrackID() == 1){
+  /// Lines 94-111 give a seg fault
+   
+   
+  // if this doesn't work I'll try to count the prevolume + postvolume condition and kill the ones that have post and pre in the crystal, withouth checking msc condition.
+  /*if(preStep -> GetStepStatus() == fGeomBoundary){
+  G4String volumeName =
+        postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
+    G4String prevolumeName =
+        preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
+  if ((prevolumeName=="CrystalLV" || prevolumeName=="lTeflon") && volumeName=="phantomLog"){
+  if (postStep->GetProcessDefinedStep()->GetProcessName()=="msc"&&aStep->GetTrack()->GetDefinition() ==
+        G4Electron::ElectronDefinition()){
         
   if (KinEnFile.is_open()) {
 
-        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<G4endl;
+        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<"\t"<<postStep->GetProcessDefinedStep()->GetProcessName()<<G4endl;
       }
       //aStep->GetTrack()->SetTrackStatus(fStopAndKill);
       }
-  
-  
+  }
+  }*/
   
   if (postStep->GetStepStatus() == fGeomBoundary) {
 
@@ -119,7 +129,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       }
       
     }
-    if (aStep->GetTrack()->GetDefinition() ==
+   /* if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
       if (volumeName == "OF_core_LV" && prevolumeName == "CrystalLV") {
         if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName() ==
@@ -143,19 +153,48 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
         }
       }
       
-      /*else if((volumeName == "OF_clad_LV" && prevolumeName == "CrystalLV")||(volumeName == "OF_cladding_LV" && prevolumeName == "CrystalLV")){ 
+      else if((volumeName == "OF_clad_LV" && prevolumeName == "CrystalLV")||(volumeName == "OF_cladding_LV" && prevolumeName == "CrystalLV")){ 
       aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-      }*/
-    } 
-  }
-  if (aStep->GetTrack()->GetDefinition() ==
+      }
+    } */
+
+  /*if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
         if(OpticInfo.is_open()){
         
         OpticInfo      << "Event ID--->"<<  " " <<  eventid<< " "<< "track ID--->"<<  " " <<  trackID << " "<< "process--->"<<  " "<<aStep->GetTrack()->GetCreatorProcess()->GetProcessName()<< " "<< "Physical Volume --->"<< "  " <<aStep->GetTrack()->GetVolume()->GetName()<< " "<<"Step Number: "<<" "<<aStep->GetTrack()->GetCurrentStepNumber()<<"PreStepVolume: "<<" "<< aStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<" "<<"PoststepVolume: "<<" "<< aStep->GetPostStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetName()  <<G4endl;
 }
         
-        }
+        }*/
 }
+
+    //Bremsthralung and fluorescence
+    if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition()){
+    
+    if (aStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetName() ==  "OF_core_LV" || aStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetName() ==  "CrystalLV") {
+        if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName()== "eBrem") {
+          
+          if (OpticFiber.is_open()) {
+
+            OpticFiber << eventid << "\t"
+                       << "Bremstralhung in core/scintillator"
+                       << "\t" << trackID << G4endl;
+          }
+    }
+    if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName()=="eIoni"){
+    if (OpticFiber.is_open()) {
+
+            OpticFiber << eventid << "\t"
+                       << "Fluorescence in core"
+                       << "\t" << trackID << G4endl;
+          }
+    
+    
+    }
+  }
+  aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+  }
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

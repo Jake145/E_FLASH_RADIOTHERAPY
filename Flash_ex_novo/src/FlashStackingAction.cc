@@ -33,6 +33,8 @@
 #include "G4RunManager.hh"
 #include "G4Threading.hh"
 #include "G4Track.hh"
+#include "G4Electron.hh"
+#include "G4Gamma.hh"
 #include "G4VProcess.hh"
 #include "G4ios.hh"
 #include <sstream>
@@ -40,7 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashStackingAction::FlashStackingAction()
-    : G4UserStackingAction(), fScintillationCounter(0), fCerenkovCounter(0) {
+    : G4UserStackingAction(), fScintillationCounter(0), fCerenkovCounter(0),fBremstralung(0),fFluo(0) {
   std::ostringstream oss_1;
   oss_1 << "Optic_" << G4Threading::G4GetThreadId() << ".csv";
   std::string filename_1 = oss_1.str();
@@ -56,21 +58,22 @@ FlashStackingAction::~FlashStackingAction() { OpticFile.close(); }
 
 G4ClassificationOfNewTrack
 FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
-if(aTrack->GetTrackID()>1 && aTrack->GetDefinition() !=
-      G4OpticalPhoton::OpticalPhotonDefinition()){
-      
-      return fKill;
-      
-      }
+
+if(aTrack->GetDefinition()==G4Gamma::GammaDefinition()){
+if((aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_core_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_clad_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_cladding_LV") || aTrack->GetVolume()->GetLogicalVolume()->GetName() == "CrystalLV" ){
+
+if(aTrack->GetCreatorProcess()->GetProcessName()== "eBrem")
+{
+fBremstralung++;
+}
+else if (aTrack->GetCreatorProcess()->GetProcessName()== "eIoni")
+{
+fFluo++;
+}
+}
+}
   if (aTrack->GetDefinition() ==
-      G4OpticalPhoton::OpticalPhotonDefinition()) { // particle is optical
-                                                    // photon
-                   // particle is secondary
-      // if (aTrack->GetTrackStatus()!=fStopAndKill){
-      // if(aTrack->GetVolume()->GetName()=="OF_core_phys"||aTrack->GetVolume()->GetName()=="crystalphys"){
-      // if (aTrack->GetVolume()-GetName() ==
-      // "FirstApplicatorFlash"||aTrack->GetVolume()-GetName() ==
-      // "FinalApplicatorFlash") return fKill;
+      G4OpticalPhoton::OpticalPhotonDefinition()) { 
       if ((aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_core_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_clad_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_cladding_LV") || aTrack->GetVolume()->GetLogicalVolume()->GetName() == "CrystalLV" ){
         
       
@@ -106,7 +109,9 @@ void FlashStackingAction::NewStage()
           << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
           << "\t"
           << "scintillation events:" << fScintillationCounter << "\t"
-          << "Cerenkov events: " << fCerenkovCounter << G4endl;
+          << "Cerenkov events: " << fCerenkovCounter << "\t"
+          << "Bremstralung events: "<<fBremstralung<<"\t"
+          <<"Fluo Events: "<<fFluo<< G4endl;
     }
   }
 }

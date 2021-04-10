@@ -52,6 +52,8 @@ private:
   std::ofstream OpticFile;
   G4int fScintillationCounter;
   G4int fCerenkovCounter;
+  G4int fBremstralung;
+  G4int fFluo;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
