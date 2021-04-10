@@ -167,8 +167,10 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
         
         }*/
 }
-
-    //Bremsthralung and fluorescence
+//NB!!!!! Le seguenti righe servono per contare brutalmente i eBrem e eIon, sono da commentare per 
+//per fare le pdd e altro!
+ 
+    //Bremsthralung and fluorescence 
     if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition()){
     
     if (aStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetName() ==  "OF_core_LV" || aStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetName() ==  "CrystalLV") {
