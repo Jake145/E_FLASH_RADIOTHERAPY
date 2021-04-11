@@ -14,7 +14,7 @@ With SSD=80cm the applicator is made of a titanium window followed by aluminum m
 ![Spectrum](/imagesforredame/spettronovac.PNG)
 The application uses a custom spectrum for the beam.
 ## Simulated Geometry
-![Geo](/imagesforredame/rivelatore.PNG)
+![Geo](/imagesforredame/wedge.PNG)
 The geometry is as described in the optics sheet. In the image the dosimeter composed of the LYSO crystal and the optic fiber.
 
 ## Dose distribution

@@ -59,7 +59,7 @@ public:
   G4VPhysicalVolume *physicalTreatmentRoom;
 
   // FlashDetectorConstruction();
-  G4VPhysicalVolume * ConstructPhantom();
+  G4VPhysicalVolume * ConstructPhantom(G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz);
   FlashDetectorConstruction(); // costruttore ci passo il puntatore al mondo
   virtual ~FlashDetectorConstruction(); // distruttore
 

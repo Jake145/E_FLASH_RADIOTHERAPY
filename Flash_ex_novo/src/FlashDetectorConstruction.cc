@@ -362,7 +362,7 @@ void FlashDetectorConstruction::DefineMaterials() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom() {
+G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom(G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz) {
 
   G4Material *phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
@@ -481,9 +481,9 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
 
-  G4double phantomSizeX = 20.0 * cm, phantomSizeY = 20.0 * cm,
-           phantomSizeZ = 20.0 * cm;
-  G4ThreeVector phantomPosition = G4ThreeVector(-99.4 * mm, 0. * mm, 0. * mm);
+  G4double phantomSizeX = 10.0 * cm, phantomSizeY = 30.0 * cm,
+           phantomSizeZ = 30.0 * cm;
+  G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom
   phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
                       phantomSizeZ / 2);
@@ -515,9 +515,10 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
     
   //============================DETECTOR_SUPPORT=====================================//
   
-  G4double support_x=1*cm, wedge_X=1*mm,wedge_Y=1*mm,wedge_Z=1*cm;
-  G4ThreeVector xTrans(-0.9, 0, wedge_Z/2);
-  G4Box* support_whole= new G4Box("Support_w",support_x/2,phantomSizeY/2,phantomSizeZ/2);
+  //G4double support_x=1*cm, wedge_X=1*mm,wedge_Y=1*mm,wedge_Z=1*cm;
+  G4double support_x=1*cm, wedge_X=Cz+2*d,wedge_Y=Cy+2*d,wedge_Z=Cx+Oz+2*d; 
+  G4ThreeVector xTrans(-(support_x/2-wedge_X/2), 0, -wedge_Z/2);
+  G4Box* support_whole= new G4Box("Support_w",support_x/2,10*cm,10*cm);
   G4Box* wedge = new G4Box("Wedge",wedge_X/2,wedge_Y/2,wedge_Z/2);
   G4SubtractionSolid* support_wedged = new G4SubtractionSolid("Wedged_Support",support_whole,wedge,0,xTrans);
   
@@ -527,13 +528,33 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
 G4RotationMatrix rotmp = G4RotationMatrix();
   rotmp.rotateY(0 * deg);
 
-  G4ThreeVector positionp = G4ThreeVector((phantomSizeX/2+support_x/2));
+  G4ThreeVector positionp = G4ThreeVector((phantomSizeX/2+support_x/2),0,0);
   G4Transform3D transformp = G4Transform3D(rotmp, positionp);
   
   G4VPhysicalVolume *DTsupp = new G4PVPlacement(
       transformp, DetectorSupport, "supportphys", phantomLogicalVolume, false, 0);
   
   //=================================================================================//
+  //================Second Piece of Phantom==================================//
+  
+  G4ThreeVector phantomPosition_2 = G4ThreeVector((15 * cm -(phantomSizeX / 2 +support_x/2))+support_x/2 , 0. * mm, 0. * mm);
+  // Definition of the solid volume of the Phantom
+  G4Box * phantom_2 = new G4Box("Phantom_2", 15 * cm -(phantomSizeX / 2 +support_x/2) , phantomSizeY / 2,
+                      phantomSizeZ / 2);
+
+  // Definition of the logical volume of the Phantom
+  G4LogicalVolume* phantomLogicalVolume_2 =
+      new G4LogicalVolume(phantom_2, phantomMaterial, "phantomLog_2", 0, 0, 0);
+
+  // Definition of the physics volume of the Phantom
+  G4VPhysicalVolume * phant_phys_2 =
+      new G4PVPlacement(0, phantomPosition_2, "phantomPhys_2", phantomLogicalVolume_2,
+                        DTsupp, false, 0);
+  
+  
+  
+  //==========================================================================//
+  
   G4Region *PhantomRegion = new G4Region("Phantom_reg");
   phantomLogicalVolume->SetRegion(PhantomRegion);
   PhantomRegion->AddRootLogicalVolume(phantomLogicalVolume);
@@ -547,6 +568,7 @@ blue = new G4VisAttributes(G4Colour(0 / 255., 0./ 255., 255. / 255.));
 
   phantomLogicalVolume->SetVisAttributes(red);
  DetectorSupport->SetVisAttributes(blue);
+   phantomLogicalVolume_2->SetVisAttributes(red);
   G4double maxStep = 0.1 * mm;
   fStepLimit = new G4UserLimits(maxStep);
   phantomLogicalVolume->SetUserLimits(fStepLimit);
@@ -603,20 +625,31 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   // The treatment room is invisible in the Visualisation
   logicTreatmentRoom->SetVisAttributes(G4VisAttributes::GetInvisible());
-  phantom_physical=ConstructPhantom();
+  
   // -----------------------------
-  // detector
+  // detector + phantom +Default dimensions
   //------------------------------
 
   red = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
   red->SetVisibility(true);
   green = new G4VisAttributes(G4Colour(255 / 255., 0. / 255., 0 / 255.));
   green->SetVisibility(true);
-
+//crystal dims
   G4double cryst_dX = 1 * cm, cryst_dY = 1 * mm, cryst_dZ = 1 * mm;
   G4double gap = 0 * mm; // a gap for wrapping, change to add gap
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap;
-
+ //fiber dim
+ G4double opticfiber_core_dx = 5 * cm;
+  G4double opticfiber_core_diameter = 0.98 * mm;
+  G4double optic_fiber_clad_diameter = 2.2 * mm;
+  G4double optic_fiber_cladding_diameter = 1. * mm;
+  //Teflon dim
+  G4double fPTFEThickness = 0.3 * mm;
+  //construct collimatore
+    Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
+  // constuct phantom
+  phantom_physical=ConstructPhantom(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  //constuct detector
   G4Box *solidCryst = new G4Box("crystal", dX / 2, dY / 2, dZ / 2);
   //
   logicCryst = new G4LogicalVolume(solidCryst,   // its solid
@@ -625,11 +658,11 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   G4RotationMatrix rotm = G4RotationMatrix();
   rotm.rotateY(90 * deg);
 
-  G4ThreeVector position = G4ThreeVector(-75.0 * mm, 0. * mm, 0. * mm);
+  G4ThreeVector position = G4ThreeVector(-(1*cm/2-dZ/2-fPTFEThickness), 0, -(dX/2+fPTFEThickness));
   G4Transform3D transform = G4Transform3D(rotm, position);
 
   G4VPhysicalVolume *phys_cryst = new G4PVPlacement(
-      transform, logicCryst, "crystalphys", phantomLogicalVolume, false, 0);
+      transform, logicCryst, "crystalphys", DetectorSupport, false, 0);
      
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   G4OpticalSurface *opteflonSurface_up =
@@ -655,10 +688,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   // optic fiber
   //
-  G4double opticfiber_core_dx = 5 * cm;
-  G4double opticfiber_core_diameter = 0.98 * mm;
-  G4double optic_fiber_clad_diameter = 2.2 * mm;
-  G4double optic_fiber_cladding_diameter = 1. * mm;
+  
   ////////////////////
 
   G4Tubs *opticfiber_cladding = new G4Tubs(
@@ -731,7 +761,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   G4LogicalBorderSurface *core_scint_down = new G4LogicalBorderSurface(
       "teflonSurface_of_down", physcore, phys_cryst, opcore_scint);
   // OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
-  G4double fPTFEThickness = 0.3 * mm;
+
   G4VSolid * t1= new G4Box("t1",dX/2+fPTFEThickness, dY/2+fPTFEThickness, dZ/2+fPTFEThickness);
   G4VSolid *t2 = new G4Box("t2",dX, dY, dZ);
 
@@ -739,10 +769,10 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   G4SubtractionSolid* solidFullTeflon = new G4SubtractionSolid("hollowteflon", t1, t2, 0, zTrans);
 
-  //wtf is wrong with this hole
+
   G4VSolid *tHole = new G4Tubs("sTeflonHole",
 			       0.0*cm,
-			       optic_fiber_clad_diameter/2,
+			       (optic_fiber_clad_diameter - optic_fiber_cladding_diameter) / 2,
 			       fPTFEThickness/2,
 			       0.*deg,
 			       360.*deg);
@@ -751,7 +781,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   //yRot->rotateX(90*deg);
   yRot->rotateY(90*deg);
-  G4ThreeVector zHole((dX/2 + fPTFEThickness), 0,0  );
+  G4ThreeVector zHole((dX/2 + fPTFEThickness/2), 0,0  );
 
   G4SubtractionSolid* solidHoleTeflon = new G4SubtractionSolid("hollowHoleteflon", solidFullTeflon, tHole, yRot, zHole);
  G4LogicalVolume *logicTeflon = new G4LogicalVolume(solidHoleTeflon, TEFLON,"lTeflon",0,0,0);
@@ -1000,7 +1030,7 @@ G4OpticalSurface *cladteflonSurface_up =
   
   logicTeflon->SetVisAttributes(red);
 
-  Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
+
 
   G4Region *CrystalRegion = new G4Region("crystal_reg");
   logicCryst->SetRegion(CrystalRegion);
