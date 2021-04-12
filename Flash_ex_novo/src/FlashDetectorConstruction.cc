@@ -528,7 +528,7 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
 G4RotationMatrix rotmp = G4RotationMatrix();
   rotmp.rotateY(0 * deg);
 
-  G4ThreeVector positionp = G4ThreeVector((phantomSizeX/2+support_x/2),0,0);
+  G4ThreeVector positionp = G4ThreeVector((phantomSizeX/2+support_x/2),0,Cx/2);
   G4Transform3D transformp = G4Transform3D(rotmp, positionp);
   
   G4VPhysicalVolume *DTsupp = new G4PVPlacement(
@@ -537,7 +537,7 @@ G4RotationMatrix rotmp = G4RotationMatrix();
   //=================================================================================//
   //================Second Piece of Phantom==================================//
   
-  G4ThreeVector phantomPosition_2 = G4ThreeVector((15 * cm -(phantomSizeX / 2 +support_x/2))+support_x/2 , 0. * mm, 0. * mm);
+  G4ThreeVector phantomPosition_2 = G4ThreeVector((15 * cm -(phantomSizeX / 2 +support_x/2))+support_x/2 , 0. * mm, -Cx/2);
   // Definition of the solid volume of the Phantom
   G4Box * phantom_2 = new G4Box("Phantom_2", 15 * cm -(phantomSizeX / 2 +support_x/2) , phantomSizeY / 2,
                       phantomSizeZ / 2);

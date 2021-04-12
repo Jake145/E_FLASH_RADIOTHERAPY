@@ -90,15 +90,21 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   
   /// Lines 94-111 give a seg fault
    
-   
+//===========================================BACKSCATTER=========================================   
   // if this doesn't work I'll try to count the prevolume + postvolume condition and kill the ones that have post and pre in the crystal, withouth checking msc condition.
+  
+  //there is a problem in 100-103
+  
   /*if(preStep -> GetStepStatus() == fGeomBoundary){
-  G4String volumeName =
+    G4cout<<"HEY8"<<G4endl;
+  G4String volumeName_1 =
         postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
-    G4String prevolumeName =
+    G4String prevolumeName_1 =
         preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
-  if ((prevolumeName=="CrystalLV" || prevolumeName=="lTeflon") && volumeName=="phantomLog"){
-  if (postStep->GetProcessDefinedStep()->GetProcessName()=="msc"&&aStep->GetTrack()->GetDefinition() ==
+          G4cout<<"HEY9"<<G4endl;
+  if ((prevolumeName_1=="CrystalLV" || prevolumeName_1=="lTeflon") && volumeName_1=="phantomLog"){
+  G4cout<<"HEY"<<G4endl;
+  if (postStep->GetProcessDefinedStep()->GetProcessName()=="msc" && aStep->GetTrack()->GetDefinition() ==
         G4Electron::ElectronDefinition()){
         
   if (KinEnFile.is_open()) {
@@ -108,8 +114,14 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       //aStep->GetTrack()->SetTrackStatus(fStopAndKill);
       }
   }
-  }*/
+  }
+  */
   
+ //==========================================================================================
+ 
+ //===========================INCIDENT PARTICLES===============================================
+ 
+ //==============================PRIMARIES ENERGY SPECTRUM======================================= 
   if (postStep->GetStepStatus() == fGeomBoundary) {
 
     G4String volumeName =
@@ -129,6 +141,8 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       }
       
     }
+    //==========================================================================================
+  //========================================OPTICAL PHOTONS=====================================
    /* if (aStep->GetTrack()->GetDefinition() ==
         G4OpticalPhoton::OpticalPhotonDefinition()) {
       if (volumeName == "OF_core_LV" && prevolumeName == "CrystalLV") {
@@ -166,7 +180,9 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
 }
         
         }*/
+//=================================================================================================
 }
+//==========================BREM AND FLUO==========================================================
 //NB!!!!! Le seguenti righe servono per contare brutalmente i eBrem e eIon, sono da commentare per 
 //per fare le pdd e altro!
  /*
@@ -196,6 +212,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   }
   aStep->GetTrack()->SetTrackStatus(fStopAndKill);
   }*/
+ //===========================================================================================
 }
 
 
