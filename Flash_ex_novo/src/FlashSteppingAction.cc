@@ -185,7 +185,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
 //==========================BREM AND FLUO==========================================================
 //NB!!!!! Le seguenti righe servono per contare brutalmente i eBrem e eIon, sono da commentare per 
 //per fare le pdd e altro!
- /*
+ 
     //Bremsthralung and fluorescence 
     if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition()){
     
@@ -203,15 +203,15 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
     if (OpticFiber.is_open()) {
 
             OpticFiber << eventid << "\t"
-                       << "Fluorescence in core"
+                       << "Fluorescence in core/scintillator"
                        << "\t" << trackID << G4endl;
           }
     
     
     }
   }
-  aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-  }*/
+ // aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+  }
  //===========================================================================================
 }
 

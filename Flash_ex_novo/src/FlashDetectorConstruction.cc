@@ -481,8 +481,9 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
 
-  G4double phantomSizeX = 10.0 * cm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 2.0 * cm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm;
+  depth =phantomSizeX;
   G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom
   phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
@@ -523,7 +524,7 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   G4SubtractionSolid* support_wedged = new G4SubtractionSolid("Wedged_Support",support_whole,wedge,0,xTrans);
   
   DetectorSupport =
-      new G4LogicalVolume(support_wedged, PMMA, "SupportLog");
+      new G4LogicalVolume(support_whole, PMMA, "SupportLog");
 
 G4RotationMatrix rotmp = G4RotationMatrix();
   rotmp.rotateY(0 * deg);
@@ -657,12 +658,12 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
                                    "CrystalLV"); // its name
   G4RotationMatrix rotm = G4RotationMatrix();
   rotm.rotateY(90 * deg);
-
-  G4ThreeVector position = G4ThreeVector(-(1*cm/2-dZ/2-fPTFEThickness), 0, -(dX/2+fPTFEThickness));
+  //depth wedge = -(1*cm/2-dZ/2-fPTFEThickness)
+  G4ThreeVector position = G4ThreeVector((depth)/2, 0, -(dX/2+fPTFEThickness));
   G4Transform3D transform = G4Transform3D(rotm, position);
 
   G4VPhysicalVolume *phys_cryst = new G4PVPlacement(
-      transform, logicCryst, "crystalphys", DetectorSupport, false, 0);
+      transform, logicCryst, "crystalphys", phantomLogicalVolume, false, 0);
      
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   G4OpticalSurface *opteflonSurface_up =
