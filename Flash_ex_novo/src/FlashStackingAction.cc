@@ -59,7 +59,7 @@ FlashStackingAction::~FlashStackingAction() { OpticFile.close(); }
 G4ClassificationOfNewTrack
 FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
 
-if(aTrack->GetDefinition()==G4Gamma::GammaDefinition()){
+/*if(aTrack->GetDefinition()==G4Gamma::GammaDefinition()){
 if((aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_core_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_clad_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_cladding_LV") || aTrack->GetVolume()->GetLogicalVolume()->GetName() == "CrystalLV" ){
 
 if(aTrack->GetCreatorProcess()->GetProcessName()== "eBrem")
@@ -71,7 +71,7 @@ else if (aTrack->GetCreatorProcess()->GetProcessName()== "eIoni")
 fFluo++;
 }
 }
-}
+}*/
   if (aTrack->GetDefinition() ==
       G4OpticalPhoton::OpticalPhotonDefinition()) { 
       if ((aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_core_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_clad_LV"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "OF_cladding_LV") || aTrack->GetVolume()->GetLogicalVolume()->GetName() == "CrystalLV" ){
@@ -79,11 +79,15 @@ fFluo++;
       
 
         if (aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation") {
+          /*if(aTrack->GetParentID()==0) {fScintillationCounter++;}
+          else if(aTrack->GetParentID()>0) {fBremstralung++;}*/
           fScintillationCounter++;
            //G4cout<<"found a scintillation in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
         }
         if (aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov") {
-          fCerenkovCounter++;
+          /*if(aTrack->GetParentID()==0) {fCerenkovCounter++;}
+                    else if(aTrack->GetParentID()>0) {fFluo++;}*/
+                    fCerenkovCounter++;
           //G4cout << "found a cherenkov in : "<<" "<<aTrack->GetVolume()->GetName()<<G4endl;
         }
       }
@@ -108,10 +112,10 @@ void FlashStackingAction::NewStage()
           << "event ID: "
           << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
           << "\t"
-          << "scintillation events:" << fScintillationCounter << "\t"
-          << "Cerenkov events: " << fCerenkovCounter << "\t"
-          << "Bremstralung events: "<<fBremstralung<<"\t"
-          <<"Fluo Events: "<<fFluo<< G4endl;
+          << "Primary scintillation events:" << fScintillationCounter << "\t"
+          << "Primary Cerenkov events: " << fCerenkovCounter << "\t"<< G4endl;
+          //<< "Secondary Scintillation events: "<<fBremstralung<<"\t"
+          //<<"Secondary Cerenkov Events: "<<fFluo<< G4endl;
     }
   }
 }

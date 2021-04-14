@@ -481,7 +481,7 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
 
-  G4double phantomSizeX = 2.0 * cm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 0.8 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm;
   depth =phantomSizeX;
   G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
@@ -659,7 +659,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   G4RotationMatrix rotm = G4RotationMatrix();
   rotm.rotateY(90 * deg);
   //depth wedge = -(1*cm/2-dZ/2-fPTFEThickness)
-  G4ThreeVector position = G4ThreeVector((depth)/2, 0, -(dX/2+fPTFEThickness));
+  G4ThreeVector position = G4ThreeVector((depth-dZ-2*fPTFEThickness)/2, 0, -(dX/2+fPTFEThickness));
   G4Transform3D transform = G4Transform3D(rotm, position);
 
   G4VPhysicalVolume *phys_cryst = new G4PVPlacement(

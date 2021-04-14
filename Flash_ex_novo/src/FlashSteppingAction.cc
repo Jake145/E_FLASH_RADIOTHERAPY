@@ -55,13 +55,13 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 
   KinEnFile.open(filename_1, std::ios_base::app);
 
-  std::ostringstream oss_of;
+  /*std::ostringstream oss_of;
   oss_of << "Optic_fiber" << ThreadNumber << ".csv";
   std::string filename_2 = oss_of.str();
 
   OpticFiber.open(filename_2, std::ios_base::app);
   
-  /*std::ostringstream oss_optinfo;
+  std::ostringstream oss_optinfo;
   oss_optinfo << "Opticinfo" << ThreadNumber << ".csv";
   std::string filename_3 = oss_optinfo.str();
 
@@ -74,7 +74,7 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
 
 FlashSteppingAction::~FlashSteppingAction() {
   KinEnFile.close();
- OpticFiber.close();
+ //OpticFiber.close();
  // OpticInfo.close();
 }
 
@@ -187,7 +187,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
 //per fare le pdd e altro!
  
     //Bremsthralung and fluorescence 
-    if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition()){
+   /* if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition()){
     
     if (aStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetName() ==  "OF_core_LV" || aStep->GetTrack()->GetVolume()->GetLogicalVolume()->GetName() ==  "CrystalLV") {
         if (aStep->GetTrack()->GetCreatorProcess()->GetProcessName()== "eBrem") {
@@ -211,7 +211,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
     }
   }
  // aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-  }
+  }*/
  //===========================================================================================
 }
 
