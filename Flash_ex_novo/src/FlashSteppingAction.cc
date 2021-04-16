@@ -95,17 +95,16 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   
   //there is a problem in 100-103
   
-  /*if(preStep -> GetStepStatus() == fGeomBoundary){
-    G4cout<<"HEY8"<<G4endl;
+ /* if(preStep -> GetStepStatus() == fGeomBoundary){
+
   G4String volumeName_1 =
         postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
     G4String prevolumeName_1 =
         preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
-          G4cout<<"HEY9"<<G4endl;
+
   if ((prevolumeName_1=="CrystalLV" || prevolumeName_1=="lTeflon") && volumeName_1=="phantomLog"){
-  G4cout<<"HEY"<<G4endl;
-  if (postStep->GetProcessDefinedStep()->GetProcessName()=="msc" && aStep->GetTrack()->GetDefinition() ==
-        G4Electron::ElectronDefinition()){
+
+  if (aStep->GetTrack()->GetTrackID()==1){
         
   if (KinEnFile.is_open()) {
 
@@ -114,8 +113,8 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       //aStep->GetTrack()->SetTrackStatus(fStopAndKill);
       }
   }
-  }
-  */
+  }*/
+  
   
  //==========================================================================================
  
@@ -139,7 +138,19 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
         KinEnFile <<"Incoming Energy"<<"\t"<< eventid << "\t" << kineticEnergy << "\t" << trackID
                   <<"\t"<<procName<< G4endl;
       }
+      }
       
+      if ((volumeName == "phantomLog" && aStep->GetTrack()->GetTrackID() == 1)  ) {
+   if(prevolumeName=="CrystalLV"||prevolumeName=="lTeflon"||prevolumeName=="filler"){
+    
+      if (KinEnFile.is_open()) {
+
+        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<"\t"<<postStep->GetProcessDefinedStep()->GetProcessName()<<G4endl;
+      }
+      
+      
+    }
+    }
     }
     //==========================================================================================
   //========================================OPTICAL PHOTONS=====================================
@@ -181,7 +192,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
         
         }*/
 //=================================================================================================
-}
+
 //==========================BREM AND FLUO==========================================================
 //NB!!!!! Le seguenti righe servono per contare brutalmente i eBrem e eIon, sono da commentare per 
 //per fare le pdd e altro!
@@ -214,6 +225,8 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   }*/
  //===========================================================================================
 }
+
+
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
