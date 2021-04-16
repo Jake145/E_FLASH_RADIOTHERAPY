@@ -481,7 +481,7 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
 
-  G4double phantomSizeX = 10.0 * cm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 3.0 * cm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm;
   G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom

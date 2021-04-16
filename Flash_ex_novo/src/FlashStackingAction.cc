@@ -79,16 +79,34 @@ fFluo++;
       
 
         if (aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation") {
-          /*if(aTrack->GetParentID()==0) {fScintillationCounter++;}
-          else if(aTrack->GetParentID()>0) {fBremstralung++;}*/
-          fScintillationCounter++;
-           //G4cout<<"found a scintillation in:"<<""<<aTrack->GetVolume()->GetName()<<G4endl;
+          if(aTrack->GetParentID()==1) {fScintillationCounter++;}
+          else if(aTrack->GetParentID()>1) {fBremstralung++;}
+           /*fScintillationCounter++;
+          if (OpticFile.is_open()) {
+
+      OpticFile
+          << "event ID: "
+          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
+          << "\t"
+          << "scintillation parent id:" << aTrack->GetParentID() << G4endl;
+          //<< "Secondary Scintillation events: "<<fBremstralung<<"\t"
+          //<<"Secondary Cerenkov Events: "<<fFluo<< G4endl;
+    }*/
         }
         if (aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov") {
-          /*if(aTrack->GetParentID()==0) {fCerenkovCounter++;}
-                    else if(aTrack->GetParentID()>0) {fFluo++;}*/
-                    fCerenkovCounter++;
-          //G4cout << "found a cherenkov in : "<<" "<<aTrack->GetVolume()->GetName()<<G4endl;
+          if(aTrack->GetParentID()==1) {fCerenkovCounter++;}
+                    else if(aTrack->GetParentID()>1) {fFluo++;}
+                    /*fCerenkovCounter++;
+          if (OpticFile.is_open()) {
+
+      OpticFile
+          << "event ID: "
+          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
+          << "\t"
+          << "cerenkov parent id:" << aTrack->GetParentID() << G4endl;
+          //<< "Secondary Scintillation events: "<<fBremstralung<<"\t"
+          //<<"Secondary Cerenkov Events: "<<fFluo<< G4endl;
+    }*/
         }
       }
       else 
@@ -113,9 +131,9 @@ void FlashStackingAction::NewStage()
           << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
           << "\t"
           << "Primary scintillation events:" << fScintillationCounter << "\t"
-          << "Primary Cerenkov events: " << fCerenkovCounter << "\t"<< G4endl;
-          //<< "Secondary Scintillation events: "<<fBremstralung<<"\t"
-          //<<"Secondary Cerenkov Events: "<<fFluo<< G4endl;
+          << "Primary Cerenkov events: " << fCerenkovCounter << "\t"
+          << "Secondary Scintillation events: "<<fBremstralung<<"\t"
+          <<"Secondary Cerenkov Events: "<<fFluo<< G4endl;
     }
   }
 }
