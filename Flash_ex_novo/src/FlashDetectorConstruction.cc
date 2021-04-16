@@ -481,9 +481,8 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
 
-  G4double phantomSizeX = 0.8 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 10.0 * cm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm;
-  depth =phantomSizeX;
   G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom
   phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
@@ -534,7 +533,12 @@ G4RotationMatrix rotmp = G4RotationMatrix();
   
   G4VPhysicalVolume *DTsupp = new G4PVPlacement(
       transformp, DetectorSupport, "supportphys", phantomLogicalVolume, false, 0);
+      
+  AirBox = new G4LogicalVolume(wedge, airNist, "filler");
   
+    G4Transform3D transformab = G4Transform3D(rotmp, xTrans);
+    
+  G4VPhysicalVolume *AB = new G4PVPlacement(transformab, AirBox, "f", DetectorSupport, false, 0);
   //=================================================================================//
   //================Second Piece of Phantom==================================//
   
@@ -587,7 +591,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   const G4double worldZ = 400.0 * cm;
   G4bool isotopes = false;
 
-  G4Material *airNist =
+  airNist =
       G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
   // Air
   //
@@ -658,12 +662,12 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
                                    "CrystalLV"); // its name
   G4RotationMatrix rotm = G4RotationMatrix();
   rotm.rotateY(90 * deg);
-  //depth wedge = -(1*cm/2-dZ/2-fPTFEThickness)
-  G4ThreeVector position = G4ThreeVector((depth-dZ-2*fPTFEThickness)/2, 0, -(dX/2+fPTFEThickness));
+
+  G4ThreeVector position = G4ThreeVector(0, 0, (opticfiber_core_dx/2));
   G4Transform3D transform = G4Transform3D(rotm, position);
 
   G4VPhysicalVolume *phys_cryst = new G4PVPlacement(
-      transform, logicCryst, "crystalphys", phantomLogicalVolume, false, 0);
+      transform, logicCryst, "crystalphys", AirBox, false, 0);
      
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   G4OpticalSurface *opteflonSurface_up =

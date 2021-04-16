@@ -74,10 +74,9 @@ private:
   // FSensitiveDetector* sd_of_cryst;
   // OpticFiberSD* sd_of_of;
   // PhotoDiodeSD* sd_of_pd;
-   G4LogicalVolume* AirBox;
+  G4LogicalVolume* AirBox;
    G4Material *airNist;
   G4Material* TEFLON;
-  G4double depth;
   Applicator80BeamLine *Collimator;
   G4LogicalVolume *opticfiber_core_log;
   G4LogicalVolume *logicCryst;
