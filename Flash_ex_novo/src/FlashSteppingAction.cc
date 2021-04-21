@@ -88,36 +88,7 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
   G4StepPoint *preStep = aStep->GetPreStepPoint();
   G4int trackID = aStep->GetTrack()->GetTrackID();
   
-  /// Lines 94-111 give a seg fault
-   
-//===========================================BACKSCATTER=========================================   
-  // if this doesn't work I'll try to count the prevolume + postvolume condition and kill the ones that have post and pre in the crystal, withouth checking msc condition.
   
-  //there is a problem in 100-103
-  
- /* if(preStep -> GetStepStatus() == fGeomBoundary){
-
-  G4String volumeName_1 =
-        postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
-    G4String prevolumeName_1 =
-        preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
-
-  if ((prevolumeName_1=="CrystalLV" || prevolumeName_1=="lTeflon") && volumeName_1=="phantomLog"){
-
-  if (aStep->GetTrack()->GetTrackID()==1){
-        
-  if (KinEnFile.is_open()) {
-
-        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<"\t"<<postStep->GetProcessDefinedStep()->GetProcessName()<<G4endl;
-      }
-      //aStep->GetTrack()->SetTrackStatus(fStopAndKill);
-      }
-  }
-  }*/
-  
-  
- //==========================================================================================
- 
  //===========================INCIDENT PARTICLES===============================================
  
  //==============================PRIMARIES ENERGY SPECTRUM======================================= 
@@ -140,18 +111,17 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
       }
       }
       
-      if ((volumeName == "phantomLog" && aStep->GetTrack()->GetTrackID() == 1)  ) {
-   if(prevolumeName=="CrystalLV"||prevolumeName=="lTeflon"||prevolumeName=="filler"){
-    
+      if ((volumeName == "CrystalLV" && aStep->GetTrack()->GetDefinition() == G4Electron::ElectronDefinition())){
+      
       if (KinEnFile.is_open()) {
 
-        KinEnFile <<"Backscattered/penetrated "<<"\t"<< eventid  << "\t" << trackID<<"\t"<< "\t"<<postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName()<<"\t"<<postStep->GetProcessDefinedStep()->GetProcessName()<<G4endl;
+        KinEnFile <<"Incident Electron"<<"\t"<< eventid << "\t" << trackID
+                  <<"\t"<< G4endl;
       }
-      
-      
+   
     }
     }
-    }
+    
     //==========================================================================================
   //========================================OPTICAL PHOTONS=====================================
    /* if (aStep->GetTrack()->GetDefinition() ==

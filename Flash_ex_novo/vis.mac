@@ -21,15 +21,15 @@
 /vis/viewer/set/lineSegmentsPerCircle 100
 
 # Axes, scale, etc.
-/vis/scene/add/scale   # Simple scale line
-/vis/scene/add/axes    # Simple axes: x=red, y=green, z=blue.
+#/vis/scene/add/scale   # Simple scale line
+#/vis/scene/add/axes    # Simple axes: x=red, y=green, z=blue.
 /vis/scene/add/trajectories
 /vis/scene/endOfEventAction accumulate 50000
 
 #
 /vis/viewer/set/style wireframe
 /vis/viewer/set/hiddenMarker true
-/vis/viewer/set/viewpointThetaPhi 120 150
+/vis/viewer/set/viewpointThetaPhi 90
 #
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
@@ -132,4 +132,19 @@
 /gps/hist/point 10.5	0.0001
 
 
+# Flux Scorer
+/score/create/boxMesh boxMesh_2 
+/score/mesh/boxSize 0.1  0.001 0.5 cm 
+/score/mesh/nBin 1 1 1
+/score/mesh/translate/xyz 3.68 0. -0.1 cm
+/score/mesh/rotate/rotateZ     90.   deg
+/score/quantity/flatSurfaceCurrent flux 0 F
+/score/filter/particle   eMinusFilter    e-
+/score/close
+/score/list  
 
+
+#/score/dumpQuantityToFile boxMesh_1 dose dose.out
+
+#/score/drawProjection boxMesh_1 dose
+/score/drawProjection boxMesh_2 flux

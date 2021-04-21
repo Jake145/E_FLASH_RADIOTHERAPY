@@ -481,9 +481,10 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
 
-  G4double phantomSizeX = 3.0 * cm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 1 * cm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm;
-  G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
+  //G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
+    G4ThreeVector phantomPosition = G4ThreeVector(-(-0.9 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom
   phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
                       phantomSizeZ / 2);
@@ -640,7 +641,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   green = new G4VisAttributes(G4Colour(255 / 255., 0. / 255., 0 / 255.));
   green->SetVisibility(true);
 //crystal dims
-  G4double cryst_dX = 1 * cm, cryst_dY = 1 * mm, cryst_dZ = 1 * mm;
+  G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
   G4double gap = 0 * mm; // a gap for wrapping, change to add gap
   G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap;
  //fiber dim
@@ -649,7 +650,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   G4double optic_fiber_clad_diameter = 2.2 * mm;
   G4double optic_fiber_cladding_diameter = 1. * mm;
   //Teflon dim
-  G4double fPTFEThickness = 0.3 * mm;
+  G4double fPTFEThickness = 1 * mm;
   //construct collimatore
     Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
   // constuct phantom

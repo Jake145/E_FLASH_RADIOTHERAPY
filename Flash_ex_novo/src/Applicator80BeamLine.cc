@@ -332,10 +332,10 @@ void Applicator80BeamLine::FlashBeamLineFirstApplicator() {
 
   // const G4double outRadiusFirstApplicatorFlash = 45. *mm;
   // const G4double innRadiusFirstApplicatorFlash = 40. *mm;
-  const G4double hightFirstApplicatorFlash = 100. * mm;
+  const G4double hightFirstApplicatorFlash = 150. * mm;
   const G4double startAngleFirstApplicatorFlash = 0. * deg;
   const G4double spanningAngleFirstApplicatorFlash = 360. * deg;
-  const G4double firstApplicatorXPositionFlash = initial_pos +200.56 * mm;
+  const G4double firstApplicatorXPositionFlash = initial_pos +250.56 * mm;
 
   G4double phi6 = 90. * deg;
 
@@ -376,8 +376,8 @@ void Applicator80BeamLine::FlashBeamLineJunctions() {
   const G4double hightGiunz5FinalAppFlash = 10. * mm;
   const G4double startAngleGiunz5FinalAppFlash = 0. * deg;
   const G4double spanningAngleGiunz5FinalAppFlash = 360. * deg;
-  const G4double Giunz5FinalAppXPositionFlash = initial_pos + 310.56 * mm;
-
+  //const G4double Giunz5FinalAppXPositionFlash = initial_pos + 310.56 * mm;
+  const G4double Giunz5FinalAppXPositionFlash = initial_pos + 400.56 * mm;
   solidGiunz5FinalAppFlash = new G4Tubs(
       "Giunz5FinalAppFlash", innRadiusGiunz5FinalAppFlash,
       outRadiusGiunz5FinalAppFlash, hightGiunz5FinalAppFlash,
@@ -655,10 +655,11 @@ void Applicator80BeamLine::FlashBeamLineFinalApplicator() {
 
   // const G4double outRadiusFinalApplicatorFlash = 45. *mm;
   // const G4double innRadiusFinalApplicatorFlash = 40. *mm;
-  const G4double hightFinalApplicatorFlash = 250.0 * mm;
+  //const G4double hightFinalApplicatorFlash = 250.0 * mm;
+  const G4double hightFinalApplicatorFlash = 300.0 * mm;
   const G4double startAngleFinalApplicatorFlash = 0. * deg;
   const G4double spanningAngleFinalApplicatorFlash = 360. * deg;
-  const G4double finalApplicatorXPositionFlash = initial_pos+550.56 * mm;
+  const G4double finalApplicatorXPositionFlash = initial_pos+700.56 * mm;
 
   G4double phi6 = 90. * deg;
 
