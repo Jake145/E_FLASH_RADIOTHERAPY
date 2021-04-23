@@ -481,7 +481,7 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
 
-  G4double phantomSizeX = 5 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 15 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm;
   //G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
     G4ThreeVector phantomPosition = G4ThreeVector(-(-0.9 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
