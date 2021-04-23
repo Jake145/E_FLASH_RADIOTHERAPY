@@ -1,0 +1,22 @@
+#class tools::wcsv::ntuple
+#title boxMesh_2_flux
+#separator 44
+#vector_separator 59
+#column int boxMesh_2_flux_eventId
+#column int boxMesh_2_flux_cell
+#column double boxMesh_2_flux_score
+26924,33,1.04772
+26924,38,1.04772
+26924,43,1.04772
+39200,33,0.777023
+39200,38,0.777023
+39200,43,0.777023
+202794,1,2.39901
+202794,6,2.39901
+202794,11,2.39901
+269330,18,0.790393
+269330,23,0.790393
+269330,28,0.790393
+911218,1,0.835204
+911218,6,0.835372
+911218,11,0.835372
