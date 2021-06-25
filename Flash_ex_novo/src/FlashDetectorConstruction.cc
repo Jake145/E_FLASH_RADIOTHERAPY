@@ -174,36 +174,27 @@ void FlashDetectorConstruction::DefineMaterials() {
   //--------------------------------------------------
   // Fluorinated Polyethylene
   //--------------------------------------------------
-  G4double PhotonEnergy[] = {
-      2.00 * eV, 2.03 * eV, 2.06 * eV, 2.09 * eV, 2.12 * eV, 2.15 * eV,
-      2.18 * eV, 2.21 * eV, 2.24 * eV, 2.27 * eV, 2.30 * eV, 2.33 * eV,
-      2.36 * eV, 2.39 * eV, 2.42 * eV, 2.45 * eV, 2.48 * eV, 2.51 * eV,
-      2.54 * eV, 2.57 * eV, 2.60 * eV, 2.63 * eV, 2.66 * eV, 2.69 * eV,
-      2.72 * eV, 2.75 * eV, 2.78 * eV, 2.81 * eV, 2.84 * eV, 2.87 * eV,
-      2.90 * eV, 2.93 * eV, 2.96 * eV, 2.99 * eV, 3.02 * eV, 3.05 * eV,
-      3.08 * eV, 3.11 * eV, 3.14 * eV, 3.17 * eV, 3.20 * eV, 3.23 * eV,
-      3.26 * eV, 3.29 * eV, 3.32 * eV, 3.35 * eV, 3.38 * eV, 3.41 * eV,
-      3.44 * eV, 3.47 * eV};
+  G4double PhotonEnergy[] = {1.79 * eV, 1.85 * eV, 1.91 * eV, 1.97 * eV,
+
+                       2.04 * eV, 2.11 * eV, 2.19 * eV, 2.27 * eV,
+
+                       2.36 * eV, 2.45 * eV, 2.56 * eV, 2.67 * eV,
+
+                       2.80 * eV, 2.94 * eV, 3.09 * eV, 3.25 * eV,
+
+                       3.44 * eV, 3.65 * eV, 3.89 * eV, 4.16 * eV};
 
   const G4int nEntries = sizeof(PhotonEnergy) / sizeof(G4double);
 
   G4double refractiveIndexClad2[] = {
       1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-      1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-      1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-      1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42,
-      1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42};
+      1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42, 1.42
+      };
 
   assert(sizeof(refractiveIndexClad2) == sizeof(PhotonEnergy));
   G4double absClad[] = {
       20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m};
+      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m};
 
   assert(sizeof(absClad) == sizeof(PhotonEnergy));
 
@@ -255,29 +246,26 @@ void FlashDetectorConstruction::DefineMaterials() {
   //--------------------------------------------------
   //  PMMA for fibers
   //--------------------------------------------------
-  G4double photonEnergy_fib[] = {
-      2.00 * eV, 2.03 * eV, 2.06 * eV, 2.09 * eV, 2.12 * eV, 2.15 * eV,
-      2.18 * eV, 2.21 * eV, 2.24 * eV, 2.27 * eV, 2.30 * eV, 2.33 * eV,
-      2.36 * eV, 2.39 * eV, 2.42 * eV, 2.45 * eV, 2.48 * eV, 2.51 * eV,
-      2.54 * eV, 2.57 * eV, 2.60 * eV, 2.63 * eV, 2.66 * eV, 2.69 * eV,
-      2.72 * eV, 2.75 * eV, 2.78 * eV, 2.81 * eV, 2.84 * eV, 2.87 * eV,
-      2.90 * eV, 2.93 * eV, 2.96 * eV, 2.99 * eV, 3.02 * eV, 3.05 * eV,
-      3.08 * eV, 3.11 * eV, 3.14 * eV, 3.17 * eV, 3.20 * eV, 3.23 * eV,
-      3.26 * eV, 3.29 * eV, 3.32 * eV, 3.35 * eV, 3.38 * eV, 3.41 * eV,
-      3.44 * eV, 3.47 * eV};
+  G4double photonEnergy_fib[] = {1.79 * eV, 1.85 * eV, 1.91 * eV, 1.97 * eV,
+
+                       2.04 * eV, 2.11 * eV, 2.19 * eV, 2.27 * eV,
+
+                       2.36 * eV, 2.45 * eV, 2.56 * eV, 2.67 * eV,
+
+                       2.80 * eV, 2.94 * eV, 3.09 * eV, 3.25 * eV,
+
+                       3.44 * eV, 3.65 * eV, 3.89 * eV, 4.16 * eV};
 
   const G4int nEntries_fib = sizeof(photonEnergy_fib) / sizeof(G4double);
 
   G4double refractiveIndex_fiber[] = {
       1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49};
+      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49
+      };
 
   assert(sizeof(refractiveIndex_fiber) == sizeof(photonEnergy_fib));
 
-  G4double abs_fiber[] = {
+  /*G4double abs_fiber[] = {
       5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m,
       5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m,
       5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m, 5.40 * m,
@@ -289,7 +277,7 @@ void FlashDetectorConstruction::DefineMaterials() {
 
   assert(sizeof(abs_fiber) == sizeof(photonEnergy_fib));
 
-  /* G4double emission_fib[] =
+   G4double emission_fib[] =
    {0.05, 0.10, 0.30, 0.50, 0.75, 1.00, 1.50, 1.85, 2.30, 2.75,
     3.25, 3.80, 4.50, 5.20, 6.00, 7.00, 8.50, 9.50, 11.1, 12.4,
     12.9, 13.0, 12.8, 12.3, 11.1, 11.0, 12.0, 11.0, 17.0, 16.9,
@@ -303,8 +291,7 @@ void FlashDetectorConstruction::DefineMaterials() {
   mpt_fiber->AddProperty("RINDEX", photonEnergy_fib, refractiveIndex_fiber,
                          nEntries_fib);
 
-  mpt_fiber->AddProperty("ABSLENGTH", photonEnergy_fib, abs_fiber,
-                         nEntries_fib);
+  //mpt_fiber->AddProperty("ABSLENGTH", photonEnergy_fib, abs_fiber,nEntries_fib);
   // mptWLSfiber->AddProperty("WLSCOMPONENT",photonEnergy_fib,emissionFib,nEntries_fib);
 
   PMMA->SetMaterialPropertiesTable(mpt_fiber);
@@ -315,22 +302,15 @@ void FlashDetectorConstruction::DefineMaterials() {
 
   G4double refractiveIndex_Clad[] = {
       1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49,
-      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49};
+      1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49, 1.49
+      };
 
   assert(sizeof(refractiveIndex_Clad) == sizeof(photonEnergy_fib));
 
   G4double abs_Clad[] = {
       20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m,
-      20.0 * m};
+      20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m, 20.0 * m
+      };
 
   assert(sizeof(abs_Clad) == sizeof(photonEnergy_fib));
 
@@ -345,9 +325,18 @@ void FlashDetectorConstruction::DefineMaterials() {
     TEFLON = nist->FindOrBuildMaterial("G4_TEFLON",isotopes);
 
   G4double photonEnergy_teflon[] =
-              { 7.897*eV,7.208*eV, 6.702*eV,  4.999*eV};
+              {1.79 * eV, 1.85 * eV, 1.91 * eV, 1.97 * eV,
+
+                       2.04 * eV, 2.11 * eV, 2.19 * eV, 2.27 * eV,
+
+                       2.36 * eV, 2.45 * eV, 2.56 * eV, 2.67 * eV,
+
+                       2.80 * eV, 2.94 * eV, 3.09 * eV, 3.25 * eV,
+
+                       3.44 * eV, 3.65 * eV, 3.89 * eV, 4.16 * eV};
     G4double refractiveIndex3[] =
-              { 1.432, 1.308, 1.364, 1.329};
+              {1.35,1.35,1.35,1.35,1.35,1.35,1.35,1.35,1.35,1.35,
+               1.35,1.35,1.35,1.35,1.35,1.35,1.35,1.35,1.35,1.35};
   const G4int nEntries_teflon = sizeof(photonEnergy_teflon)/sizeof(G4double);
     G4MaterialPropertiesTable* myMPT3 = new G4MaterialPropertiesTable();
     myMPT3->AddProperty("RINDEX", photonEnergy_teflon, refractiveIndex3,
@@ -369,13 +358,15 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom(G4double Cx,G4do
   // ------------ Generate & Add Material Properties Table ------------
   //
 
-  G4double photonEnergy[] = {
-      2.034 * eV, 2.068 * eV, 2.103 * eV, 2.139 * eV, 2.177 * eV, 2.216 * eV,
-      2.256 * eV, 2.298 * eV, 2.341 * eV, 2.386 * eV, 2.433 * eV, 2.481 * eV,
-      2.532 * eV, 2.585 * eV, 2.640 * eV, 2.697 * eV, 2.757 * eV, 2.820 * eV,
-      2.885 * eV, 2.954 * eV, 3.026 * eV, 3.102 * eV, 3.181 * eV, 3.265 * eV,
-      3.353 * eV, 3.446 * eV, 3.545 * eV, 3.649 * eV, 3.760 * eV, 3.877 * eV,
-      4.002 * eV, 4.136 * eV};
+  G4double photonEnergy[] = {1.79 * eV, 1.85 * eV, 1.91 * eV, 1.97 * eV,
+
+                       2.04 * eV, 2.11 * eV, 2.19 * eV, 2.27 * eV,
+
+                       2.36 * eV, 2.45 * eV, 2.56 * eV, 2.67 * eV,
+
+                       2.80 * eV, 2.94 * eV, 3.09 * eV, 3.25 * eV,
+
+                       3.44 * eV, 3.65 * eV, 3.89 * eV, 4.16 * eV};
 
   const G4int nEntries = sizeof(photonEnergy) / sizeof(G4double);
 
@@ -383,8 +374,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom(G4double Cx,G4do
   // Water
   //
   G4double refractiveIndex1[] = {
-      1.3435, 1.344,  1.3445, 1.345,  1.3455, 1.346,  1.3465, 1.347,
-      1.3475, 1.348,  1.3485, 1.3492, 1.35,   1.3505, 1.351,  1.3518,
+      1.35,   1.3505, 1.351,  1.3518,
       1.3522, 1.3530, 1.3535, 1.354,  1.3545, 1.355,  1.3555, 1.356,
       1.3568, 1.3572, 1.358,  1.3585, 1.359,  1.3595, 1.36,   1.3608};
 
@@ -482,9 +472,10 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
   
 
   G4double phantomSizeX = 15 * mm, phantomSizeY = 30.0 * cm,
-           phantomSizeZ = 30.0 * cm;
+           phantomSizeZ = 30.0 * cm, phantom_coordinateX=-(-0.9 * mm - phantomSizeX/2);
   //G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
-    G4ThreeVector phantomPosition = G4ThreeVector(-(-0.9 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
+  
+    G4ThreeVector phantomPosition = G4ThreeVector(phantom_coordinateX , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom
   phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
                       phantomSizeZ / 2);
@@ -528,12 +519,13 @@ phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
 
 G4RotationMatrix rotmp = G4RotationMatrix();
   rotmp.rotateY(0 * deg);
+  G4double supp_coordinateX=phantom_coordinateX+(phantomSizeX/2+support_x/2);
 
-  G4ThreeVector positionp = G4ThreeVector((phantomSizeX/2+support_x/2),0,Cx/2);
+  G4ThreeVector positionp = G4ThreeVector(supp_coordinateX,0,Cx/2);
   G4Transform3D transformp = G4Transform3D(rotmp, positionp);
   
   G4VPhysicalVolume *DTsupp = new G4PVPlacement(
-      transformp, DetectorSupport, "supportphys", phantomLogicalVolume, false, 0);
+      transformp, DetectorSupport, "supportphys", logicTreatmentRoom, false, 0);
       
   AirBox = new G4LogicalVolume(wedge, airNist, "filler");
   
@@ -542,8 +534,8 @@ G4RotationMatrix rotmp = G4RotationMatrix();
   G4VPhysicalVolume *AB = new G4PVPlacement(transformab, AirBox, "f", DetectorSupport, false, 0);
   //=================================================================================//
   //================Second Piece of Phantom==================================//
-  
-  G4ThreeVector phantomPosition_2 = G4ThreeVector((15 * cm -(phantomSizeX / 2 +support_x/2))+support_x/2 , 0. * mm, -Cx/2);
+  G4double phantom2_coordinateX= supp_coordinateX +(15 * cm -(phantomSizeX / 2 +support_x/2))+support_x/2;
+  G4ThreeVector phantomPosition_2 = G4ThreeVector(phantom2_coordinateX , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom
   G4Box * phantom_2 = new G4Box("Phantom_2", 15 * cm -(phantomSizeX / 2 +support_x/2) , phantomSizeY / 2,
                       phantomSizeZ / 2);
@@ -555,7 +547,7 @@ G4RotationMatrix rotmp = G4RotationMatrix();
   // Definition of the physics volume of the Phantom
   G4VPhysicalVolume * phant_phys_2 =
       new G4PVPlacement(0, phantomPosition_2, "phantomPhys_2", phantomLogicalVolume_2,
-                        DTsupp, false, 0);
+                        physicalTreatmentRoom, false, 0);
   
   
   
@@ -623,7 +615,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
     airNist->SetMaterialPropertiesTable(myMPT2); */
 
   G4Box *treatmentRoom = new G4Box("TreatmentRoom", worldX, worldY, worldZ);
-  G4LogicalVolume *logicTreatmentRoom = new G4LogicalVolume(
+  logicTreatmentRoom = new G4LogicalVolume(
       treatmentRoom, airNist, "logicTreatmentRoom", 0, 0, 0);
   physicalTreatmentRoom =
       new G4PVPlacement(0, G4ThreeVector(), "physicalTreatmentRoom",
@@ -724,23 +716,23 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
       new G4LogicalVolume(opticfiber_clad, // its solid
                           PE,              // its material
                           "OF_clad_LV");   // its name
-  G4ThreeVector position_opt = G4ThreeVector(0. * mm, 0. * mm, 0. * mm);
-  G4ThreeVector position_clad = G4ThreeVector(
-      0. * mm + (dX / 2 + opticfiber_core_dx / 2), 0. * mm, 0. * mm);
-
+  G4ThreeVector position_opt = G4ThreeVector(0. * mm, 0. * mm, -dX/2);
+  //G4ThreeVector position_clad = G4ThreeVector(
+  //    0. * mm + (dX / 2 + opticfiber_core_dx / 2), 0. * mm, 0. * mm);
+	G4ThreeVector position_clad=position_opt;
   G4RotationMatrix rotm_opt = G4RotationMatrix();
-  rotm_opt.rotateY(0 * deg);
+  rotm_opt.rotateX(0 * deg);
   G4Transform3D transform_opt = G4Transform3D(rotm_opt, position_opt);
 
   G4RotationMatrix rotm_clad = G4RotationMatrix();
-  rotm_clad.rotateY(90 * deg);
+  rotm_clad.rotateX(0 * deg);
   G4Transform3D transform_clad = G4Transform3D(rotm_clad, position_clad);
 
   //
   G4VPhysicalVolume *physclad = new G4PVPlacement(
       transform_clad,
       // position
-      opticfiber_clad_log, "outerfiber", logicCryst, false, 0);
+      opticfiber_clad_log, "outerfiber", AirBox, false, 0);
 
   G4VPhysicalVolume *physcore = new G4PVPlacement(transform_clad,
                                                   // position
@@ -748,14 +740,14 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
                                                   "OF_core_phys",
 
-                                                  logicCryst, false, 0);
+                                                  AirBox, false, 0);
   G4VPhysicalVolume *claddingcore = new G4PVPlacement(transform_clad,
                                                       // position
                                                       opticfiber_cladding_log,
 
                                                       "OF_cladding_phys",
 
-                                                      logicCryst, false, 0);
+                                                      AirBox, false, 0);
 
   G4OpticalSurface *opcore_scint =
       new G4OpticalSurface("OpticFiberandScintillator");
@@ -766,7 +758,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
       "teflonSurface_of_up", phys_cryst, physcore, opcore_scint);
   G4LogicalBorderSurface *core_scint_down = new G4LogicalBorderSurface(
       "teflonSurface_of_down", physcore, phys_cryst, opcore_scint);
-  // OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooooo
+  // OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooo
 
   G4VSolid * t1= new G4Box("t1",dX/2+fPTFEThickness, dY/2+fPTFEThickness, dZ/2+fPTFEThickness);
   G4VSolid *t2 = new G4Box("t2",dX, dY, dZ);
@@ -786,12 +778,12 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
 
   //yRot->rotateX(90*deg);
-  yRot->rotateY(90*deg);
+  yRot->rotateY(270*deg);
   G4ThreeVector zHole((dX/2 + fPTFEThickness/2), 0,0  );
 
   G4SubtractionSolid* solidHoleTeflon = new G4SubtractionSolid("hollowHoleteflon", solidFullTeflon, tHole, yRot, zHole);
  G4LogicalVolume *logicTeflon = new G4LogicalVolume(solidHoleTeflon, TEFLON,"lTeflon",0,0,0);
- G4VPhysicalVolume *physiTeflon = new G4PVPlacement(0, G4ThreeVector(0,0,0), logicTeflon, "pTeflon", logicCryst, false, 0);
+ G4VPhysicalVolume *physiTeflon = new G4PVPlacement(yRot, G4ThreeVector(0, 0, (opticfiber_core_dx/2)), logicTeflon, "pTeflon", AirBox, false, 0);
   
   
   //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
