@@ -59,7 +59,9 @@ public:
   G4VPhysicalVolume *physicalTreatmentRoom;
 G4LogicalVolume *logicTreatmentRoom;
   // FlashDetectorConstruction();
-  G4VPhysicalVolume * ConstructPhantom(G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz);
+  G4VPhysicalVolume * ConstructPhantom_Support(G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz);
+  G4VPhysicalVolume * ConstructPhantom();
+  G4VPhysicalVolume *BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx);
   FlashDetectorConstruction(); // costruttore ci passo il puntatore al mondo
   virtual ~FlashDetectorConstruction(); // distruttore
 
@@ -74,10 +76,12 @@ private:
   // FSensitiveDetector* sd_of_cryst;
   // OpticFiberSD* sd_of_of;
   // PhotoDiodeSD* sd_of_pd;
+  
   G4LogicalVolume* AirBox;
    G4Material *airNist;
   G4Material* TEFLON;
   Applicator80BeamLine *Collimator;
+  G4VPhysicalVolume * detector_physical;
   G4LogicalVolume *opticfiber_core_log;
   G4LogicalVolume *logicCryst;
   G4Box *phantom;

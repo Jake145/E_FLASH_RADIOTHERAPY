@@ -73,6 +73,7 @@
 FlashDetectorConstruction::FlashDetectorConstruction()
     : G4VUserDetectorConstruction(), physicalTreatmentRoom(0), Collimator(0),
       fCheckOverlaps(true) {
+      
 
   DefineMaterials();
 
@@ -351,7 +352,7 @@ void FlashDetectorConstruction::DefineMaterials() {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom(G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz) {
+G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz) {
 
   G4Material *phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
@@ -573,81 +574,192 @@ blue = new G4VisAttributes(G4Colour(0 / 255., 0./ 255., 255. / 255.));
 
   return phant_phys;
 }
+G4VPhysicalVolume *FlashDetectorConstruction::ConstructPhantom(){
 
-G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
-  // -----------------------------
-  // Treatment room - World volume
-  //------------------------------
-  // Treatment room sizes
-  const G4double worldX = 400.0 * cm;
-  const G4double worldY = 400.0 * cm;
-  const G4double worldZ = 400.0 * cm;
-  G4bool isotopes = false;
 
-  airNist =
-      G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
-  // Air
+G4Material *phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
+
+  // ------------ Generate & Add Material Properties Table ------------
   //
-  /*
-  G4double photonEnergy_air[] =
-              { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
-                2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
-                2.341*eV, 2.386*eV, 2.433*eV, 2.481*eV,
-                2.532*eV, 2.585*eV, 2.640*eV, 2.697*eV,
-                2.757*eV, 2.820*eV, 2.885*eV, 2.954*eV,
-                3.026*eV, 3.102*eV, 3.181*eV, 3.265*eV,
-                3.353*eV, 3.446*eV, 3.545*eV, 3.649*eV,
-                3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV };
-    G4double refractiveIndex2[] =
-              { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-                1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-                1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-                1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-                1.00, 1.00, 1.00, 1.00 };
-  const G4int nEntries_air = sizeof(photonEnergy_air)/sizeof(G4double);
-    G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
-    myMPT2->AddProperty("RINDEX", photonEnergy_air, refractiveIndex2,
-  nEntries_air);
 
-    G4cout << "Air G4MaterialPropertiesTable" << G4endl;
-    myMPT2->DumpTable();
+  G4double photonEnergy[] = {1.79 * eV, 1.85 * eV, 1.91 * eV, 1.97 * eV,
 
-    airNist->SetMaterialPropertiesTable(myMPT2); */
+                       2.04 * eV, 2.11 * eV, 2.19 * eV, 2.27 * eV,
 
-  G4Box *treatmentRoom = new G4Box("TreatmentRoom", worldX, worldY, worldZ);
-  logicTreatmentRoom = new G4LogicalVolume(
-      treatmentRoom, airNist, "logicTreatmentRoom", 0, 0, 0);
-  physicalTreatmentRoom =
-      new G4PVPlacement(0, G4ThreeVector(), "physicalTreatmentRoom",
-                        logicTreatmentRoom, 0, false, 0);
+                       2.36 * eV, 2.45 * eV, 2.56 * eV, 2.67 * eV,
 
-  // The treatment room is invisible in the Visualisation
-  logicTreatmentRoom->SetVisAttributes(G4VisAttributes::GetInvisible());
+                       2.80 * eV, 2.94 * eV, 3.09 * eV, 3.25 * eV,
+
+                       3.44 * eV, 3.65 * eV, 3.89 * eV, 4.16 * eV};
+
+  const G4int nEntries = sizeof(photonEnergy) / sizeof(G4double);
+
+  //
+  // Water
+  //
+  G4double refractiveIndex1[] = {
+      1.35,   1.3505, 1.351,  1.3518,
+      1.3522, 1.3530, 1.3535, 1.354,  1.3545, 1.355,  1.3555, 1.356,
+      1.3568, 1.3572, 1.358,  1.3585, 1.359,  1.3595, 1.36,   1.3608};
+
+  assert(sizeof(refractiveIndex1) == sizeof(photonEnergy));
+
+ /* G4double absorption[] = {
+      3.448 * m,  4.082 * m,  6.329 * m,  9.174 * m,  12.346 * m, 13.889 * m,
+      15.152 * m, 17.241 * m, 18.868 * m, 20.000 * m, 26.316 * m, 35.714 * m,
+      45.455 * m, 47.619 * m, 52.632 * m, 52.632 * m, 55.556 * m, 52.632 * m,
+      52.632 * m, 47.619 * m, 45.455 * m, 41.667 * m, 37.037 * m, 33.333 * m,
+      30.000 * m, 28.500 * m, 27.000 * m, 24.500 * m, 22.000 * m, 19.500 * m,
+      17.500 * m, 14.500 * m};
+
+  assert(sizeof(absorption) == sizeof(photonEnergy));
+
+  G4double scintilFast[] =
+            { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00 };
+
+  assert(sizeof(scintilFast) == sizeof(photonEnergy));
+
+  G4double scintilSlow[] =
+            { 0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00,
+              7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 4.00,
+              3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00,
+              4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
+              7.00, 6.00, 5.00, 4.00 };
+
+  assert(sizeof(scintilSlow) == sizeof(photonEnergy));*/
+  G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
+
+  myMPT1->AddProperty("RINDEX", photonEnergy, refractiveIndex1, nEntries)
+      ->SetSpline(true);
+  /*myMPT1->AddProperty("ABSLENGTH", photonEnergy, absorption, nEntries)
+      ->SetSpline(true);
+  myMPT1->AddProperty("FASTCOMPONENT",photonEnergy, scintilFast,     nEntries)
+        ->SetSpline(true);
+  myMPT1->AddProperty("SLOWCOMPONENT",photonEnergy, scintilSlow,     nEntries)
+        ->SetSpline(true);
+
+  myMPT1->AddConstProperty("SCINTILLATIONYIELD",50./MeV);
+  myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
+  myMPT1->AddConstProperty("FASTTIMECONSTANT", 1.*ns);
+  myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
+  myMPT1->AddConstProperty("YIELDRATIO",0.8);
+
+  G4double energy_water[] = {
+      1.56962 * eV, 1.58974 * eV, 1.61039 * eV, 1.63157 * eV, 1.65333 * eV,
+      1.67567 * eV, 1.69863 * eV, 1.72222 * eV, 1.74647 * eV, 1.77142 * eV,
+      1.7971 * eV,  1.82352 * eV, 1.85074 * eV, 1.87878 * eV, 1.90769 * eV,
+      1.93749 * eV, 1.96825 * eV, 1.99999 * eV, 2.03278 * eV, 2.06666 * eV,
+      2.10169 * eV, 2.13793 * eV, 2.17543 * eV, 2.21428 * eV, 2.25454 * eV,
+      2.29629 * eV, 2.33962 * eV, 2.38461 * eV, 2.43137 * eV, 2.47999 * eV,
+      2.53061 * eV, 2.58333 * eV, 2.63829 * eV, 2.69565 * eV, 2.75555 * eV,
+      2.81817 * eV, 2.88371 * eV, 2.95237 * eV, 3.02438 * eV, 3.09999 * eV,
+      3.17948 * eV, 3.26315 * eV, 3.35134 * eV, 3.44444 * eV, 3.54285 * eV,
+      3.64705 * eV, 3.75757 * eV, 3.87499 * eV, 3.99999 * eV, 4.13332 * eV,
+      4.27585 * eV, 4.42856 * eV, 4.59258 * eV, 4.76922 * eV, 4.95999 * eV,
+      5.16665 * eV, 5.39129 * eV, 5.63635 * eV, 5.90475 * eV, 6.19998 * eV};
+
+  const G4int numentries_water = sizeof(energy_water) / sizeof(G4double);
+
+  // assume 100 times larger than the rayleigh scattering for now.
+  G4double mie_water[] = {
+      167024.4 * m, 158726.7 * m, 150742 * m,   143062.5 * m, 135680.2 * m,
+      128587.4 * m, 121776.3 * m, 115239.5 * m, 108969.5 * m, 102958.8 * m,
+      97200.35 * m, 91686.86 * m, 86411.33 * m, 81366.79 * m, 76546.42 * m,
+      71943.46 * m, 67551.29 * m, 63363.36 * m, 59373.25 * m, 55574.61 * m,
+      51961.24 * m, 48527.00 * m, 45265.87 * m, 42171.94 * m, 39239.39 * m,
+      36462.50 * m, 33835.68 * m, 31353.41 * m, 29010.30 * m, 26801.03 * m,
+      24720.42 * m, 22763.36 * m, 20924.88 * m, 19200.07 * m, 17584.16 * m,
+      16072.45 * m, 14660.38 * m, 13343.46 * m, 12117.33 * m, 10977.70 * m,
+      9920.416 * m, 8941.407 * m, 8036.711 * m, 7202.470 * m, 6434.927 * m,
+      5730.429 * m, 5085.425 * m, 4496.467 * m, 3960.210 * m, 3473.413 * m,
+      3032.937 * m, 2635.746 * m, 2278.907 * m, 1959.588 * m, 1675.064 * m,
+      1422.710 * m, 1200.004 * m, 1004.528 * m, 833.9666 * m, 686.1063 * m};
+
+  assert(sizeof(mie_water) == sizeof(energy_water));
+  // gforward, gbackward, forward backward ratio
+  G4double mie_water_const[3] = {0.99, 0.99, 0.8};
+
+  myMPT1->AddProperty("MIEHG", energy_water, mie_water, numentries_water)
+      ->SetSpline(true);
+  myMPT1->AddConstProperty("MIEHG_FORWARD", mie_water_const[0]);
+  myMPT1->AddConstProperty("MIEHG_BACKWARD", mie_water_const[1]);
+  myMPT1->AddConstProperty("MIEHG_FORWARD_RATIO", mie_water_const[2]);
+
+  G4cout << "Water G4MaterialPropertiesTable" << G4endl;
+  myMPT1->DumpTable();
+phantomMaterial->GetIonisation()->SetBirksConstant(0.126 * mm / MeV);*/
+  phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
-  // -----------------------------
-  // detector + phantom +Default dimensions
-  //------------------------------
 
+  G4double phantomSizeX = 30.0 * cm, phantomSizeY = 30.0 * cm,
+           phantomSizeZ = 30.0 * cm, phantom_coordinateX=-(-0.9 * mm - phantomSizeX/2);
+  //G4ThreeVector phantomPosition = G4ThreeVector(-(199.4 * mm - phantomSizeX/2) , 0. * mm, 0. * mm);
+  
+    G4ThreeVector phantomPosition = G4ThreeVector(phantom_coordinateX , 0. * mm, 0. * mm);
+  // Definition of the solid volume of the Phantom
+  phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
+                      phantomSizeZ / 2);
+
+  // Definition of the logical volume of the Phantom
+  phantomLogicalVolume =
+      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
+
+  // Definition of the physics volume of the Phantom
+  phant_phys =
+      new G4PVPlacement(0, phantomPosition, "phantomPhys", phantomLogicalVolume,
+                        physicalTreatmentRoom, false, 0);
+  /*
+  G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
+    opWaterSurface->SetType(dielectric_LUTDAVIS);
+    opWaterSurface->SetFinish(Rough_LUT);
+    opWaterSurface->SetModel(DAVIS);
+
+    G4LogicalBorderSurface* waterSurface =
+            new G4LogicalBorderSurface("WaterSurface",
+                                   phant_phys,physicalTreatmentRoom,opWaterSurface);
+
+    G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
+          (waterSurface->GetSurface(phant_phys,physicalTreatmentRoom)->
+                                                         GetSurfaceProperty());
+    if (opticalSurface) opticalSurface->DumpInfo();
+    */
+    
+    G4Region *PhantomRegion = new G4Region("Phantom_reg");
+  phantomLogicalVolume->SetRegion(PhantomRegion);
+  PhantomRegion->AddRootLogicalVolume(phantomLogicalVolume);
+
+  // Visualisation attributes of the phantom
   red = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
   red->SetVisibility(true);
-  green = new G4VisAttributes(G4Colour(255 / 255., 0. / 255., 0 / 255.));
-  green->SetVisibility(true);
-//crystal dims
-  G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
-  G4double gap = 0 * mm; // a gap for wrapping, change to add gap
-  G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap;
+
+blue = new G4VisAttributes(G4Colour(0 / 255., 0./ 255., 255. / 255.));
+  blue->SetVisibility(true);
+
+  phantomLogicalVolume->SetVisAttributes(red);
+
+
+  G4double maxStep = 0.1 * mm;
+  fStepLimit = new G4UserLimits(maxStep);
+  phantomLogicalVolume->SetUserLimits(fStepLimit);
+
+  return phant_phys;
+
+
+}
+G4VPhysicalVolume *FlashDetectorConstruction::BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx){
+
  //fiber dim
- G4double opticfiber_core_dx = 5 * cm;
+
   G4double opticfiber_core_diameter = 0.98 * mm;
   G4double optic_fiber_clad_diameter = 2.2 * mm;
   G4double optic_fiber_cladding_diameter = 1. * mm;
   //Teflon dim
-  G4double fPTFEThickness = 1 * mm;
-  //construct collimatore
-    Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
-  // constuct phantom
-  phantom_physical=ConstructPhantom(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
-  //constuct detector
+
+   //constuct detector
   G4Box *solidCryst = new G4Box("crystal", dX / 2, dY / 2, dZ / 2);
   //
   logicCryst = new G4LogicalVolume(solidCryst,   // its solid
@@ -1041,6 +1153,74 @@ G4OpticalSurface *cladteflonSurface_up =
   G4Region *OFcladRegion = new G4Region("OF_clad_reg");
   opticfiber_clad_log->SetRegion(OFcladRegion);
   OFcladRegion->AddRootLogicalVolume(opticfiber_clad_log);
+  return phys_cryst;
+}
+
+G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
+  // -----------------------------
+  // Treatment room - World volume
+  //------------------------------
+  // Treatment room sizes
+  const G4double worldX = 400.0 * cm;
+  const G4double worldY = 400.0 * cm;
+  const G4double worldZ = 400.0 * cm;
+  G4bool isotopes = false;
+
+  airNist =
+      G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
+  // Air
+  //
+  /*
+  G4double photonEnergy_air[] =
+              { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
+                2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
+                2.341*eV, 2.386*eV, 2.433*eV, 2.481*eV,
+                2.532*eV, 2.585*eV, 2.640*eV, 2.697*eV,
+                2.757*eV, 2.820*eV, 2.885*eV, 2.954*eV,
+                3.026*eV, 3.102*eV, 3.181*eV, 3.265*eV,
+                3.353*eV, 3.446*eV, 3.545*eV, 3.649*eV,
+                3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV };
+    G4double refractiveIndex2[] =
+              { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+                1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+                1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+                1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+                1.00, 1.00, 1.00, 1.00 };
+  const G4int nEntries_air = sizeof(photonEnergy_air)/sizeof(G4double);
+    G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
+    myMPT2->AddProperty("RINDEX", photonEnergy_air, refractiveIndex2,
+  nEntries_air);
+
+    G4cout << "Air G4MaterialPropertiesTable" << G4endl;
+    myMPT2->DumpTable();
+
+    airNist->SetMaterialPropertiesTable(myMPT2); */
+
+  G4Box *treatmentRoom = new G4Box("TreatmentRoom", worldX, worldY, worldZ);
+  logicTreatmentRoom = new G4LogicalVolume(
+      treatmentRoom, airNist, "logicTreatmentRoom", 0, 0, 0);
+  physicalTreatmentRoom =
+      new G4PVPlacement(0, G4ThreeVector(), "physicalTreatmentRoom",
+                        logicTreatmentRoom, 0, false, 0);
+
+  // The treatment room is invisible in the Visualisation
+  logicTreatmentRoom->SetVisAttributes(G4VisAttributes::GetInvisible());
+  
+  // -----------------------------
+  // detector + phantom +Default dimensions
+  //------------------------------
+
+ G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
+  G4double opticfiber_core_dx = 5 * cm;
+     G4double fPTFEThickness = 1 * mm;
+  G4double gap = 0 * mm; // a gap for wrapping, change to add gap
+   G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap;
+  //construct collimatore
+    Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
+  // constuct phantom
+  phantom_physical=ConstructPhantom_Support(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  
+  detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
 
   return physicalTreatmentRoom;
 }
