@@ -61,14 +61,15 @@ public:
   void FlashBeamLineJunctions();
   void FlashBeamLineFinalApplicator();
 
-  
-
+    G4double initial_pos;
+ G4double finalApplicatorXPositionFlash;
+  G4double hightFinalApplicatorFlash;
 private:
   //G4double FieldDimensionFactor; // Valore che determina le dimensioni del campo
   G4VPhysicalVolume *motherPhys;        // mondo fisico
   void SetDefaultDimensions();          // setta le dimensioni di default
   void ConstructApplicator80BeamLine(); // costruisce tutto l'applicatore
-  G4double initial_pos;
+
   G4VisAttributes *blue; // colori vari
   G4VisAttributes *gray;
   G4VisAttributes *white;
@@ -79,7 +80,7 @@ private:
   G4VisAttributes *darkOrange3;
   G4VisAttributes *skyBlue;
   G4VisAttributes *magenta;
-
+	G4double Final_Attachment_X;
   // Variabili del primo pezzo del collimatore
   G4double innerRadiusFirstApplicatorFlash, OuterRadiusFirstApplicatorFlash;
   G4Tubs *solidFirstApplicatorFlash;

@@ -59,8 +59,8 @@ public:
   G4VPhysicalVolume *physicalTreatmentRoom;
 G4LogicalVolume *logicTreatmentRoom;
   // FlashDetectorConstruction();
-  G4VPhysicalVolume * ConstructPhantom_Support(G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz);
-  G4VPhysicalVolume * ConstructPhantom();
+  G4VPhysicalVolume * ConstructPhantom_Support(G4double CollPos, G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz);
+  G4VPhysicalVolume * ConstructPhantom(G4double CollPos);
   G4VPhysicalVolume *BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx);
   FlashDetectorConstruction(); // costruttore ci passo il puntatore al mondo
   virtual ~FlashDetectorConstruction(); // distruttore
