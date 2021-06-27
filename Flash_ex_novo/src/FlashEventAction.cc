@@ -62,7 +62,7 @@ void FlashEventAction::BeginOfEventAction(const G4Event *) {
 
 // void FlashEventAction::EndOfEventAction(const G4Event* evt)
 void FlashEventAction::EndOfEventAction(const G4Event *evt) {
-  /*G4HCofThisEvent *HCE = evt->GetHCofThisEvent();
+  G4HCofThisEvent *HCE = evt->GetHCofThisEvent();
   if (!HCE)
     return;
   G4SDManager *SDMan = G4SDManager::GetSDMpointer();
@@ -79,7 +79,7 @@ void FlashEventAction::EndOfEventAction(const G4Event *evt) {
     edep = *(itr->second);
   };
   if (edep > 0.)
-    fRunAction->SumEdep(edep);*/
+    fRunAction->SumEdep(edep);
 
   G4cout << "Ending event: "
          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()

@@ -884,10 +884,10 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   //construct collimatore
     Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
   // constuct phantom
-  phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
-  //phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  //phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
+  phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
 
-  //detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
 
   return physicalTreatmentRoom;
 }
@@ -895,7 +895,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlashDetectorConstruction::ConstructSDandField() {
-  /*G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
   G4MultiFunctionalDetector *cryst = new G4MultiFunctionalDetector("crystalSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
@@ -903,7 +903,7 @@ void FlashDetectorConstruction::ConstructSDandField() {
   cryst->RegisterPrimitive(primitiv1);
   SetSensitiveDetector("CrystalLV", cryst);
 
-  */
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
