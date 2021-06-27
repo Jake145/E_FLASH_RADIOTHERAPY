@@ -17,10 +17,89 @@
 
 ###########BEAM##############
 #Gaussian 7 MeV (Novac7)
-/gps/ene/type Gauss
-/gps/ene/mono 7 MeV
-/gps/ene/sigma 100 keV
+#/gps/ene/type Gauss
+#/gps/ene/mono 7 MeV
+#/gps/ene/sigma 100 keV
+#/gps/pos/centre -1000 0 0 mm
+#Custom Histogram (Novac7)
 /gps/pos/centre -1000 0 0 mm
+/gps/ene/type User
+/gps/hist/type energy
+/gps/hist/point 2.5	0.0000
+/gps/hist/point 2.6	0.0000
+/gps/hist/point 2.7	0.0000
+/gps/hist/point 2.8	0.0000
+/gps/hist/point 2.9	0.0000
+/gps/hist/point 3	0.0000
+/gps/hist/point 3.1	0.0000
+/gps/hist/point 3.2	0.0000
+/gps/hist/point 3.3	0.0000
+/gps/hist/point 3.4	0.0000
+/gps/hist/point 3.5	0.0000
+/gps/hist/point 3.6	0.0000
+/gps/hist/point 3.7	0.0000
+/gps/hist/point 3.8	0.0000
+/gps/hist/point 3.9	0.0000
+/gps/hist/point 4	0.0000
+/gps/hist/point 4.1	0.0000
+/gps/hist/point 4.2	0.0000
+/gps/hist/point 4.3	0.0000
+/gps/hist/point 4.4	0.0000
+/gps/hist/point 4.5	0.0000
+/gps/hist/point 4.6	0.0000
+/gps/hist/point 4.7	0.0000
+/gps/hist/point 4.8	0.0000
+/gps/hist/point 4.9	0.0000
+/gps/hist/point 5	0.0000
+/gps/hist/point 5.1	0.0000
+/gps/hist/point 5.2	0.0000
+/gps/hist/point 5.3	0.0000
+/gps/hist/point 5.4	0.00683
+/gps/hist/point 5.5	0.0111
+/gps/hist/point 5.6	0.183
+/gps/hist/point 5.7	0.0218
+/gps/hist/point 5.8	0.0218
+/gps/hist/point 5.9	0.0219
+/gps/hist/point 6	0.0220
+/gps/hist/point 6.1	0.0220
+/gps/hist/point 6.2	0.0221
+/gps/hist/point 6.3	0.0221
+/gps/hist/point 6.4	0.0221
+/gps/hist/point 6.5	0.0221
+/gps/hist/point 6.6	0.0222
+/gps/hist/point 6.7	0.0222
+/gps/hist/point 6.8	0.0223
+/gps/hist/point 6.9	0.0226
+/gps/hist/point 7	0.0318
+/gps/hist/point 7.1	0.0427
+/gps/hist/point 7.2	0.0510
+/gps/hist/point 7.3	0.0511
+/gps/hist/point 7.4	0.0511
+/gps/hist/point 7.5	0.345
+/gps/hist/point 7.6	0.104
+/gps/hist/point 7.7	0.0000
+/gps/hist/point 7.8	0.0000
+/gps/hist/point 7.9	0.0000
+/gps/hist/point 8	0.0000
+/gps/hist/point 8.1	0.0000
+/gps/hist/point 8.2	0.0000
+/gps/hist/point 8.3	0.0000
+/gps/hist/point 8.4	0.0000
+/gps/hist/point 8.5	0.0000
+/gps/hist/point 8.6	0.0000
+/gps/hist/point 8.7	0.0000
+/gps/hist/point 8.8	0.0000
+/gps/hist/point 8.9	0.0000
+/gps/hist/point 9	0.0000
+/gps/hist/point 9.1	0.0000
+/gps/hist/point 9.2	0.0000
+/gps/hist/point 9.3	0.0000
+/gps/hist/point 9.4	0.0000
+/gps/hist/point 9.5	0.0000
+/gps/hist/point 9.6	0.0000
+/gps/hist/point 9.7	0.0000
+/gps/hist/point 9.8	0.0000
+/gps/hist/point 9.9	0.0000
 #Custom Histogram (Novac11)
 #/gps/pos/centre -1000 0 0 mm
 #/gps/ene/type User
@@ -131,33 +210,33 @@
 #
 # Scoring mesh is used to calculate
 #  the dose in the phantom
-#/score/create/boxMesh boxMesh_1
+/score/create/boxMesh boxMesh_1
 #
-#/score/mesh/boxSize 5. 0.05 0.5 cm
-#/score/mesh/nBin 100 1 1
-#/score/mesh/translate/xyz -149.4 0 0 mm 
-#/score/quantity/doseDeposit dose Gy
+/score/mesh/boxSize 5. 0.05 0.5 cm
+/score/mesh/nBin 100 1 1
+/score/mesh/translate/xyz 50.5 0 0 mm 
+/score/quantity/doseDeposit dose Gy
 
 #
-#/score/close
+/score/close
 # Flux Scorer
 
-/score/create/boxMesh boxMesh_2 
-/score/mesh/boxSize 0.1  0.001 0.5 cm 
-/score/mesh/nBin 1 1 1
-/score/mesh/translate/xyz 3.68 0. -0.1 cm #to find position 0.18 = - Phantom_sizeX + mesh_X
-/score/mesh/rotate/rotateZ     90.   deg
-/score/quantity/flatSurfaceCurrent flux 0 F
-/score/filter/particle   eMinusFilter    e-
-/score/close
-/score/list  
+#/score/create/boxMesh boxMesh_2 
+#/score/mesh/boxSize 0.1  0.001 0.5 cm 
+#/score/mesh/nBin 1 1 1
+#/score/mesh/translate/xyz 3.68 0. -0.1 cm #to find position 0.18 = - Phantom_sizeX + mesh_X
+#/score/mesh/rotate/rotateZ     90.   deg
+#/score/quantity/flatSurfaceCurrent flux 0 F
+#/score/filter/particle   eMinusFilter    e-
+#/score/close
+#/score/list  
 
 
 /run/beamOn	1000000
 #/run/beamOn  211950
 #/run/beamOn 500000
 
-#/score/dumpQuantityToFile boxMesh_1 dose dose.out
-/score/dumpQuantityToFile boxMesh_2 flux flux.out
+/score/dumpQuantityToFile boxMesh_1 dose dose.out
+#/score/dumpQuantityToFile boxMesh_2 flux flux.out
 #/score/drawProjection boxMesh_1 dose
 #/score/drawProjection boxMesh_2 flux
