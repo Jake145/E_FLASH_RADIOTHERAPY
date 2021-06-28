@@ -61,7 +61,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   particleGun->SetParticleDefinition(particle);
 
   // qui definiamo la posizione della sorgente. Il fascio ha forma gaussiana e
-  // divergenza 6 gradi. Lo spettro energetico viene dato dalla macro a gps
+  // divergenza 5 gradi. Lo spettro energetico viene dato dalla macro a gps
 
   G4double defaultX0 = -1000.0 * CLHEP::mm;
   X0 = defaultX0;
@@ -78,7 +78,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   G4double defaultsigmaZ = 1.115 * CLHEP::mm;
   sigmaZ = defaultsigmaZ;
 
-  G4double defaultTheta = 6.0 * CLHEP::deg;
+  G4double defaultTheta = 6 * CLHEP::deg;
   Theta = defaultTheta;
 }
 
