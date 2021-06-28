@@ -78,7 +78,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   G4double defaultsigmaZ = 1.115 * CLHEP::mm;
   sigmaZ = defaultsigmaZ;
 
-  G4double defaultTheta = 5.0 * CLHEP::deg;
+  G4double defaultTheta = 6.0 * CLHEP::deg;
   Theta = defaultTheta;
 }
 
