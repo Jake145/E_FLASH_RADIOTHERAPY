@@ -371,7 +371,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
-  G4double phantomSizeX = 150 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 37.5 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
   
@@ -393,7 +393,8 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   //============================DETECTOR_SUPPORT=====================================//
   
   //G4double support_x=1*cm, wedge_X=1*mm,wedge_Y=1*mm,wedge_Z=1*cm;
-  G4double support_x=1*cm, wedge_X=Cz+2*d,wedge_Y=Cy+2*d,wedge_Z=Cx+Oz+2*d; 
+  
+  G4double support_x=1*cm, wedge_X=Cz+2*d+0.5*mm,wedge_Y=Cy+2*d+0.5*mm,wedge_Z=Cx+Oz+2*d+0.5*mm; 
   G4ThreeVector xTrans(-(support_x/2-wedge_X/2), 0, -wedge_Z/2);
   G4Box* support_whole= new G4Box("Support_w",support_x/2,10*cm,10*cm);
   G4Box* wedge = new G4Box("Wedge",wedge_X/2,wedge_Y/2,wedge_Z/2);
@@ -563,7 +564,7 @@ fCheckOverlaps = true;
       transform, logicCryst, "crystalphys", AirBox, false, 0,fCheckOverlaps);
      
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-  G4OpticalSurface *opteflonSurface_up =
+  /*G4OpticalSurface *opteflonSurface_up =
       new G4OpticalSurface("teflonSurface");
   opteflonSurface_up->SetType(dielectric_LUTDAVIS);
 
@@ -582,7 +583,7 @@ fCheckOverlaps = true;
       teflonSurface_up->GetSurface(phys_cryst, phantom_physical)
           ->GetSurfaceProperty());
   if (opticalSurface_teflon)
-    opticalSurface_teflon->DumpInfo();
+    opticalSurface_teflon->DumpInfo();*/
 //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
   // optic fiber
   //
@@ -649,7 +650,7 @@ fCheckOverlaps = true;
                                                       "OF_cladding_phys",
 
                                                       AirBox, false, 0,fCheckOverlaps);
-
+/*
   G4OpticalSurface *opcore_scint =
       new G4OpticalSurface("OpticFiberandScintillator");
   opcore_scint->SetType(dielectric_LUTDAVIS);
@@ -658,11 +659,11 @@ fCheckOverlaps = true;
   G4LogicalBorderSurface *core_scint_up = new G4LogicalBorderSurface(
       "teflonSurface_of_up", phys_cryst, physcore, opcore_scint);
   G4LogicalBorderSurface *core_scint_down = new G4LogicalBorderSurface(
-      "teflonSurface_of_down", physcore, phys_cryst, opcore_scint);
+      "teflonSurface_of_down", physcore, phys_cryst, opcore_scint);*/
   // OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooo
 
   G4VSolid * t1= new G4Box("t1",dX/2+fPTFEThickness, dY/2+fPTFEThickness, dZ/2+fPTFEThickness);
-  G4VSolid *t2 = new G4Box("t2",dX/2, dY/2, dZ/2);
+  G4VSolid *t2 = new G4Box("t2",dX/2 + 0.05 * mm, dY/2 + 0.05 * mm, dZ/2 + 0.05 * mm);
 G4RotationMatrix rotm_t2 = G4RotationMatrix();
   rotm_t2.rotateX(0 * deg);
   G4ThreeVector zTrans(0, 0,0);
@@ -672,7 +673,7 @@ G4RotationMatrix rotm_t2 = G4RotationMatrix();
 
   G4VSolid *tHole = new G4Tubs("sTeflonHole",
 			       0.0*cm,
-			       optic_fiber_clad_diameter  / 2,
+			       optic_fiber_clad_diameter  / 2 + 0.01*mm,
 			       fPTFEThickness/2,
 			       0.*deg,
 			       360.*deg);
@@ -689,7 +690,7 @@ G4RotationMatrix rotm_t2 = G4RotationMatrix();
   
   
   //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-  G4OpticalSurface *scintteflonSurface_up =
+  /*G4OpticalSurface *scintteflonSurface_up =
       new G4OpticalSurface("steflonSurface");
   scintteflonSurface_up->SetType(dielectric_LUTDAVIS);
 
@@ -787,7 +788,7 @@ G4OpticalSurface *cladteflonSurface_up =
    G4OpticalSurface* opticalSurface_9 = dynamic_cast <G4OpticalSurface*>
          (phantom_clad->GetSurface(phantom_physical,physclad)->
                                                         GetSurfaceProperty());
-   if (opticalSurface_9) opticalSurface_9->DumpInfo();
+   if (opticalSurface_9) opticalSurface_9->DumpInfo();*/
 
          green = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
   green->SetVisibility(true);
@@ -878,16 +879,16 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
  G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
   G4double opticfiber_core_dx = 5 * cm;
-     G4double fPTFEThickness = 1 * mm;
+     G4double fPTFEThickness = 1.5 * mm;
   G4double gap = 0 * mm; // a gap for wrapping, change to add gap
    G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap;
   //construct collimatore
     Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
   // constuct phantom
-  phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
-  //phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  //phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
+  phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
 
-  //detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
 
   return physicalTreatmentRoom;
 }
@@ -896,13 +897,13 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
 void FlashDetectorConstruction::ConstructSDandField() {
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
-/*
+
   G4MultiFunctionalDetector *cryst = new G4MultiFunctionalDetector("crystalSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
   G4VPrimitiveScorer *primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
   SetSensitiveDetector("CrystalLV", cryst);
-*/
+
   
 }
 
