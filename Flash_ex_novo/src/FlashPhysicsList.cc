@@ -76,7 +76,7 @@ void FlashPhysicsList::SetCuts() {
   cuts->SetProductionCut(0.1 * mm, G4ProductionCuts::GetIndex("e-"));
   cuts->SetProductionCut(0.1 * mm, G4ProductionCuts::GetIndex("e+"));
   region->SetProductionCuts(cuts);
-
+/*
   regName = "crystal_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts = new G4ProductionCuts;
@@ -99,5 +99,5 @@ void FlashPhysicsList::SetCuts() {
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts = new G4ProductionCuts;
   cuts->SetProductionCut(0.1 * mm);
-  region->SetProductionCuts(cuts);
+  region->SetProductionCuts(cuts);*/
 }
