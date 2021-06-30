@@ -509,7 +509,7 @@ G4double Position_coefficient= CollPos;
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
