@@ -23,9 +23,9 @@
 #/gps/pos/centre -1000 0 0 mm
 
 ##Custom Histogram (ElectronFlash)########################
-#/gps/pos/centre -1000 0 0 mm
-#/gps/ene/type User
-#/gps/hist/type energy
+/gps/pos/centre -1000 0 0 mm
+/gps/ene/type User
+/gps/hist/type energy
 /gps/hist/point 4	0.00112
 /gps/hist/point 4.1	0.00116
 /gps/hist/point 4.2	0.00116
