@@ -371,7 +371,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
-  G4double phantomSizeX = 9.62 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 22.5 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
   
