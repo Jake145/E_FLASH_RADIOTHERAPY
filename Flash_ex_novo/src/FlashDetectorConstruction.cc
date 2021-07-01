@@ -332,7 +332,7 @@ void FlashDetectorConstruction::DefineMaterials() {
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double CollPos, G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz) {
 
   G4Material *phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
@@ -371,7 +371,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
-  G4double phantomSizeX = 37.5 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 9.62 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
   
@@ -509,7 +509,7 @@ G4double Position_coefficient= CollPos;
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
@@ -563,30 +563,7 @@ fCheckOverlaps = true;
   G4VPhysicalVolume *phys_cryst = new G4PVPlacement(
       transform, logicCryst, "crystalphys", AirBox, false, 0,fCheckOverlaps);
      
-//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-  /*G4OpticalSurface *opteflonSurface_up =
-      new G4OpticalSurface("teflonSurface");
-  opteflonSurface_up->SetType(dielectric_LUTDAVIS);
 
-  opteflonSurface_up->SetModel(DAVIS);
-  opteflonSurface_up->SetFinish(PolishedTeflon_LUT);
-
-
- G4LogicalBorderSurface *teflonSurface_up =
-      new G4LogicalBorderSurface("teflonSurface_up", phys_cryst,
-                                 phantom_physical, opteflonSurface_up);
-  G4LogicalBorderSurface *teflonSurface_down =
-      new G4LogicalBorderSurface("teflonSurface_down", phantom_physical,
-                                 phys_cryst, opteflonSurface_up);
-
-  G4OpticalSurface *opticalSurface_teflon = dynamic_cast<G4OpticalSurface *>(
-      teflonSurface_up->GetSurface(phys_cryst, phantom_physical)
-          ->GetSurfaceProperty());
-  if (opticalSurface_teflon)
-    opticalSurface_teflon->DumpInfo();*/
-//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-  // optic fiber
-  //
   
   ////////////////////
 
@@ -650,17 +627,6 @@ fCheckOverlaps = true;
                                                       "OF_cladding_phys",
 
                                                       AirBox, false, 0,fCheckOverlaps);
-/*
-  G4OpticalSurface *opcore_scint =
-      new G4OpticalSurface("OpticFiberandScintillator");
-  opcore_scint->SetType(dielectric_LUTDAVIS);
-  opcore_scint->SetFinish(PolishedESRGrease_LUT);
-  opcore_scint->SetModel(DAVIS);
-  G4LogicalBorderSurface *core_scint_up = new G4LogicalBorderSurface(
-      "teflonSurface_of_up", phys_cryst, physcore, opcore_scint);
-  G4LogicalBorderSurface *core_scint_down = new G4LogicalBorderSurface(
-      "teflonSurface_of_down", physcore, phys_cryst, opcore_scint);*/
-  // OOOOOOOOOOOOOOOOOOOOOOOooooooooooooooooooooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOOOOOooooooooooo
 
   G4VSolid * t1= new G4Box("t1",dX/2+fPTFEThickness, dY/2+fPTFEThickness, dZ/2+fPTFEThickness);
   G4VSolid *t2 = new G4Box("t2",dX/2 + 0.05 * mm, dY/2 + 0.05 * mm, dZ/2 + 0.05 * mm);
@@ -689,106 +655,6 @@ G4RotationMatrix rotm_t2 = G4RotationMatrix();
  G4VPhysicalVolume *physiTeflon = new G4PVPlacement(yRot, G4ThreeVector(0, 0, (opticfiber_core_dx/2)), logicTeflon, "pTeflon", AirBox, false, 0,fCheckOverlaps);
   
   
-  //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-  /*G4OpticalSurface *scintteflonSurface_up =
-      new G4OpticalSurface("steflonSurface");
-  scintteflonSurface_up->SetType(dielectric_LUTDAVIS);
-
-  scintteflonSurface_up->SetModel(DAVIS);
-  scintteflonSurface_up->SetFinish(PolishedTeflon_LUT);
-
-
- G4LogicalBorderSurface *ssteflonSurface_up =
-      new G4LogicalBorderSurface("steflonSurface_up", phys_cryst,
-                                 physiTeflon, scintteflonSurface_up);
-  G4LogicalBorderSurface *ssteflonSurface_down =
-      new G4LogicalBorderSurface("steflonSurface_down", physiTeflon,
-                                 phys_cryst, scintteflonSurface_up);
-
-  G4OpticalSurface *scintteflonSurface_up_0 = dynamic_cast<G4OpticalSurface *>(
-      ssteflonSurface_up->GetSurface(phys_cryst, physiTeflon)
-          ->GetSurfaceProperty());
-  if (scintteflonSurface_up_0)
-    scintteflonSurface_up_0->DumpInfo();
-//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-  //OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-  G4OpticalSurface *phantteflonSurface_up =
-      new G4OpticalSurface("pteflonSurface");
-  phantteflonSurface_up->SetType(dielectric_LUTDAVIS);
-
-  phantteflonSurface_up->SetModel(DAVIS);
-  phantteflonSurface_up->SetFinish(PolishedTeflon_LUT);
-
-
- G4LogicalBorderSurface *pteflonSurface_up =
-      new G4LogicalBorderSurface("pteflonSurface_up", phant_phys,
-                                 physiTeflon, phantteflonSurface_up);
-  G4LogicalBorderSurface *pteflonSurface_down =
-      new G4LogicalBorderSurface("pteflonSurface_down", physiTeflon,
-                                 phant_phys, phantteflonSurface_up);
-
-  G4OpticalSurface *pteflonSurface_up_0 = dynamic_cast<G4OpticalSurface *>(
-      pteflonSurface_up->GetSurface(phant_phys, physiTeflon)
-          ->GetSurfaceProperty());
-  if (pteflonSurface_up_0)
-    pteflonSurface_up_0->DumpInfo();
-//OOOOOOOOOOOOOOOOOOoooooooooooooooOOOOOOOOOOOOOOOOOOOOOOOooooooooooooOOOOOOOOOOOOOOOoo
-
-G4OpticalSurface *cladteflonSurface_up =
-      new G4OpticalSurface("cteflonSurface");
-  cladteflonSurface_up->SetType(dielectric_LUTDAVIS);
-
-  cladteflonSurface_up->SetModel(DAVIS);
-  cladteflonSurface_up->SetFinish(PolishedTeflon_LUT);
-
-
- G4LogicalBorderSurface *cteflonSurface_up =
-      new G4LogicalBorderSurface("cteflonSurface_up", physclad,
-                                 physiTeflon, cladteflonSurface_up);
-  G4LogicalBorderSurface *cteflonSurface_down =
-      new G4LogicalBorderSurface("cteflonSurface_down", physiTeflon,
-                                 physclad, cladteflonSurface_up);
-
-  G4OpticalSurface *cteflonSurface_up_0 = dynamic_cast<G4OpticalSurface *>(
-      cteflonSurface_up->GetSurface(physclad, physiTeflon)
-          ->GetSurfaceProperty());
-  if (cteflonSurface_up_0)
-    cteflonSurface_up_0->DumpInfo();
- //0000000000000000000000000000000000000000000ooooooooooooooooooooooooooo000000000000000000000000ooo
-
- 
-  // Definiamo ora le ultime tre superfici ottiche interessanti
-
-  G4OpticalSurface *opcore_clad = new G4OpticalSurface("OpticFiberandClad");
-  opcore_clad->SetType(dielectric_LUTDAVIS);
-  opcore_clad->SetFinish(Polished_LUT);
-  opcore_clad->SetModel(DAVIS);
-
-  G4LogicalBorderSurface *core_clad_up = new G4LogicalBorderSurface(
-      "opfibclad_up", physcore, physclad, opcore_clad);
-  G4LogicalBorderSurface *core_clad_down = new G4LogicalBorderSurface(
-      "opfibclad_down", physclad, physcore, opcore_clad);
-
-  G4OpticalSurface *opticalSurface_8 = dynamic_cast<G4OpticalSurface *>(
-      core_clad_up->GetSurface(physcore, physclad)->GetSurfaceProperty());
-  if (opticalSurface_8)
-    opticalSurface_8->DumpInfo();
-
-  
-
- G4OpticalSurface* opphantom_clad = new G4OpticalSurface("PhantomandClad");
-   opphantom_clad->SetType(dielectric_LUTDAVIS);
-   opphantom_clad->SetFinish(Rough_LUT);
-   opphantom_clad->SetModel(DAVIS);
-
-   G4LogicalBorderSurface* phantom_clad=
-           new G4LogicalBorderSurface("opfibclad",
-                                  phantom_physical,physclad,opphantom_clad);
-
-   G4OpticalSurface* opticalSurface_9 = dynamic_cast <G4OpticalSurface*>
-         (phantom_clad->GetSurface(phantom_physical,physclad)->
-                                                        GetSurfaceProperty());
-   if (opticalSurface_9) opticalSurface_9->DumpInfo();*/
 
          green = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
   green->SetVisibility(true);
@@ -814,11 +680,7 @@ G4OpticalSurface *cladteflonSurface_up =
       new G4VisAttributes(G4Colour(135 / 255., 206 / 255., 235 / 255.));
   skyBlue1->SetVisibility(true);
   logicCryst->SetVisAttributes(red);
-  /* air_coupling_log->SetVisAttributes(yellow);
-  fPhotocath_log->SetVisAttributes(blue);
-   logicwrapper_long->SetVisAttributes(skyBlue1);
-        logicwrapper_side->SetVisAttributes(skyBlue1);
-            logicwrapper_little->SetVisAttributes(skyBlue1);*/
+ 
   opticfiber_core_log->SetVisAttributes(red);
   opticfiber_clad_log->SetVisAttributes(skyBlue1);
   opticfiber_cladding_log->SetVisAttributes(green);
@@ -885,10 +747,10 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   //construct collimatore
     Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
   // constuct phantom
-  phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
-  //phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  //phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
+  phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
 
-  //detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
 
   return physicalTreatmentRoom;
 }
@@ -898,11 +760,11 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 void FlashDetectorConstruction::ConstructSDandField() {
   G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
-  /*G4MultiFunctionalDetector *cryst = new G4MultiFunctionalDetector("crystalSD");
+  G4MultiFunctionalDetector *cryst = new G4MultiFunctionalDetector("crystalSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
   G4VPrimitiveScorer *primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
-  SetSensitiveDetector("CrystalLV", cryst);*/
+  SetSensitiveDetector("CrystalLV", cryst);
 
   
 }

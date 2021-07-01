@@ -46,8 +46,11 @@ target_link_libraries(flash ${Geant4_LIBRARIES})
 set(flash_SCRIPTS
   debug.mac
   init_vis.mac
-  run1.mac
+  run.mac
   vis.mac
+  ElectronFlash.mac
+  Novac7.mac
+  Novac11.mac
   )
 
 foreach(_script ${flash_SCRIPTS})

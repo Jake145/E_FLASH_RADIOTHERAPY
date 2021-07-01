@@ -51,11 +51,11 @@ public:
   virtual void BeginOfRunAction(const G4Run *); // inizia la run
   virtual void EndOfRunAction(const G4Run *);   // finisce la run
 
-  // void CountEvent()           { fGoodEvents += 1; };
+  void CountEvent(G4int Evs)           { fEvents += Evs; };
   void SumEdep(G4double Edep) { fSumEdep += Edep; };
 
 private:
-  // G4Accumulable<G4int>    fGoodEvents;
+  G4Accumulable<G4int>    fEvents;
   G4Accumulable<G4double> fSumEdep;
 };
 

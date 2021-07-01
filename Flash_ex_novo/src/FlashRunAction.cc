@@ -43,11 +43,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashRunAction::FlashRunAction() : G4UserRunAction(), fSumEdep(0.) {
+FlashRunAction::FlashRunAction() : G4UserRunAction(), fSumEdep(0.),fEvents(0) {
   // Register accumulable to the accumulable manager
   G4AccumulableManager *accumulableManager = G4AccumulableManager::Instance();
 
   accumulableManager->RegisterAccumulable(fSumEdep);
+    accumulableManager->RegisterAccumulable(fEvents);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,7 +111,7 @@ void FlashRunAction::EndOfRunAction(const G4Run *run) {
   G4cout
 
       << " Total Energy in crystal : "
-      << G4BestUnit(fSumEdep.GetValue(), "Energy") << G4endl
+      << G4BestUnit(fSumEdep.GetValue(), "Energy") << "\n"<<"Total events: " <<fEvents.GetValue()<<G4endl
       << "------------------------------------------------------------"
       << G4endl << G4endl;
 }
