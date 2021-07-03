@@ -91,7 +91,7 @@ void FlashDetectorConstruction::DefineMaterials() {
   G4NistManager *man = G4NistManager::Instance();
   G4int ncomponents;
   G4bool isotopes = false;
-  G4double prelude_density = 7.4 * g / cm3;
+  G4double prelude_density = 7.25 * g / cm3;
   G4Material *prelude =
       new G4Material("prelude", prelude_density, ncomponents = 4);
   prelude->AddElement(man->FindOrBuildElement("Lu"), 71 * perCent);
@@ -371,7 +371,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
-  G4double phantomSizeX = 22.5 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 22 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
   
@@ -382,7 +382,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
@@ -394,7 +394,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   
   //G4double support_x=1*cm, wedge_X=1*mm,wedge_Y=1*mm,wedge_Z=1*cm;
   
-  G4double support_x=1*cm, wedge_X=Cz+2*d+0.5*mm,wedge_Y=Cy+2*d+0.5*mm,wedge_Z=Cx+Oz+2*d+0.5*mm; 
+  G4double support_x=2*cm, wedge_X=Cz+2*d,wedge_Y=Cy+2*d,wedge_Z=Cx+Oz+2*d; 
   G4ThreeVector xTrans(-(support_x/2-wedge_X/2), 0, -wedge_Z/2);
   G4Box* support_whole= new G4Box("Support_w",support_x/2,10*cm,10*cm);
   G4Box* wedge = new G4Box("Wedge",wedge_X/2,wedge_Y/2,wedge_Z/2);
@@ -428,7 +428,7 @@ G4RotationMatrix rotmp = G4RotationMatrix();
 
   // Definition of the logical volume of the Phantom
   G4LogicalVolume* phantomLogicalVolume_2 =
-      new G4LogicalVolume(phantom_2, phantomMaterial, "phantomLog_2", 0, 0, 0);
+      new G4LogicalVolume(phantom_2, PMMA, "phantomLog_2", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   G4VPhysicalVolume * phant_phys_2 =
@@ -509,7 +509,7 @@ G4double Position_coefficient= CollPos;
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
@@ -629,7 +629,7 @@ fCheckOverlaps = true;
                                                       AirBox, false, 0,fCheckOverlaps);
 
   G4VSolid * t1= new G4Box("t1",dX/2+fPTFEThickness, dY/2+fPTFEThickness, dZ/2+fPTFEThickness);
-  G4VSolid *t2 = new G4Box("t2",dX/2 + 0.05 * mm, dY/2 + 0.05 * mm, dZ/2 + 0.05 * mm);
+  G4VSolid *t2 = new G4Box("t2",dX/2 , dY/2 , dZ/2 );
 G4RotationMatrix rotm_t2 = G4RotationMatrix();
   rotm_t2.rotateX(0 * deg);
   G4ThreeVector zTrans(0, 0,0);
@@ -741,7 +741,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
  G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
   G4double opticfiber_core_dx = 5 * cm;
-     G4double fPTFEThickness = 1.5 * mm;
+     G4double fPTFEThickness = 0.5 * mm;
   G4double gap = 0 * mm; // a gap for wrapping, change to add gap
    G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap;
   //construct collimatore
