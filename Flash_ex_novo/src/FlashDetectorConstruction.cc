@@ -208,9 +208,9 @@ void FlashDetectorConstruction::DefineMaterials() {
 
 
 
-  G4double fractionmass;
+
   std::vector<G4int> natoms;
-  std::vector<G4double> fractionMass;
+
   std::vector<G4String> elements;
   
   
@@ -328,12 +328,83 @@ void FlashDetectorConstruction::DefineMaterials() {
     myMPT3->DumpTable();
 
     TEFLON->SetMaterialPropertiesTable(myMPT3);
+    // EJ-212 Scintillator material
+    // Values from http://www.eljentechnology.com/index.php/joomla-overview/what-is-new-in-1-5/64-ej-212
+    // and from http://www.eljentechnology.com/images/stories/Technical_Information/Physical%20Constant%20of%20Plastic%20Scintillators.pdf
+    // Define the material and its composition
+    EJ212 = new G4Material("EJ-212", density=1.023*g/cm3, ncomponents=2);
+    EJ212->AddElement(fH, 0.5243407708);
+    EJ212->AddElement(fC, 0.4756592292);
     
-  
+    
+    // Add the material's optical properties
+    const G4int n_ej212_entries = 26;
+    
+    // All the properties are stored as key/value pairs. The keys are photon
+    // energies (not wavelengths!) the values are the property for that energy
+    G4double ej212_photon_energies[n_ej212_entries] =
+    {2.38*eV, 2.41*eV, 2.43*eV, 2.45*eV, 2.48*eV, 2.50*eV, 2.53*eV, 2.55*eV,
+        2.58*eV, 2.61*eV, 2.64*eV, 2.66*eV, 2.69*eV, 2.72*eV, 2.75*eV, 2.78*eV,
+        2.82*eV, 2.85*eV, 2.88*eV, 2.92*eV, 2.93*eV, 2.95*eV, 2.99*eV, 3.02*eV,
+        3.06*eV, 3.10*eV};
+    
+    // For scintillation you define the relative amplitudes of each photon
+    // energy in the emission spectrum. This is normalised to 1.
+    G4double ej212_emission_spectrum [n_ej212_entries] =
+    {0.005, 0.010, 0.020, 0.050, 0.095, 0.100, 0.100, 0.080, 0.070, 0.070,
+        0.067, 0.055, 0.045, 0.036, 0.031, 0.027, 0.023, 0.020, 0.018, 0.016,
+        0.014, 0.012, 0.010, 0.009, 0.008, 0.007};
+    
+    // Refractive index; this is static for most photon energies.
+    G4double ej212_refractive_index [n_ej212_entries] =
+        {1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58,
+         1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58, 1.58,
+         1.58, 1.58, 1.58, 1.58};
+    
+    // Absorption/Attenuation length (distance for signal to drop to 1/e intial)
+    G4double ej212_absorption_length [n_ej212_entries] =
+       {250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm,
+        250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm,
+        250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm, 250*cm};
+    
+    G4MaterialPropertiesTable* ej212_MPT = new G4MaterialPropertiesTable();
+    ej212_MPT->AddProperty("RINDEX",                // The property name
+                           ej212_photon_energies,   // photon energies (keys)
+                           ej212_refractive_index,  // value for that photon energy
+                           n_ej212_entries);        // number of key/value pairs
+    
+    // Add the scintillation emission spectrum (normalised to 1)
+    ej212_MPT->AddProperty("FASTCOMPONENT",
+                           ej212_photon_energies,
+                           ej212_emission_spectrum,
+                           n_ej212_entries);
+    
+    // Specify the absorption lengths
+    ej212_MPT->AddProperty("ABSLENGTH",
+                           ej212_photon_energies,
+                           ej212_absorption_length,
+                           n_ej212_entries);
+    
+    // How many photons / MeV / Step, this is assumed to be linear
+    ej212_MPT->AddConstProperty("SCINTILLATIONYIELD", 10000.0/MeV);
+    // Scale the variance of the number of photons / MeV / Step (e.g. due to
+    // doping of the material and/or Fano factor)
+    ej212_MPT->AddConstProperty("RESOLUTIONSCALE", 1.0);
+    // If EJ-212 had a
+    ej212_MPT->AddConstProperty("YIELDRATIO", 1.0);
+    // The time constant for the time evolution of the number of scintillation
+    // photons (i.e. tau in the formula 'A*exp(-t/tau)' )
+    ej212_MPT->AddConstProperty("FASTTIMECONSTANT", 2.4*ns);
+    // There is also a 'FASTSCINTILLATIONRISETIME' that accounts for the rise
+    // time of the scintillator but given that for EJ-212 this is 0.9ns
+    // it will be ignored.
+    
+    // Set the material table
+    EJ212->SetMaterialPropertiesTable(ej212_MPT);
 }
 
 
-G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double CollPos, G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz) {
+G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double CollPos, G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz,G4bool plastic_bool) {
 
   G4Material *phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
@@ -371,7 +442,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
-  G4double phantomSizeX = 22 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 4 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
   
@@ -393,31 +464,53 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   //============================DETECTOR_SUPPORT=====================================//
   
   //G4double support_x=1*cm, wedge_X=1*mm,wedge_Y=1*mm,wedge_Z=1*cm;
-  
-  G4double support_x=2*cm, wedge_X=Cz+2*d,wedge_Y=Cy+2*d,wedge_Z=Cx+Oz+2*d; 
+  if (plastic_bool == false){
+   support_x=2*cm;
+   G4double wedge_X=Cz+2*d,wedge_Y=Cy+2*d,wedge_Z=Cx+Oz+2*d; 
   G4ThreeVector xTrans(-(support_x/2-wedge_X/2), 0, -wedge_Z/2);
   G4Box* support_whole= new G4Box("Support_w",support_x/2,10*cm,10*cm);
   G4Box* wedge = new G4Box("Wedge",wedge_X/2,wedge_Y/2,wedge_Z/2);
-  G4SubtractionSolid* support_wedged = new G4SubtractionSolid("Wedged_Support",support_whole,wedge,0,xTrans);
+  //G4SubtractionSolid* support_wedged = new G4SubtractionSolid("Wedged_Support",support_whole,wedge,0,xTrans);
   
   DetectorSupport =
       new G4LogicalVolume(support_whole, PMMA, "SupportLog");
 
 G4RotationMatrix rotmp = G4RotationMatrix();
   rotmp.rotateY(0 * deg);
-  G4double supp_coordinateX=phantom_coordinateX+(phantomSizeX/2+support_x/2);
+   supp_coordinateX=phantom_coordinateX+(phantomSizeX/2+support_x/2);
 
   G4ThreeVector positionp = G4ThreeVector(supp_coordinateX,0,Cx/2);
   G4Transform3D transformp = G4Transform3D(rotmp, positionp);
   
-  G4VPhysicalVolume *DTsupp = new G4PVPlacement(
+  new G4PVPlacement(
       transformp, DetectorSupport, "supportphys", logicTreatmentRoom, false, 0);
       
   AirBox = new G4LogicalVolume(wedge, airNist, "filler");
   
     G4Transform3D transformab = G4Transform3D(rotmp, xTrans);
     
-  G4VPhysicalVolume *AB = new G4PVPlacement(transformab, AirBox, "f", DetectorSupport, false, 0);
+  new G4PVPlacement(transformab, AirBox, "f", DetectorSupport, false, 0);}
+  
+  else if (plastic_bool == true){
+  
+   support_x=2*cm;
+  G4Box* support_whole= new G4Box("Support_w",support_x/2,10*cm,10*cm);
+  
+  DetectorSupport =
+      new G4LogicalVolume(support_whole, PMMA, "SupportLog");
+
+G4RotationMatrix rotmp = G4RotationMatrix();
+  rotmp.rotateY(0 * deg);
+   supp_coordinateX=phantom_coordinateX+(phantomSizeX/2+support_x/2);
+
+  G4ThreeVector positionp = G4ThreeVector(supp_coordinateX,0,0);
+  G4Transform3D transformp = G4Transform3D(rotmp, positionp);
+  
+  new G4PVPlacement(
+      transformp, DetectorSupport, "supportphys", logicTreatmentRoom, false, 0);
+      
+  
+  }
   //=================================================================================//
   //================Second Piece of Phantom==================================//
   G4double phantom2_coordinateX= supp_coordinateX +(15 * cm -(phantomSizeX / 2 +support_x/2))+support_x/2;
@@ -431,7 +524,7 @@ G4RotationMatrix rotmp = G4RotationMatrix();
       new G4LogicalVolume(phantom_2, PMMA, "phantomLog_2", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
-  G4VPhysicalVolume * phant_phys_2 =
+ 
       new G4PVPlacement(0, phantomPosition_2, "phantomPhys_2", phantomLogicalVolume_2,
                         physicalTreatmentRoom, false, 0);
   
@@ -539,10 +632,38 @@ blue = new G4VisAttributes(G4Colour(0 / 255., 0./ 255., 255. / 255.));
 
 
 }
-G4VPhysicalVolume *FlashDetectorConstruction::BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx){
-fCheckOverlaps = true;
- //fiber dim
+G4VPhysicalVolume *FlashDetectorConstruction::BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx,G4bool plastic_bool){
 
+fCheckOverlaps = true;
+
+G4double maxStep_det = 0.1 * mm;
+  fStepLimit = new G4UserLimits(maxStep_det);
+  
+ green = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
+  green->SetVisibility(true);
+  red = new G4VisAttributes(G4Colour(255 / 255., 0. / 255., 0 / 255.));
+  red->SetVisibility(true);
+  G4VisAttributes *white = new G4VisAttributes(G4Colour());
+  white->SetVisibility(true);
+  // white -> SetForceSolid(true);
+
+  blue = new G4VisAttributes(G4Colour(0., 0., 1.));
+  blue->SetVisibility(true);
+  // blue -> SetForceSolid(true);
+
+  G4VisAttributes *grey = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5));
+  grey->SetVisibility(true);
+  // grey-> SetForceSolid(true);
+
+  G4VisAttributes *yellow = new G4VisAttributes(G4Colour(1., 1., 0.));
+  yellow->SetVisibility(true);
+  // yellow-> SetForceSolid(true);
+
+  G4VisAttributes *skyBlue1 =
+      new G4VisAttributes(G4Colour(135 / 255., 206 / 255., 235 / 255.));
+  skyBlue1->SetVisibility(true);
+ //fiber dim
+if( plastic_bool == false){
   G4double opticfiber_core_diameter = 0.98 * mm;
   G4double optic_fiber_clad_diameter = 2.2 * mm;
   G4double optic_fiber_cladding_diameter = 1. * mm;
@@ -560,7 +681,7 @@ fCheckOverlaps = true;
   G4ThreeVector position = G4ThreeVector(0, 0, (opticfiber_core_dx/2));
   G4Transform3D transform = G4Transform3D(rotm, position);
 
-  G4VPhysicalVolume *phys_cryst = new G4PVPlacement(
+  phys_cryst = new G4PVPlacement(
       transform, logicCryst, "crystalphys", AirBox, false, 0,fCheckOverlaps);
      
 
@@ -608,19 +729,19 @@ fCheckOverlaps = true;
   G4Transform3D transform_clad = G4Transform3D(rotm_clad, position_clad);
 
   //
-  G4VPhysicalVolume *physclad = new G4PVPlacement(
+  new G4PVPlacement(
       transform_clad,
       // position
       opticfiber_clad_log, "outerfiber", AirBox, false, 0,fCheckOverlaps);
 
-  G4VPhysicalVolume *physcore = new G4PVPlacement(transform_clad,
+  new G4PVPlacement(transform_clad,
                                                   // position
                                                   opticfiber_core_log,
 
                                                   "OF_core_phys",
 
                                                   AirBox, false, 0,fCheckOverlaps);
-  G4VPhysicalVolume *claddingcore = new G4PVPlacement(transform_clad,
+  new G4PVPlacement(transform_clad,
                                                       // position
                                                       opticfiber_cladding_log,
 
@@ -652,53 +773,18 @@ G4RotationMatrix rotm_t2 = G4RotationMatrix();
 
   G4SubtractionSolid* solidHoleTeflon = new G4SubtractionSolid("hollowHoleteflon", solidFullTeflon, tHole, yRot, zHole);
  G4LogicalVolume *logicTeflon = new G4LogicalVolume(solidHoleTeflon, TEFLON,"lTeflon",0,0,0);
- G4VPhysicalVolume *physiTeflon = new G4PVPlacement(yRot, G4ThreeVector(0, 0, (opticfiber_core_dx/2)), logicTeflon, "pTeflon", AirBox, false, 0,fCheckOverlaps);
+ new G4PVPlacement(yRot, G4ThreeVector(0, 0, (opticfiber_core_dx/2)), logicTeflon, "pTeflon", AirBox, false, 0,fCheckOverlaps);
   
   
 
-         green = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
-  green->SetVisibility(true);
-  red = new G4VisAttributes(G4Colour(255 / 255., 0. / 255., 0 / 255.));
-  red->SetVisibility(true);
-  G4VisAttributes *white = new G4VisAttributes(G4Colour());
-  white->SetVisibility(true);
-  // white -> SetForceSolid(true);
+        
 
-  G4VisAttributes *blue = new G4VisAttributes(G4Colour(0., 0., 1.));
-  blue->SetVisibility(true);
-  // blue -> SetForceSolid(true);
-
-  G4VisAttributes *grey = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5));
-  grey->SetVisibility(true);
-  // grey-> SetForceSolid(true);
-
-  G4VisAttributes *yellow = new G4VisAttributes(G4Colour(1., 1., 0.));
-  yellow->SetVisibility(true);
-  // yellow-> SetForceSolid(true);
-
-  G4VisAttributes *skyBlue1 =
-      new G4VisAttributes(G4Colour(135 / 255., 206 / 255., 235 / 255.));
-  skyBlue1->SetVisibility(true);
-  logicCryst->SetVisAttributes(red);
  
   opticfiber_core_log->SetVisAttributes(red);
   opticfiber_clad_log->SetVisAttributes(skyBlue1);
   opticfiber_cladding_log->SetVisAttributes(green);
-
-  G4double maxStep_det = 0.1 * mm;
-  fStepLimit = new G4UserLimits(maxStep_det);
-  logicCryst->SetUserLimits(fStepLimit);
-
-  logicCryst->SetVisAttributes(green);
-  
   logicTeflon->SetVisAttributes(red);
-
-
-
-  G4Region *CrystalRegion = new G4Region("crystal_reg");
-  logicCryst->SetRegion(CrystalRegion);
-  CrystalRegion->AddRootLogicalVolume(logicCryst);
-
+   
   G4Region *OFcoreRegion = new G4Region("OF_core_reg");
   opticfiber_core_log->SetRegion(OFcoreRegion);
   OFcoreRegion->AddRootLogicalVolume(opticfiber_core_log);
@@ -706,6 +792,42 @@ G4RotationMatrix rotm_t2 = G4RotationMatrix();
   G4Region *OFcladRegion = new G4Region("OF_clad_reg");
   opticfiber_clad_log->SetRegion(OFcladRegion);
   OFcladRegion->AddRootLogicalVolume(opticfiber_clad_log);
+  }
+  
+  else if (plastic_bool==true){
+  
+  G4Box *solidCryst = new G4Box("crystal", dX / 2, dY / 2, dZ / 2);
+  //
+  logicCryst = new G4LogicalVolume(solidCryst,   // its solid
+                                   EJ212,    // its material
+                                   "CrystalLV"); // its name
+  G4RotationMatrix rotm = G4RotationMatrix();
+  rotm.rotateY(90 * deg);
+
+  G4ThreeVector position = G4ThreeVector(-5*mm, 0, 0);
+  G4Transform3D transform = G4Transform3D(rotm, position);
+
+  phys_cryst = new G4PVPlacement(
+      transform, logicCryst, "crystalphys", DetectorSupport, false, 0,fCheckOverlaps);
+     
+
+  
+  
+  
+  }
+  
+   logicCryst->SetVisAttributes(red);
+  logicCryst->SetUserLimits(fStepLimit);
+
+  logicCryst->SetVisAttributes(green);
+  
+
+
+
+
+  G4Region *CrystalRegion = new G4Region("crystal_reg");
+  logicCryst->SetRegion(CrystalRegion);
+  CrystalRegion->AddRootLogicalVolume(logicCryst);
   return phys_cryst;
 }
 
@@ -738,19 +860,36 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   // -----------------------------
   // detector + phantom +Default dimensions
   //------------------------------
-
+  select_EJ212 = true;
+//LYSO_dimensions/////////////////////
+if (select_EJ212 == false){
  G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
-  G4double opticfiber_core_dx = 5 * cm;
-     G4double fPTFEThickness = 0.5 * mm;
+   opticfiber_core_dx_ = 5 * cm;
+      fPTFEThickness_ = 0.5 * mm;
   G4double gap = 0 * mm; // a gap for wrapping, change to add gap
-   G4double dX = cryst_dX - gap, dY = cryst_dY - gap, dZ = cryst_dZ - gap;
+    dX_ = cryst_dX - gap;
+     dY_ = cryst_dY - gap;
+      dZ_ = cryst_dZ - gap;
+//EJ212_dimensions/////////////////////////
+
+}
+else if (select_EJ212==true){
+ dX_=2 * cm;
+ dZ_ = 2 * mm;
+ dY_= 1*cm;
+   opticfiber_core_dx_ = 0 *mm;
+    fPTFEThickness_ = 0*mm;
+}
+
   //construct collimatore
     Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
-  // constuct phantom
+  // constuct phantom//////
+  
   //phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
-  phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
-
-  detector_physical=BuildDetector(dX,dY,dZ,fPTFEThickness,opticfiber_core_dx);
+  phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
+///construct Detector//////
+  detector_physical=BuildDetector(dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
+  
 
   return physicalTreatmentRoom;
 }

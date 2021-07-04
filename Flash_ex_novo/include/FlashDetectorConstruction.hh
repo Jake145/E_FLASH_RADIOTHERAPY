@@ -59,9 +59,9 @@ public:
   G4VPhysicalVolume *physicalTreatmentRoom;
 G4LogicalVolume *logicTreatmentRoom;
   // FlashDetectorConstruction();
-  G4VPhysicalVolume * ConstructPhantom_Support(G4double CollPos, G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz);
+  G4VPhysicalVolume * ConstructPhantom_Support(G4double CollPos, G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz,G4bool plastic_bool);
   G4VPhysicalVolume * ConstructPhantom(G4double CollPos);
-  G4VPhysicalVolume *BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx);
+  G4VPhysicalVolume *BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx, G4bool plastic_bool);
   FlashDetectorConstruction(); // costruttore ci passo il puntatore al mondo
   virtual ~FlashDetectorConstruction(); // distruttore
 
@@ -98,8 +98,15 @@ private:
   G4VPhysicalVolume *phantom_physical;
   G4UserLimits *fStepLimit;
   G4bool fCheckOverlaps; // booleano per vedere se vi sono degli overlap nella
-                         // geometria (preso da B3a)
-
+  G4bool select_EJ212;                       // geometria (preso da B3a)
+G4double supp_coordinateX;
+G4double support_x;
+G4VPhysicalVolume *phys_cryst;
+G4double dX_;
+G4double dY_;
+G4double dZ_;
+G4double opticfiber_core_dx_;
+G4double fPTFEThickness_;
   G4Element *fN;
   G4Element *fO;
 
@@ -111,6 +118,7 @@ private:
   G4Material *PMMA;
   G4Material *PMMA_optic;
   G4Material *PE;
+  G4Material * EJ212;
   G4Tubs *fPhotocath;
 
   G4LogicalVolume *fPhotocath_log;
