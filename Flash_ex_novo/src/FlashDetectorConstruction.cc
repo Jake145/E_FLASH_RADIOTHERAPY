@@ -332,9 +332,9 @@ void FlashDetectorConstruction::DefineMaterials() {
     // Values from http://www.eljentechnology.com/index.php/joomla-overview/what-is-new-in-1-5/64-ej-212
     // and from http://www.eljentechnology.com/images/stories/Technical_Information/Physical%20Constant%20of%20Plastic%20Scintillators.pdf
     // Define the material and its composition
-    EJ212 = new G4Material("EJ-212", density=1.023*g/cm3, ncomponents=2);
-    EJ212->AddElement(fH, 0.5243407708);
-    EJ212->AddElement(fC, 0.4756592292);
+    ej212 = new G4Material("EJ-212", density=1.023*g/cm3, ncomponents=2);
+    ej212->AddElement(fH, 0.5243407708);
+    ej212->AddElement(fC, 0.4756592292);
     
     
     // Add the material's optical properties
@@ -400,7 +400,8 @@ void FlashDetectorConstruction::DefineMaterials() {
     // it will be ignored.
     
     // Set the material table
-    EJ212->SetMaterialPropertiesTable(ej212_MPT);
+    ej212->SetMaterialPropertiesTable(ej212_MPT);
+    EJ212=nist->FindOrBuildMaterial("EJ-212");
 }
 
 
@@ -442,7 +443,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
-  G4double phantomSizeX = 4 * mm, phantomSizeY = 30.0 * cm,
+  G4double phantomSizeX = 11 * mm -5 * mm, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
   
@@ -636,7 +637,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::BuildDetector(G4double dX,G4double
 
 fCheckOverlaps = true;
 
-G4double maxStep_det = 0.1 * mm;
+G4double maxStep_det = 0.01 * mm;
   fStepLimit = new G4UserLimits(maxStep_det);
   
  green = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
@@ -875,8 +876,8 @@ if (select_EJ212 == false){
 }
 else if (select_EJ212==true){
  dX_=2 * cm;
- dZ_ = 2 * mm;
- dY_= 1*cm;
+ dY_ = 2 * mm;
+ dZ_= 1*cm;
    opticfiber_core_dx_ = 0 *mm;
     fPTFEThickness_ = 0*mm;
 }

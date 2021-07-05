@@ -118,6 +118,7 @@ G4double fPTFEThickness_;
   G4Material *PMMA;
   G4Material *PMMA_optic;
   G4Material *PE;
+    G4Material * ej212;
   G4Material * EJ212;
   G4Tubs *fPhotocath;
 
