@@ -443,7 +443,9 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
-  G4double phantomSizeX = 11 * mm -5 * mm, phantomSizeY = 30.0 * cm,
+ G4double Detector_size=5 * mm; //this is the distance from the phantom to the barycenter of the detector
+ G4double Measurement_point=41 * mm;
+  G4double phantomSizeX = Measurement_point - Detector_size, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
   
@@ -603,7 +605,7 @@ G4double Position_coefficient= CollPos;
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
@@ -876,8 +878,8 @@ if (select_EJ212 == false){
 }
 else if (select_EJ212==true){
  dX_=2 * cm;
- dY_ = 2 * mm;
- dZ_= 1*cm;
+ dZ_ = 2 * mm;
+ dY_= 1*cm;
    opticfiber_core_dx_ = 0 *mm;
     fPTFEThickness_ = 0*mm;
 }
@@ -886,10 +888,10 @@ else if (select_EJ212==true){
     Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
   // constuct phantom//////
   
-  //phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
-  phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
+  phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
+  //phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
 ///construct Detector//////
-  detector_physical=BuildDetector(dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
+  //detector_physical=BuildDetector(dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
   
 
   return physicalTreatmentRoom;
@@ -898,13 +900,13 @@ else if (select_EJ212==true){
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlashDetectorConstruction::ConstructSDandField() {
-  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+  /*G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
   G4MultiFunctionalDetector *cryst = new G4MultiFunctionalDetector("crystalSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
   G4VPrimitiveScorer *primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
-  SetSensitiveDetector("CrystalLV", cryst);
+  SetSensitiveDetector("CrystalLV", cryst);*/
 
   
 }
