@@ -98,7 +98,8 @@ private:
   G4VPhysicalVolume *phantom_physical;
   G4UserLimits *fStepLimit;
   G4bool fCheckOverlaps; // booleano per vedere se vi sono degli overlap nella
-  G4bool select_EJ212;                       // geometria (preso da B3a)
+  G4bool select_EJ212;                     
+    G4bool Detector_builder;                       
 G4double supp_coordinateX;
 G4double support_x;
 G4VPhysicalVolume *phys_cryst;

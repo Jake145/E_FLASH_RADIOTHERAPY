@@ -443,8 +443,8 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
   
  G4double Position_coefficient=  CollPos;
- G4double Detector_size=5 * mm; //this is the distance from the phantom to the barycenter of the detector
- G4double Measurement_point=41 * mm;
+ G4double Detector_size=1.5 * mm; //this is the distance from the phantom to the barycenter of the detector
+ G4double Measurement_point=3.5 * mm;
   G4double phantomSizeX = Measurement_point - Detector_size, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
@@ -863,7 +863,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   // -----------------------------
   // detector + phantom +Default dimensions
   //------------------------------
-  select_EJ212 = true;
+  select_EJ212 = false;
 //LYSO_dimensions/////////////////////
 if (select_EJ212 == false){
  G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
@@ -885,14 +885,18 @@ else if (select_EJ212==true){
 }
 
   //construct collimatore
+   Detector_builder = true;
+  
     Collimator = new Applicator80BeamLine(physicalTreatmentRoom);
   // constuct phantom//////
-  
+  if (Detector_builder == false){
   phantom_physical=ConstructPhantom(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash);
-  //phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
+  }
+  else if (Detector_builder == true){
+  phantom_physical=ConstructPhantom_Support(Collimator->finalApplicatorXPositionFlash + Collimator->hightFinalApplicatorFlash,dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
 ///construct Detector//////
-  //detector_physical=BuildDetector(dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
-  
+  detector_physical=BuildDetector(dX_,dY_,dZ_,fPTFEThickness_,opticfiber_core_dx_,select_EJ212);
+  }
 
   return physicalTreatmentRoom;
 }
@@ -900,14 +904,15 @@ else if (select_EJ212==true){
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void FlashDetectorConstruction::ConstructSDandField() {
-  /*G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+if (Detector_builder == true){
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
   G4MultiFunctionalDetector *cryst = new G4MultiFunctionalDetector("crystalSD");
   G4SDManager::GetSDMpointer()->AddNewDetector(cryst);
   G4VPrimitiveScorer *primitiv1 = new G4PSEnergyDeposit("edep");
   cryst->RegisterPrimitive(primitiv1);
-  SetSensitiveDetector("CrystalLV", cryst);*/
-
+  SetSensitiveDetector("CrystalLV", cryst);
+}
   
 }
 

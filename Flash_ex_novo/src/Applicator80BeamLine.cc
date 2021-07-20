@@ -650,7 +650,7 @@ void Applicator80BeamLine::FlashBeamLineFinalApplicator() {
   // const G4double outRadiusFinalApplicatorFlash = 45. *mm;
   // const G4double innRadiusFinalApplicatorFlash = 40. *mm;
   //const G4double hightFinalApplicatorFlash = 250.0 * mm;
-  hightFinalApplicatorFlash = 300.0 * mm; //300 corresponds to ssd of 100 cm
+  hightFinalApplicatorFlash = 200.0 * mm; //300 corresponds to ssd of 100 cm
   const G4double startAngleFinalApplicatorFlash = 0. * deg;
   //G4double position_factor= 1000.56 - hightFinalApplicatorFlash;
   const G4double spanningAngleFinalApplicatorFlash = 360. * deg;
