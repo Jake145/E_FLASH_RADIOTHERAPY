@@ -71,7 +71,7 @@ int main(int argc,char** argv)
 //  G4RunManager* runManager = new G4RunManager;
 //#endif
 // Comment to unset the seed.
-   G4Random::setTheSeed(42);
+   G4Random::setTheSeed(5454545);
 
   // Set mandatory initialization classes
   //

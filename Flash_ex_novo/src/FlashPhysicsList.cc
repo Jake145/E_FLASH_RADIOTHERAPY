@@ -31,6 +31,8 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option4.hh"
+#include "G4EmLivermorePhysics.hh"  
 #include "G4OpticalPhysics.hh"
 #include "G4ProductionCuts.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -54,6 +56,7 @@ FlashPhysicsList::FlashPhysicsList() : G4VModularPhysicsList() {
 
   // EM physics
   RegisterPhysics(new G4EmPenelopePhysics());
+    //RegisterPhysics(new G4EmStandardPhysics_option4());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

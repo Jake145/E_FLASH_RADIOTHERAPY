@@ -444,11 +444,11 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   
  G4double Position_coefficient=  CollPos;
  G4double Detector_size=1.5 * mm; //this is the distance from the phantom to the barycenter of the detector
- G4double Measurement_point=3.5 * mm;
+ G4double Measurement_point=1.5 * mm;
   G4double phantomSizeX = Measurement_point - Detector_size, phantomSizeY = 30.0 * cm,
            phantomSizeZ = 30.0 * cm, phantom_coordinateX=(Position_coefficient * mm + phantomSizeX/2);
   
-  
+  if(phantomSizeX!=0){
     G4ThreeVector phantomPosition = G4ThreeVector(phantom_coordinateX , 0. * mm, 0. * mm);
   // Definition of the solid volume of the Phantom
   phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
@@ -461,7 +461,7 @@ G4VPhysicalVolume * FlashDetectorConstruction::ConstructPhantom_Support(G4double
   // Definition of the physics volume of the Phantom
   phant_phys =
       new G4PVPlacement(0, phantomPosition, "phantomPhys", phantomLogicalVolume,physicalTreatmentRoom, false, 0);
-  
+  }
     
     
   //============================DETECTOR_SUPPORT=====================================//
@@ -536,8 +536,9 @@ G4RotationMatrix rotmp = G4RotationMatrix();
   //==========================================================================//
   
   G4Region *PhantomRegion = new G4Region("Phantom_reg");
-  phantomLogicalVolume->SetRegion(PhantomRegion);
-  PhantomRegion->AddRootLogicalVolume(phantomLogicalVolume);
+  
+  if(phantomSizeX!=0){phantomLogicalVolume->SetRegion(PhantomRegion);
+  PhantomRegion->AddRootLogicalVolume(phantomLogicalVolume);}
 
   // Visualisation attributes of the phantom
   red = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
@@ -545,13 +546,15 @@ G4RotationMatrix rotmp = G4RotationMatrix();
 
 blue = new G4VisAttributes(G4Colour(0 / 255., 0./ 255., 255. / 255.));
   blue->SetVisibility(true);
+G4double maxStep = 0.1 * mm;
+  fStepLimit = new G4UserLimits(maxStep);
 
-  phantomLogicalVolume->SetVisAttributes(red);
+  if(phantomSizeX!=0){phantomLogicalVolume->SetVisAttributes(red);
+    phantomLogicalVolume->SetUserLimits(fStepLimit);
+    }
  DetectorSupport->SetVisAttributes(blue);
    phantomLogicalVolume_2->SetVisAttributes(red);
-  G4double maxStep = 0.1 * mm;
-  fStepLimit = new G4UserLimits(maxStep);
-  phantomLogicalVolume->SetUserLimits(fStepLimit);
+  
 
   return phant_phys;
 }
@@ -605,7 +608,7 @@ G4double Position_coefficient= CollPos;
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
