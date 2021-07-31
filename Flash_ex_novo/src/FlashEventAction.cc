@@ -39,18 +39,10 @@
 #include "G4THitsMap.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 FlashEventAction::FlashEventAction(FlashRunAction *runAction)
     : G4UserEventAction(), fRunAction(runAction), fCollID_cryst(-1) {}
-// inizializzo il costruttore dando gli argomenti appropriati alle funzioni
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-FlashEventAction::~FlashEventAction() // distruttore
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+FlashEventAction::~FlashEventAction() {}
 
 void FlashEventAction::BeginOfEventAction(const G4Event *) {
   G4cout << "Starting event: "
@@ -58,9 +50,6 @@ void FlashEventAction::BeginOfEventAction(const G4Event *) {
          << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// void FlashEventAction::EndOfEventAction(const G4Event* evt)
 void FlashEventAction::EndOfEventAction(const G4Event *evt) {
   G4HCofThisEvent *HCE = evt->GetHCofThisEvent();
   if (!HCE)
@@ -73,18 +62,17 @@ void FlashEventAction::EndOfEventAction(const G4Event *evt) {
 
   std::map<G4int, G4double *>::iterator itr;
   G4double edep = 0.;
-  G4int Number_of_events=0;
+  G4int Number_of_events = 0;
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
-    /// G4int copyNb  = (itr->first);
+
     edep = *(itr->second);
   };
-  if (edep > 0.){
+  if (edep > 0.) {
     fRunAction->SumEdep(edep);
-    fRunAction->CountEvent(1);}
+    fRunAction->CountEvent(1);
+  }
 
   G4cout << "Ending event: "
          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
          << G4endl;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

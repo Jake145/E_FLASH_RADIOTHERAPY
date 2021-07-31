@@ -34,28 +34,21 @@
 #include "G4RunManager.hh"
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-class G4Run; // Dichiaro la classe della run
+class G4Run;
 
-/// Run action class
-///
-/// In EndOfRunAction(), it calculates the dose in the selected volume
-/// from the energy deposit accumulated via stepping and event actions.
-/// The computed dose is then printed on the screen.
-
-class FlashRunAction : public G4UserRunAction // dichiaro il run action
-{
+class FlashRunAction : public G4UserRunAction {
 public:
-  FlashRunAction();          // costruttore
-  virtual ~FlashRunAction(); // distruttore
+  FlashRunAction();
+  virtual ~FlashRunAction();
 
-  virtual void BeginOfRunAction(const G4Run *); // inizia la run
-  virtual void EndOfRunAction(const G4Run *);   // finisce la run
+  virtual void BeginOfRunAction(const G4Run *);
+  virtual void EndOfRunAction(const G4Run *);
 
-  void CountEvent(G4int Evs)           { fEvents += Evs; };
+  void CountEvent(G4int Evs) { fEvents += Evs; };
   void SumEdep(G4double Edep) { fSumEdep += Edep; };
 
 private:
-  G4Accumulable<G4int>    fEvents;
+  G4Accumulable<G4int> fEvents;
   G4Accumulable<G4double> fSumEdep;
 };
 

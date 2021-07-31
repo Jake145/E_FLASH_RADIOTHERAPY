@@ -33,10 +33,6 @@
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
 #include <fstream>
-/// Stacking action class : manage the newly generated particles
-///
-/// One wishes do not track secondary neutrino.Therefore one kills it
-/// immediately, before created particles will  put in a stack.
 
 class FlashStackingAction : public G4UserStackingAction {
 public:
@@ -55,7 +51,5 @@ private:
   G4int fBremstralung;
   G4int fFluo;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

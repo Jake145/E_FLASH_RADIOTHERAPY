@@ -33,32 +33,23 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class FlashRunAction; // definisco la classe Run Action
+class FlashRunAction;
 
-/// Event action class
-///
+class FlashEventAction : public G4UserEventAction
 
-class FlashEventAction
-    : public G4UserEventAction // definisco la Event Action che eredita da
-                               // //G4UserEventAction
 {
 public:
-  FlashEventAction(FlashRunAction *runAction); // definisco il costruttore che
-                                               // ha in argomento un
-                                               // //puntatore runAction
-  virtual ~FlashEventAction(); // definisco il distruttore
+  FlashEventAction(FlashRunAction *runAction);
 
-  virtual void BeginOfEventAction(
-      const G4Event *event); // definisco la funzione che inizializza
-                             // //l'evento
-  virtual void
-  EndOfEventAction(const G4Event *event); // similmente quello che lo termina
+  virtual ~FlashEventAction();
+
+  virtual void BeginOfEventAction(const G4Event *event);
+
+  virtual void EndOfEventAction(const G4Event *event);
 
 private:
   FlashRunAction *fRunAction;
   G4int fCollID_cryst;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

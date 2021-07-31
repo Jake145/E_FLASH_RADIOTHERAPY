@@ -36,29 +36,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashActionInitialization::FlashActionInitialization() // definisco il
-                                                       // costruttore
+FlashActionInitialization::FlashActionInitialization()
     : G4VUserActionInitialization() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-FlashActionInitialization::~FlashActionInitialization() // definisco il
-                                                        // distruttore
+FlashActionInitialization::~FlashActionInitialization()
+
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashActionInitialization::BuildForMaster()
-    const // definisco il metodo per far funzionare il MT
-{
+void FlashActionInitialization::BuildForMaster() const {
   FlashRunAction *runAction = new FlashRunAction;
   SetUserAction(runAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void FlashActionInitialization::Build() const // metodo per costruire il tutto
-{
+void FlashActionInitialization::Build() const {
   SetUserAction(new FlashPrimaryGeneratorAction);
 
   FlashRunAction *runAction = new FlashRunAction;

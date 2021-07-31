@@ -29,17 +29,16 @@
 
 #include "FlashPhysicsList.hh"
 #include "G4DecayPhysics.hh"
+#include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4EmLivermorePhysics.hh"  
 #include "G4OpticalPhysics.hh"
 #include "G4ProductionCuts.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4SystemOfUnits.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashPhysicsList::FlashPhysicsList() : G4VModularPhysicsList() {
   SetVerboseLevel(1);
@@ -51,22 +50,18 @@ FlashPhysicsList::FlashPhysicsList() : G4VModularPhysicsList() {
   RegisterPhysics(new G4RadioactiveDecayPhysics());
 
   // optical physics
-  //G4int verbose_opt=1;
-  //RegisterPhysics(new G4OpticalPhysics());
+  // G4int verbose_opt=1;
+  // RegisterPhysics(new G4OpticalPhysics());
 
   // EM physics
   RegisterPhysics(new G4EmPenelopePhysics());
-    //RegisterPhysics(new G4EmStandardPhysics_option4());
+  // RegisterPhysics(new G4EmStandardPhysics_option4());
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashPhysicsList::~FlashPhysicsList() {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void FlashPhysicsList::SetCuts() {
-  // G4VUserPhysicsList::SetCuts();
+
   SetCutsWithDefault();
   G4Region *region;
   G4String regName;
@@ -80,7 +75,7 @@ void FlashPhysicsList::SetCuts() {
   cuts->SetProductionCut(0.1 * mm, G4ProductionCuts::GetIndex("e+"));
   region->SetProductionCuts(cuts);
 
-   regName = "crystal_reg";
+  regName = "crystal_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts = new G4ProductionCuts;
   cuts->SetProductionCut(0.001 * mm, G4ProductionCuts::GetIndex("gamma"));
@@ -89,18 +84,18 @@ void FlashPhysicsList::SetCuts() {
   // cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("proton"));
   region->SetProductionCuts(cuts);
 
- /*regName = "OF_core_reg";
-  region = G4RegionStore::GetInstance()->GetRegion(regName);
-  cuts = new G4ProductionCuts;
-  cuts->SetProductionCut(0.1 * mm);
-  cuts->SetProductionCut(0.01 * mm, G4ProductionCuts::GetIndex("gamma"));
-  cuts->SetProductionCut(0.001 * mm, G4ProductionCuts::GetIndex("e-"));
-  cuts->SetProductionCut(0.1 * mm, G4ProductionCuts::GetIndex("e+"));
-  region->SetProductionCuts(cuts);
+  /*regName = "OF_core_reg";
+   region = G4RegionStore::GetInstance()->GetRegion(regName);
+   cuts = new G4ProductionCuts;
+   cuts->SetProductionCut(0.1 * mm);
+   cuts->SetProductionCut(0.01 * mm, G4ProductionCuts::GetIndex("gamma"));
+   cuts->SetProductionCut(0.001 * mm, G4ProductionCuts::GetIndex("e-"));
+   cuts->SetProductionCut(0.1 * mm, G4ProductionCuts::GetIndex("e+"));
+   region->SetProductionCuts(cuts);
 
-  regName = "OF_clad_reg";
-  region = G4RegionStore::GetInstance()->GetRegion(regName);
-  cuts = new G4ProductionCuts;
-  cuts->SetProductionCut(0.1 * mm);
-  region->SetProductionCuts(cuts);*/
+   regName = "OF_clad_reg";
+   region = G4RegionStore::GetInstance()->GetRegion(regName);
+   cuts = new G4ProductionCuts;
+   cuts->SetProductionCut(0.1 * mm);
+   region->SetProductionCuts(cuts);*/
 }

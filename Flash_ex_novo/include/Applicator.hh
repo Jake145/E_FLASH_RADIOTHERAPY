@@ -23,13 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the first version of Flash, a Geant4-based application
 //
 //
-//////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef Applicator80BeamLine_H
-#define Applicator80BeamLine_H 1
+#ifndef Applicator_H
+#define Applicator_H 1
 
 #include "FlashDetectorConstruction.hh"
 #include "G4Box.hh"
@@ -43,34 +41,31 @@
 
 class G4VPhysicalVolume;
 
-class Applicator80BeamLine // definisco la nuova classe della collimazione
-{
+class Applicator {
 public:
-  Applicator80BeamLine(
-      G4VPhysicalVolume *); // il costruttore prende il puntatore al mondo
-  ~Applicator80BeamLine();  // distruttore
+  Applicator(G4VPhysicalVolume *);
+  ~Applicator();
 
-  void ConstructCollimator(
-      G4VPhysicalVolume *); // metodo per costruire tutta la collimazione
+  void ConstructCollimator(G4VPhysicalVolume *);
 
-  void FlashBeamLineVacuumSource(); // qui si costruiscono le varie parti della
-                                    // collimazione
+  void FlashBeamLineVacuumSource();
+
   void FlashBeamLineTitaniumWindows();
   void FlashBeamLineFirstApplicator();
 
   void FlashBeamLineJunctions();
   void FlashBeamLineFinalApplicator();
 
-    G4double initial_pos;
- G4double finalApplicatorXPositionFlash;
+  G4double initial_pos;
+  G4double finalApplicatorXPositionFlash;
   G4double hightFinalApplicatorFlash;
-private:
-  //G4double FieldDimensionFactor; // Valore che determina le dimensioni del campo
-  G4VPhysicalVolume *motherPhys;        // mondo fisico
-  void SetDefaultDimensions();          // setta le dimensioni di default
-  void ConstructApplicator80BeamLine(); // costruisce tutto l'applicatore
 
-  G4VisAttributes *blue; // colori vari
+private:
+  G4VPhysicalVolume *motherPhys;
+  void SetDefaultDimensions();
+  void ConstructApplicator();
+
+  G4VisAttributes *blue;
   G4VisAttributes *gray;
   G4VisAttributes *white;
   G4VisAttributes *red;
@@ -80,27 +75,22 @@ private:
   G4VisAttributes *darkOrange3;
   G4VisAttributes *skyBlue;
   G4VisAttributes *magenta;
-	G4double Final_Attachment_X;
-  // Variabili del primo pezzo del collimatore
+  G4double Final_Attachment_X;
+
   G4double innerRadiusFirstApplicatorFlash, OuterRadiusFirstApplicatorFlash;
   G4Tubs *solidFirstApplicatorFlash;
   G4VPhysicalVolume *physiFirstApplicatorFlash;
   G4Material *firstApplicatorMaterialFlash;
 
-  // Variabili del secondo pezzo del collimatore
   G4double innerRadiusFinalApplicatorFlash, OuterRadiusFinalApplicatorFlash;
   G4Tubs *solidFinalApplicatorFlash;
   G4VPhysicalVolume *physiFinalApplicatorFlash;
   G4Material *finalApplicatorMaterialFlash;
 
-  // Primo raccordo tra pezzi di collimatore e altre parti (finestra di titanio
-  // ecc)
   G4Tubs *solidGiunz1FinalAppFlash;
   G4VPhysicalVolume *physiGiunz1FinalAppFlash;
   G4Material *Giunz1FinalAppMaterialFlash;
 
-  // Secondo raccordo tra pezzi di collimatore e altre parti (finestra di
-  // titanio ecc)
   G4Tubs *solidGiunz2FinalAppFlash;
   G4VPhysicalVolume *physiGiunz2FinalAppFlash;
   G4Material *Giunz2FinalAppMaterialFlash;

@@ -32,82 +32,73 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-//#include "G4Element.hh"
+
 #include "G4Material.hh"
 #include "tls.hh"
-//#include "G4tubs.hh"
-//#include "G4Box.hh"
+
 #include "G4UserLimits.hh"
 
-class G4VPhysicalVolume; // definisco la classe del volume fisico
-class G4LogicalVolume;   // definisco la classe del volume logico
-class Applicator80BeamLine;
+class G4VPhysicalVolume;
+class G4LogicalVolume;
+class Applicator;
 class G4VSensitiveDetector;
 class G4NistManager;
 class G4Tubs;
 class G4Box;
 class G4Element;
 class G4VisAttributes;
-// class FSensitiveDetector;
-// class OpticFiberSD;
-// class PhotoDiodeSD;
-class FlashDetectorConstruction
-    : public G4VUserDetectorConstruction // classe della costruzione del
-                                         // detector e del fantoccio
-{
+
+class FlashDetectorConstruction : public G4VUserDetectorConstruction {
 public:
   G4VPhysicalVolume *physicalTreatmentRoom;
-G4LogicalVolume *logicTreatmentRoom;
-  // FlashDetectorConstruction();
-  G4VPhysicalVolume * ConstructPhantom_Support(G4double CollPos, G4double Cx,G4double Cy,G4double Cz,G4double d,G4double Oz,G4bool plastic_bool);
-  G4VPhysicalVolume * ConstructPhantom(G4double CollPos);
-  G4VPhysicalVolume *BuildDetector(G4double dX,G4double dY,G4double dZ,G4double fPTFEThickness,G4double opticfiber_core_dx, G4bool plastic_bool);
-  FlashDetectorConstruction(); // costruttore ci passo il puntatore al mondo
-  virtual ~FlashDetectorConstruction(); // distruttore
+  G4LogicalVolume *logicTreatmentRoom;
 
-  virtual G4VPhysicalVolume *
-  Construct(); // dichiaro il metodo per costruire il costruttore
+  G4VPhysicalVolume *ConstructPhantom_Support(G4double CollPos, G4double Cx,
+                                              G4double Cy, G4double Cz,
+                                              G4double d, G4double Oz,
+                                              G4bool plastic_bool);
+  G4VPhysicalVolume *ConstructPhantom(G4double CollPos);
+  G4VPhysicalVolume *BuildDetector(G4double dX, G4double dY, G4double dZ,
+                                   G4double fPTFEThickness,
+                                   G4double opticfiber_core_dx,
+                                   G4bool plastic_bool);
+  FlashDetectorConstruction();
+  virtual ~FlashDetectorConstruction();
 
-  virtual void
-  ConstructSDandField(); // metodo per costruire il sensitive detector,
-                         // necessario per contare gli eventi
+  virtual G4VPhysicalVolume *Construct();
+  virtual void ConstructSDandField();
 
 private:
-  // FSensitiveDetector* sd_of_cryst;
-  // OpticFiberSD* sd_of_of;
-  // PhotoDiodeSD* sd_of_pd;
-  
-  G4LogicalVolume* AirBox;
-   G4Material *airNist;
-  G4Material* TEFLON;
-  Applicator80BeamLine *Collimator;
-  G4VPhysicalVolume * detector_physical;
+  G4LogicalVolume *AirBox;
+  G4Material *airNist;
+  G4Material *TEFLON;
+  Applicator *Collimator;
+  G4VPhysicalVolume *detector_physical;
   G4LogicalVolume *opticfiber_core_log;
   G4LogicalVolume *logicCryst;
   G4Box *phantom;
-  void DefineMaterials(); // metodo per definire i materiali
+  void DefineMaterials();
   G4VisAttributes *skyBlue;
   G4VisAttributes *red;
-    G4VisAttributes *blue;
+  G4VisAttributes *blue;
   G4VisAttributes *green;
-  // G4VPhysicalVolume* motherPhys;
 
   G4LogicalVolume *phantomLogicalVolume;
-    G4LogicalVolume *DetectorSupport;
+  G4LogicalVolume *DetectorSupport;
   G4VPhysicalVolume *phant_phys;
   G4VPhysicalVolume *phantom_physical;
   G4UserLimits *fStepLimit;
-  G4bool fCheckOverlaps; // booleano per vedere se vi sono degli overlap nella
-  G4bool select_EJ212;                     
-    G4bool Detector_builder;                       
-G4double supp_coordinateX;
-G4double support_x;
-G4VPhysicalVolume *phys_cryst;
-G4double dX_;
-G4double dY_;
-G4double dZ_;
-G4double opticfiber_core_dx_;
-G4double fPTFEThickness_;
+  G4bool fCheckOverlaps;
+  G4bool select_EJ212;
+  G4bool Detector_builder;
+  G4double supp_coordinateX;
+  G4double support_x;
+  G4VPhysicalVolume *phys_cryst;
+  G4double dX_;
+  G4double dY_;
+  G4double dZ_;
+  G4double opticfiber_core_dx_;
+  G4double fPTFEThickness_;
   G4Element *fN;
   G4Element *fO;
 
@@ -119,13 +110,8 @@ G4double fPTFEThickness_;
   G4Material *PMMA;
   G4Material *PMMA_optic;
   G4Material *PE;
-    G4Material * ej212;
-  G4Material * EJ212;
-  G4Tubs *fPhotocath;
-
-  G4LogicalVolume *fPhotocath_log;
+  G4Material *ej212;
+  G4Material *EJ212;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

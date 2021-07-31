@@ -23,10 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the second version of Flash, a Geant4-based application
 //
 //
-//////////////////////////////////////////////////////////////////////////////////////////////
+
 #ifndef FlashPrimaryGeneratorAction_h
 #define FlashPrimaryGeneratorAction_h 1
 

@@ -23,10 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the second version of Flash, a Geant4-based application
 //
 //
-//////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "FlashPrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
@@ -51,17 +49,10 @@ FlashPrimaryGeneratorAction::~FlashPrimaryGeneratorAction() {
 }
 
 void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
-  // ****************************
-  // Default primary particle
-  // ****************************
-
-  // Define primary particles: electrons
+  
   G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
   G4ParticleDefinition *particle = particleTable->FindParticle("e-");
   particleGun->SetParticleDefinition(particle);
-
-  // qui definiamo la posizione della sorgente. Il fascio ha forma gaussiana e
-  // divergenza 5 gradi. Lo spettro energetico viene dato dalla macro a gps
 
   G4double defaultX0 = -1000.0 * CLHEP::mm;
   X0 = defaultX0;
@@ -83,13 +74,8 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
 }
 
 void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
-  // ****************************************
-  // Set the beam angular apread
-  // and spot size
-  // beam spot size
-  // ****************************************
 
-  // Set the position of the primary particles
+
   G4double x = X0;
   G4double y = Y0;
   G4double z = Z0;
@@ -103,10 +89,6 @@ void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   }
 
   particleGun->SetParticlePosition(G4ThreeVector(x, y, z));
-
-  // ********************************************
-  // Set the beam energy and energy spread
-  // ********************************************
 
   G4double Mx;
   G4double My;
@@ -135,6 +117,5 @@ void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   particleGun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(
       G4ThreeVector(Mx, My, Mz));
 
-  // Generate a primary particle
   particleGun->GeneratePrimaryVertex(anEvent);
 }

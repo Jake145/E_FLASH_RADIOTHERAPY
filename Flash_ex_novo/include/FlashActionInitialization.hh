@@ -32,8 +32,6 @@
 
 #include "G4VUserActionInitialization.hh"
 
-/// Classe Action initialization. Serve per il Multithreading
-
 class FlashActionInitialization : public G4VUserActionInitialization {
 public:
   FlashActionInitialization();
@@ -42,7 +40,5 @@ public:
   virtual void BuildForMaster() const;
   virtual void Build() const;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

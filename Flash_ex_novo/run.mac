@@ -11,32 +11,31 @@
 #
 /run/initialize
 
-
-
-
-
 ###########BEAM##############
-##Gaussian 7 MeV (Novac7)#############
+##Gaussian 7 MeV (Test)#############
 #/gps/ene/type Gauss
 #/gps/ene/mono 7 MeV
 #/gps/ene/sigma 100 keV
 #/gps/pos/centre -1000 0 0 mm
 
 ##Custom Histogram (ElectronFlash)########################
-#/control/execute ElectronFlash.mac
+/control/execute ElectronFlash.mac
 
 
 ##Custom Histogram (Novac7)########################
-/control/execute Novac7.mac
+#/control/execute Novac7.mac
 
 ##Custom Histogram (Novac11)###################
 #/control/execute Novac11.mac
+
+##Custom Histogram (Dark)###################
+#/control/execute EF_dark_Spectrum.mac
+
+
 #########################
 # Display the event number
 # during the run
 # 
-
-
 #########################
 # Start of the run
 #
@@ -44,20 +43,16 @@
 # Scoring mesh is used to calculate
 #  the dose in the phantom
 #/score/create/boxMesh boxMesh_1
-# scorer for 7 mev
-#/score/mesh/boxSize 4. 0.05 0.5 cm
-#/score/mesh/nBin 100 1 1
-#/score/mesh/translate/xyz 41.1 0 0 mm 
-#/score/quantity/doseDeposit dose Gy
 
 # scorer for 9 mev
-#/score/mesh/boxSize 2.5 0.05 0.5 cm
-#/score/mesh/nBin 100 1 1
-#/score/mesh/translate/xyz 66.1 0 0 mm 
+#/score/mesh/boxSize 4 0.05 0.5 cm
+#/score/mesh/nBin 200 1 1
+#/score/mesh/translate/xyz 41.1 0 0 mm 
 #/score/quantity/doseDeposit dose Gy
 
 #
 #/score/close
+
 # Flux Scorer
 
 #/score/create/boxMesh boxMesh_2 
@@ -68,6 +63,7 @@
 #/score/quantity/flatSurfaceCurrent flux 0 F
 #/score/filter/particle   eMinusFilter    e-
 #/score/close
+
 #/score/list  
 
 
