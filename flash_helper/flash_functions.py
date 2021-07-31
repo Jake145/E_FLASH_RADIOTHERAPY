@@ -93,7 +93,7 @@ def model(x, alpha, k):
     return x / ((1 / k - alpha * x))
 
 
-def model_inv(beta,x):
+def model_inv(beta, x):
     """This function creates the model that relates the CPP to the DPP
 
     :type x: array
@@ -141,7 +141,7 @@ def plotter(
     cpp_sigma,
     ddp_gaf_pl,
     pulse_lenght,
-    p0_=[ 2,0.5],
+    p0_=[2, 0.5],
     detector_name="EJ212",
     cord_1=10,
     cord_2=2,
@@ -182,7 +182,7 @@ def plotter(
 
     gaf_uncertainty = 0.03 * ddp_gaf_pl
 
-    saturation=Model(model_inv)
+    saturation = Model(model_inv)
 
     mydata = RealData(ddp_gaf_pl, tmp, sx=gaf_uncertainty, sy=sigma_tmp)
 
@@ -192,26 +192,15 @@ def plotter(
 
     myoutput = myodr.run()
 
-    k__=myoutput.beta[0]
+    k__ = myoutput.beta[0]
 
-    alpha__=myoutput.beta[1]
+    alpha__ = myoutput.beta[1]
 
-    sigma_k__=myoutput.sd_beta[0]
+    sigma_k__ = myoutput.sd_beta[0]
 
-    sigma_alpha__=myoutput.sd_beta[1]
+    sigma_alpha__ = myoutput.sd_beta[1]
 
-
-    #popt, pcov = curve_fit(
-    #    model_inv, ddp_gaf_pl, tmp, p0_, sigma=sigma_tmp, absolute_sigma=False
-    #)
-
-    #sigma_alpha, sigma_k = np.sqrt(np.diagonal(pcov))
-
-    #correlation_alpha_k, correlation_k_alpha = np.sqrt(np.diagonal(np.fliplr(pcov)))
-
-    #alpha_, k_ = popt
-
-    r2 = r2_score(tmp, model_inv(  [k__,alpha__],ddp_gaf_pl))
+    r2 = r2_score(tmp, model_inv([k__, alpha__], ddp_gaf_pl))
 
     plt.figure(f"pulse lenght: {pulse_lenght}")
 
@@ -231,7 +220,7 @@ def plotter(
 
     plt.plot(
         np.linspace(0, 20, 100),
-        model_inv( [k__,alpha__],np.linspace(0, 20, 100)),
+        model_inv([k__, alpha__], np.linspace(0, 20, 100)),
         color="magenta",
         linestyle="--",
     )
@@ -255,8 +244,11 @@ def plotter(
 
     plt.xlabel("Dose per pulse [Gy/p]")
     plt.ylabel(r"$\frac{q-f(x)}{\sigma}$")
-    res = (tmp - model_inv( [k__,alpha__],ddp_gaf_pl)) / sigma_tmp
-    plt.scatter(ddp_gaf_pl, res, marker="o", color="green", label="residuals")
+    res_x = myoutput.delta
+    res_y = myoutput.eps
+    plt.scatter(ddp_gaf_pl, res_x, marker="o", color="green", label="X residuals")
+    plt.scatter(ddp_gaf_pl, res_y, marker="o", color="red", label="Y residuals")
+
     plt.legend()
     plt.grid()
 
