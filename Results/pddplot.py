@@ -10,8 +10,11 @@ from uncertainties import ufloat, unumpy
 from uncertainties.umath import *
 
 sys.path.insert(0, "../")
-from flash_helper.flash_functions import (PDD_plotter_out, find_nearest,
-                                          mean_array_calculator)
+from flash_helper.flash_functions import (
+    PDD_plotter_out,
+    find_nearest,
+    mean_array_calculator,
+)
 
 if __name__ == "__main__":
     print("go")

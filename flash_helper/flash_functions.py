@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import scipy.stats as stats
 from labellines import labelLine, labelLines
 from scipy.optimize import curve_fit
+from scipy.odr import *
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from uncertainties import ufloat, unumpy
@@ -93,7 +93,7 @@ def model(x, alpha, k):
     return x / ((1 / k - alpha * x))
 
 
-def model_inv(x, alpha, k):
+def model_inv(beta,x):
     """This function creates the model that relates the CPP to the DPP
 
     :type x: array
@@ -108,7 +108,7 @@ def model_inv(x, alpha, k):
     :returns: values calculated for the given alpha and k
     :rtype: unumpy array
     """
-    return k * x / ((1 + alpha * x))
+    return beta[0] * x / ((1 + beta[1] * x))
 
 
 def get_index(x, y):
@@ -141,7 +141,7 @@ def plotter(
     cpp_sigma,
     ddp_gaf_pl,
     pulse_lenght,
-    p0_=[0.5, 2],
+    p0_=[ 2,0.5],
     detector_name="EJ212",
     cord_1=10,
     cord_2=2,
@@ -182,19 +182,36 @@ def plotter(
 
     gaf_uncertainty = 0.03 * ddp_gaf_pl
 
-    popt, pcov = curve_fit(
-        model_inv, ddp_gaf_pl, tmp, p0_, sigma=sigma_tmp, absolute_sigma=False
-    )
+    saturation=Model(model_inv)
 
-    sigma_alpha, sigma_k = np.diagonal(pcov)
+    mydata = RealData(ddp_gaf_pl, tmp, sx=gaf_uncertainty, sy=sigma_tmp)
 
-    correlation_alpha_k, correlation_k_alpha = np.diagonal(np.fliplr(pcov))
+    myodr = ODR(mydata, saturation, p0_)
 
-    alpha_, k_ = popt
+    myodr.set_job(fit_type=0)
 
-    stats_, pvalue = stats.chisquare(f_obs=ddp_gaf_pl, f_exp=model_inv(tmp, alpha_, k_))
+    myoutput = myodr.run()
 
-    r2 = r2_score(tmp, model_inv(ddp_gaf_pl, alpha_, k_))
+    k__=myoutput.beta[0]
+
+    alpha__=myoutput.beta[1]
+
+    sigma_k__=myoutput.sd_beta[0]
+
+    sigma_alpha__=myoutput.sd_beta[1]
+
+
+    #popt, pcov = curve_fit(
+    #    model_inv, ddp_gaf_pl, tmp, p0_, sigma=sigma_tmp, absolute_sigma=False
+    #)
+
+    #sigma_alpha, sigma_k = np.sqrt(np.diagonal(pcov))
+
+    #correlation_alpha_k, correlation_k_alpha = np.sqrt(np.diagonal(np.fliplr(pcov)))
+
+    #alpha_, k_ = popt
+
+    r2 = r2_score(tmp, model_inv(  [k__,alpha__],ddp_gaf_pl))
 
     plt.figure(f"pulse lenght: {pulse_lenght}")
 
@@ -214,7 +231,7 @@ def plotter(
 
     plt.plot(
         np.linspace(0, 20, 100),
-        model_inv(np.linspace(0, 20, 100), alpha_, k_),
+        model_inv( [k__,alpha__],np.linspace(0, 20, 100)),
         color="magenta",
         linestyle="--",
     )
@@ -222,8 +239,8 @@ def plotter(
     textstr = "\n".join(
         (
             r"$y = k\cdot\frac{x}{1 + \alpha x}$",
-            r"$\alpha=%.4f \pm %.4f $" % (alpha_, sigma_alpha),
-            r"$k=%.4f \pm %.4f $" % (k_, sigma_k),
+            r"$\alpha=%.2f \pm %.2f $" % (alpha__, sigma_alpha__),
+            r"$k=%.2f \pm %.2f $" % (k__, sigma_k__),
             r"$R^2$ score = %.3f " % (r2),
         )
     )
@@ -238,11 +255,11 @@ def plotter(
 
     plt.xlabel("Dose per pulse [Gy/p]")
     plt.ylabel(r"$\frac{q-f(x)}{\sigma}$")
-    res = (tmp - model_inv(ddp_gaf_pl, alpha_, k_)) / sigma_tmp
+    res = (tmp - model_inv( [k__,alpha__],ddp_gaf_pl)) / sigma_tmp
     plt.scatter(ddp_gaf_pl, res, marker="o", color="green", label="residuals")
     plt.legend()
     plt.grid()
 
     plt.show()
 
-    return alpha_, k_, sigma_alpha, sigma_k
+    return alpha__, k__, sigma_alpha__, sigma_k__

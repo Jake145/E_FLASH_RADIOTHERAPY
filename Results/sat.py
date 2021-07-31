@@ -15,8 +15,12 @@ from uncertainties import ufloat, unumpy
 from uncertainties.umath import *
 
 sys.path.insert(0, "../")
-from flash_helper.flash_functions import (get_index, mean_array_calculator,
-                                          model_inv, plotter)
+from flash_helper.flash_functions import (
+    get_index,
+    mean_array_calculator,
+    model_inv,
+    plotter,
+)
 
 if __name__ == "__main__":
 
@@ -87,7 +91,6 @@ if __name__ == "__main__":
         measured_charge_per_pulse_sigma_4p,
         ddp_gaf_pl,
         4,
-        [0.01, 0.8],
         cord_2=3,
     )
 
@@ -313,7 +316,7 @@ if __name__ == "__main__":
 
         plt.plot(
             np.linspace(0, 20, 100),
-            model_inv(np.linspace(0, 20, 100), alpha, kappa),
+            model_inv([kappa, alpha], np.linspace(0, 20, 100)),
             linestyle="-",
             color=colors[i],
             label=str(pl) + r"$\mu$s",
@@ -605,7 +608,7 @@ if __name__ == "__main__":
 
         plt.plot(
             np.linspace(0, 20, 100),
-            model_inv(np.linspace(0, 20, 100), alpha, kappa),
+            model_inv([kappa, alpha], np.linspace(0, 20, 100)),
             linestyle="-",
             color=colors[i],
             label=str(pl) + r"$\mu$s",
