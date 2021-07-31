@@ -1,0 +1,15 @@
+language: python
+python:
+ - "3.8"
+install:
+ - pip install -r requirements.txt
+script:
+ - black .
+ - isort .
+ - python unit_test.py
+notifications:
+   email:
+     recipients:
+       - jakeharold.pensavalle@gmail.com
+     on_success: never
+     on_failure: always
