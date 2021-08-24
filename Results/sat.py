@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
-from labellines import labelLine, labelLines
+import statsmodels.api as sm
 from scipy.optimize import curve_fit
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
@@ -15,12 +15,8 @@ from uncertainties import ufloat, unumpy
 from uncertainties.umath import *
 
 sys.path.insert(0, "../")
-from flash_helper.flash_functions import (
-    get_index,
-    mean_array_calculator,
-    model_inv,
-    plotter,
-)
+from flash_helper.flash_functions import (get_index, mean_array_calculator,
+                                          model_inv, plotter)
 
 if __name__ == "__main__":
 
@@ -132,14 +128,6 @@ if __name__ == "__main__":
 
     measured_charge_per_pulse_sigma_3p = unumpy.std_devs(measured_charge_per_pulse_3p)
 
-    alfa_3p, kappa_3p, sig_alfa_3p, sig_kappa_3p = plotter(
-        measured_charge_per_pulse_mean_3p,
-        measured_charge_per_pulse_sigma_3p,
-        ddp_gaf_pl,
-        3,
-        p0_=[0.16, 1],
-    )
-
     ##pulse lenght=2 mus
 
     measured_charge_first = np.array(
@@ -179,14 +167,6 @@ if __name__ == "__main__":
 
     measured_charge_per_pulse_sigma_2p = unumpy.std_devs(measured_charge_per_pulse_2p)
 
-    alfa_2p, kappa_2p, sig_alfa_2p, sig_kappa_2p = plotter(
-        measured_charge_per_pulse_mean_2p,
-        measured_charge_per_pulse_sigma_2p,
-        ddp_gaf_pl,
-        2,
-        cord_2=1.7,
-    )
-
     ##pulse lenght=1 mus
 
     measured_charge_first = np.array(
@@ -225,16 +205,6 @@ if __name__ == "__main__":
     )
 
     measured_charge_per_pulse_sigma_1p = unumpy.std_devs(measured_charge_per_pulse_1p)
-
-    alfa_1p, kappa_1p, sig_alfa_1p, sig_kappa_1p = plotter(
-        measured_charge_per_pulse_mean_1p,
-        measured_charge_per_pulse_sigma_1p,
-        ddp_gaf_pl,
-        1,
-        p0_=[0.1, 1],
-        cord_1=9,
-        cord_2=1,
-    )
 
     ## fixed dpp, charge vs pulse charge
 
@@ -282,7 +252,14 @@ if __name__ == "__main__":
         q_ = model.intercept_
         m_ = model.coef_[0]
         x = np.linspace(0, max(pulse_lenght_plastic) + 1, 100)
-
+        X = sm.add_constant(pulse_lenght_plastic)
+        model = sm.OLS(charge, X).fit()
+        model.HC0_se
+        with open("filename.txt", "a") as f:
+            sys.stdout = f  # Change the standard output to the file we created.
+            print(f"results for SSD= {ssd_gaf_pl[i]} plastic")
+            print(model.summary())
+            print(f"sklearn: Y={m_}X + {q_}")
         plt.xlabel(r"pulse lenght [$\mu$s]")
         plt.ylabel("CPP [nC/p]")
         plt.scatter(
@@ -290,46 +267,11 @@ if __name__ == "__main__":
             charge,
             marker="o",
             color="red",
-            label=f"EJ212 at DPP = {ddp_gaf_pl[i]} Gy/p",
+            label=f"EJ212 at SSD = {ssd_gaf_pl[i]} cm",
         )
         plt.plot(x, m_ * x + q_, linestyle="--", color="magenta", label="linear model")
         plt.legend()
         plt.grid()
-    plt.show()
-
-    ##Plot with all the points
-    aplhas = np.array([alfa_1p, alfa_2p, alfa_3p, alfa_4p])
-    kappas = np.array([kappa_1p, kappa_2p, kappa_3p, kappa_4p])
-    colors = ["red", "blue", "green", "magenta"]
-    plt.figure("Ej212 Total")
-    for i, item in enumerate(charge_plastic):
-        y = item
-        sigma_y = charge_sigma_plastic[i]
-        alpha = aplhas[i]
-        kappa = kappas[i]
-        pl = pulse_lenght_plastic[i][0]
-        plt.xlabel("Dose per pulse [Gy/p]")
-
-        plt.ylabel("Charge per pulse [nC/p]")
-
-        plt.title(f"Saturation for {detector_name} at various pulse lenghts")
-
-        plt.plot(
-            np.linspace(0, 20, 100),
-            model_inv([kappa, alpha], np.linspace(0, 20, 100)),
-            linestyle="-",
-            color=colors[i],
-            label=str(pl) + r"$\mu$s",
-        )
-
-        plt.scatter(ddp_gaf_pl, y, marker=".", color=colors[i])
-
-        plt.errorbar(
-            ddp_gaf_pl, y, yerr=sigma_y, xerr=gaf_uncertainty, ls="", color=colors[i]
-        )
-
-    labelLines(plt.gca().get_lines(), zorder=2.5)
-    plt.grid()
     plt.show()
 
     ##LYSO
@@ -435,14 +377,6 @@ if __name__ == "__main__":
 
     measured_charge_per_pulse_sigma_3l = unumpy.std_devs(measured_charge_per_pulse_3l)
 
-    alfa_3l, kappa_3l, sig_alfa_3l, sig_kappa_3l = plotter(
-        measured_charge_per_pulse_mean_3l,
-        measured_charge_per_pulse_sigma_3l,
-        ddp_gaf_pl,
-        3,
-        detector_name=detector_name_,
-    )
-
     ##Pulse lenght = 2
 
     measured_charge_mean_2l = np.array(
@@ -479,14 +413,6 @@ if __name__ == "__main__":
 
     measured_charge_per_pulse_sigma_2l = unumpy.std_devs(measured_charge_per_pulse_2l)
 
-    alfa_2l, kappa_2l, sig_alfa_2l, sig_kappa_2l = plotter(
-        measured_charge_per_pulse_mean_2l,
-        measured_charge_per_pulse_sigma_2l,
-        ddp_gaf_pl,
-        2,
-        detector_name=detector_name_,
-    )
-
     ##Pulse lenght = 1
 
     measured_charge_mean_1l = np.array(
@@ -522,14 +448,6 @@ if __name__ == "__main__":
     )
 
     measured_charge_per_pulse_sigma_1l = unumpy.std_devs(measured_charge_per_pulse_1l)
-
-    alfa_1l, kappa_1l, sig_alfa_1l, sig_kappa_1l = plotter(
-        measured_charge_per_pulse_mean_1l,
-        measured_charge_per_pulse_sigma_1l,
-        ddp_gaf_pl,
-        1,
-        detector_name=detector_name_,
-    )
 
     ## fixed dpp, charge vs pulse charge LYSO
 
@@ -574,6 +492,15 @@ if __name__ == "__main__":
         r_sq = model.score(pulse_lenght_lyso, charge)
         q_ = model.intercept_
         m_ = model.coef_[0]
+        X = sm.add_constant(pulse_lenght_lyso)
+        model = sm.OLS(charge, X).fit()
+
+        model.HC0_se
+        with open("filename.txt", "a") as f:
+            sys.stdout = f  # Change the standard output to the file we created.
+            print(f"results for SSD= {ssd_gaf_pl[i]} lyso")
+            print(model.summary())
+            print(f"sklearn: Y={m_}X + {q_}")
         x = np.linspace(0, max(pulse_lenght_lyso) + 1, 100)
         plt.xlabel(r"pulse lenght [$\mu$s]")
         plt.ylabel("CPP [nC/p]")
@@ -582,44 +509,9 @@ if __name__ == "__main__":
             charge,
             marker="o",
             color="red",
-            label=f"LYSO at DPP = {ddp_gaf_pl[i]} Gy/p",
+            label=f"LYSO at SSD = {ssd_gaf_pl[i]} cm",
         )
         plt.plot(x, m_ * x + q_, linestyle="--", color="magenta", label="linear model")
         plt.legend()
         plt.grid()
-    plt.show()
-
-    ##Plot with all the points
-    aplhas = np.array([alfa_1l, alfa_2l, alfa_3l, alfa_4l])
-    kappas = np.array([kappa_1l, kappa_2l, kappa_3l, kappa_4l])
-    colors = ["red", "blue", "green", "magenta"]
-    plt.figure("LYSO Total")
-    for i, item in enumerate(charge_lyso):
-        y = item
-        sigma_y = charge_sigma_lyso[i]
-        alpha = aplhas[i]
-        kappa = kappas[i]
-        pl = pulse_lenght_lyso[i][0]
-        plt.xlabel("Dose per pulse [Gy/p]")
-
-        plt.ylabel("Charge per pulse [nC/p]")
-
-        plt.title(f"Saturation for LYSO at various pulse lenghts")
-
-        plt.plot(
-            np.linspace(0, 20, 100),
-            model_inv([kappa, alpha], np.linspace(0, 20, 100)),
-            linestyle="-",
-            color=colors[i],
-            label=str(pl) + r"$\mu$s",
-        )
-
-        plt.scatter(ddp_gaf_pl, y, marker=".", color=colors[i])
-
-        plt.errorbar(
-            ddp_gaf_pl, y, yerr=sigma_y, xerr=gaf_uncertainty, ls="", color=colors[i]
-        )
-
-    labelLines(plt.gca().get_lines(), zorder=2.5)
-    plt.grid()
     plt.show()

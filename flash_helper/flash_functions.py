@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from labellines import labelLine, labelLines
-from scipy.optimize import curve_fit
 from scipy.odr import *
+from scipy.optimize import curve_fit
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from uncertainties import ufloat, unumpy
@@ -174,13 +173,13 @@ def plotter(
     :param cord_2: y coordinate for the results text box
 
 
-    :returns: float
-    :rtype: returns alpha, k and their uncertainties
+    :returns: alpha, k and their uncertainties
+    :rtype: float
     """
 
     tmp, sigma_tmp = cpp_mean, cpp_sigma
 
-    gaf_uncertainty = 0.03 * ddp_gaf_pl
+    gaf_uncertainty = 0.05 * ddp_gaf_pl
 
     saturation = Model(model_inv)
 
@@ -255,3 +254,50 @@ def plotter(
     plt.show()
 
     return alpha__, k__, sigma_alpha__, sigma_k__
+
+
+def find_r(x, y, R, uncertainties=False):
+    """This function finds the range value R of the PDD
+
+    :type x: array
+    :param x: depth array
+
+    :type y: array
+    :param y: dose normalized by the maximum dose (ranges from 0 to 1)
+
+    :type R: int
+    :param R: Range value desired (ex. 50, 80, 100)
+
+    :type pulse_lenght: int
+    :param pulse_lenght: pulse lenght
+
+    :type uncertainties: bool
+    :param uncertainties: set True if using Uncertainties
+
+    :returns: index of x for the selected range
+    :rtype: float
+    """
+    if uncertainties == False:
+        idx = find_nearest(y * 100, R)
+        if R != 100 and idx != 0:
+            idx2 = find_nearest(y, np.partition(np.abs(y - (R / 100)), 2)[1])
+            m = 100 * (y[idx] - y[idx2]) / (x[idx] - x[idx2])
+            q = 100 * y[idx] - m * x[idx]
+            return (R - q) / m
+
+        else:
+            return x[idx]
+    else:
+        idx = find_nearest(unumpy.nominal_values(y) * 100, R)
+
+        if R != 100 and idx != 0:
+            idx2 = find_nearest(
+                unumpy.nominal_values(y) * 100,
+                np.partition(np.abs(100 * unumpy.nominal_values(y) - (R)), 2)[1],
+            )
+            m = 100 * (y[idx] - y[idx2]) / (x[idx] - x[idx2])
+            q = 100 * y[idx] - m * x[idx]
+            return (R - q) / m
+
+        else:
+            return x[idx]

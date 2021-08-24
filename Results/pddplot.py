@@ -10,11 +10,8 @@ from uncertainties import ufloat, unumpy
 from uncertainties.umath import *
 
 sys.path.insert(0, "../")
-from flash_helper.flash_functions import (
-    PDD_plotter_out,
-    find_nearest,
-    mean_array_calculator,
-)
+from flash_helper.flash_functions import (PDD_plotter_out, find_nearest,
+                                          find_r, mean_array_calculator)
 
 if __name__ == "__main__":
     print("go")
@@ -47,10 +44,12 @@ if __name__ == "__main__":
     path = "../Flash_ex_novo/VALIDATION/7mevNOVAC_10000000_4cm_100bin_10000000.csv"  # seed 42
     dose_, sq, distance = PDD_plotter_out(path, 80)
 
-    r100 = np.round(distance[find_nearest(dose_ / np.max(dose_), 1)], 2)
-    distance_2 = distance[distance > r100]
-    r90 = np.round(distance_2[find_nearest(dose_ / np.max(dose_), 0.9)], 2)
-    r50 = np.round(distance[find_nearest(dose_ / np.max(dose_), 0.5)], 2)
+    r100 = find_r(distance, dose_ / np.max(dose_), 100)
+
+    r90 = find_r(distance[distance > r100], dose_[distance > r100] / np.max(dose_), 90)
+
+    r50 = find_r(distance, dose_ / np.max(dose_), 50)
+
     print(f"R100 in water: {r100} mm ")
     print(f"R90 in water: {r90} mm ")
     print(f"R50 in water: {r50} mm ")
@@ -137,7 +136,6 @@ if __name__ == "__main__":
     plt.hlines([90], 0, 18, linestyles="dashed", colors="red", alpha=0.2)
     plt.hlines([50], 0, 27, linestyles="dashed", colors="red", alpha=0.2)
 
-    # plt.xlim(0,50)
     plt.legend()
 
     plt.grid()
@@ -172,7 +170,6 @@ if __name__ == "__main__":
     dose_9_means = unumpy.nominal_values(dose_9)
     dose_9_std = unumpy.std_devs(dose_9)
 
-    # simulated_energy_7=np.array([3.80317,3.74554,3.77554,3.409,2.21552,0.805606])
     simulated_energy_7 = np.array(
         [3.74886, 3.68112, 3.13143, 3.01489, 2.13634, 0.95427]
     )  # lyso seed 42
@@ -200,8 +197,7 @@ if __name__ == "__main__":
         "EF_Validationdata.txt", unpack=True
     )
     # seed 42
-    # ej212_energy_sim=np.array([9.3235,9.55532,9.58284,9.43716,9.43479,9.20395,8.0759,6.54801,3.88037,2.31994,0.581116,0.0558538])#gev
-    # ej212_energy_sim_2=np.array([10.1766,10.5808,10.8589,10.5277,10.6088,10.6537,9.50409,7.40045,5.59706,2.67905,0.90506])#gev (starts from 6mm
+
     ej212_energy_sim_3 = np.array(
         [
             9.84701,
@@ -298,7 +294,6 @@ if __name__ == "__main__":
     ej212_energy_sim_means = unumpy.nominal_values(ej212_energy_sim)
     ej212_energy_sim_std = unumpy.std_devs(ej212_energy_sim)
 
-    # ej212_distamce_sim_2=np.array([6,13,27])
     ej212_distance = np.array([4, 6, 9, 11, 13, 15, 17, 22, 27, 30, 35, 40]) + 1  # mm
 
     ej212_noise = ufloat(np.mean([-0.57, -0.54, -0.53]), np.std([-0.57, -0.54, -0.53]))
@@ -426,6 +421,81 @@ if __name__ == "__main__":
     # c_corr_ej=c_corr_ej/(kappa-alpha*ej212_charge_over_pulse)
     c_corr_ej_means = unumpy.nominal_values(c_corr_ej)
     c_corr_ej_err = unumpy.std_devs(c_corr_ej)
+
+    r100_val = find_r(validation_distance_9, validation_dose_9 / 100, 100)
+    r90_val = find_r(
+        validation_distance_9[validation_distance_9 > r100_val],
+        validation_dose_9[validation_distance_9 > r100_val] / 100,
+        90,
+    )
+    r50_val = find_r(validation_distance_9, validation_dose_9 / 100, 50)
+
+    r100_pmma = find_r(
+        distance_9, dose_9 / max(unumpy.nominal_values(dose_9)), 100, True
+    )
+    r90_pmma = find_r(
+        distance_9[distance_9 > r100_pmma],
+        ((dose_9) / max(unumpy.nominal_values(dose_9)))[distance_9 > r100_pmma],
+        90,
+        True,
+    )
+    r50_pmma = find_r(
+        distance_9[distance_9 > r100_pmma],
+        ((dose_9) / max(unumpy.nominal_values(dose_9)))[distance_9 > r100_pmma],
+        50,
+        True,
+    )
+
+    r100_ej = find_r(
+        ej212_distance,
+        ej212_charge_over_pulse / max(unumpy.nominal_values(ej212_charge_over_pulse)),
+        100,
+        True,
+    )
+    r90_ej = find_r(
+        ej212_distance[ej212_distance > r100_ej],
+        (
+            (ej212_charge_over_pulse)
+            / np.max(unumpy.nominal_values(ej212_charge_over_pulse))
+        )[ej212_distance > r100_ej],
+        90,
+        True,
+    )
+    r50_ej = find_r(
+        ej212_distance[ej212_distance > r100_ej],
+        (
+            (ej212_charge_over_pulse)
+            / np.max(unumpy.nominal_values(ej212_charge_over_pulse))
+        )[ej212_distance > r100_ej],
+        50,
+        True,
+    )
+
+    r100_corr = find_r(
+        ej212_distance, c_corr_ej / max(unumpy.nominal_values(c_corr_ej)), 100, True
+    )
+    r90_corr = find_r(
+        ej212_distance[ej212_distance > r100_corr],
+        ((c_corr_ej) / max(unumpy.nominal_values(c_corr_ej)))[
+            ej212_distance > r100_corr
+        ],
+        90,
+        True,
+    )
+    r50_corr = find_r(
+        ej212_distance[ej212_distance > r100_corr],
+        ((c_corr_ej) / max(unumpy.nominal_values(c_corr_ej)))[
+            ej212_distance > r100_corr
+        ],
+        50,
+        True,
+    )
+
+    print(f"Validation data: R100 = {r100_val}, R90={r90_val}, R50={r50_val}")
+    print(f"PMMA Sum data: R100 = {r100_pmma}, R90={r90_pmma}, R50={r50_pmma}")
+    print(f"Uncorrected EJ212 data: R100 = {r100_ej}, R90={r90_ej}, R50={r50_ej}")
+    print(f"Corrected EJ212 data: R100 = {r100_corr}, R90={r90_corr}, R50={r50_corr}")
+
     plt.figure("ej212")
     plt.plot(
         distance_9,
@@ -436,22 +506,23 @@ if __name__ == "__main__":
         label="Simulated PMMA 9 MeV ",
     )
     plt.plot(
-        ej212_distance,
+        ej212_distance[:-1],
         100
-        * unumpy.nominal_values(ej212_energy_sim)
-        / max(unumpy.nominal_values(ej212_energy_sim)),
+        * unumpy.nominal_values(ej212_energy_sim[:-1])
+        / max(unumpy.nominal_values(ej212_energy_sim[:-1])),
         marker=".",
         linestyle="dashed",
         color="magenta",
         label="Simulated EJ212 9 MeV ",
     )
+
     plt.errorbar(
-        ej212_distance,
+        ej212_distance[:-1],
         unumpy.nominal_values(
-            100 * (ej212_charge_over_pulse / max(ej212_charge_over_pulse_means))
+            100 * (ej212_charge_over_pulse[:-1] / max(ej212_charge_over_pulse_means[:-1]))
         ),
         yerr=unumpy.std_devs(
-            100 * (ej212_charge_over_pulse / max(ej212_charge_over_pulse_means))
+            100 * (ej212_charge_over_pulse[:-1] / max(ej212_charge_over_pulse_means[:-1]))
         ),
         marker=".",
         linestyle="dashed",
@@ -465,20 +536,20 @@ if __name__ == "__main__":
         marker=".",
         linestyle="dashed",
         color="red",
-        label="Measured PMMA",
+        label="Measured PMMA 9 MeV",
     )
 
     plt.errorbar(
-        ej212_distance,
-        100 * unumpy.nominal_values((c_corr_ej / max(c_corr_ej_means))),
-        yerr=100 * unumpy.std_devs((c_corr_ej / max(c_corr_ej_means))),
+        ej212_distance[:-1],
+        100 * unumpy.nominal_values((c_corr_ej[:-1] / max(c_corr_ej_means[:-1]))),
+        yerr=100 * unumpy.std_devs((c_corr_ej[:-1] / max(c_corr_ej_means[:-1]))),
         marker=".",
         linestyle="dashed",
         color="green",
-        label="Corrected EJ212 ",
+        label="Corrected EJ212 9 MeV ",
     )
 
-    # plt.scatter(x_r,unumpy.nominal_values(y_r),marker='.',color='blue',label='pmma Equivalence corrected Points')
+
     plt.xlabel("distance [mm]")
     plt.ylabel("relative dose[%]")
     plt.title("Dose Distribution ElectronFlash")
@@ -515,7 +586,6 @@ if __name__ == "__main__":
     ## Correction
     c_mu = measured_charge / measured_monitor_units
     c_corr = c_mu[1:] * coefficients
-    # c_corr=(measured_charge_per_pulse[1:]/(1/0.56-0.4*measured_charge_per_pulse[1:]))*c_corr
     c_corr = c_corr / np.max(c_corr)
     dis_corr = measured_distance[1:]
     ## 9 Mev LYSO plot
@@ -572,7 +642,6 @@ if __name__ == "__main__":
     plt.ylabel("relative dose[%]")
     plt.title("Dose Distribution ElectronFlash")
 
-    # plt.xlim(0,50)
     plt.legend()
 
     plt.grid()
@@ -680,7 +749,6 @@ if __name__ == "__main__":
     plt.ylabel("relative dose[%]")
     plt.title("Dose Distribution ElectronFlash Dark Spectrum")
 
-    # plt.xlim(0,50)
     plt.legend()
 
     plt.grid()

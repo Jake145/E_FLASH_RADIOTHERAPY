@@ -12,7 +12,7 @@ from scipy.signal import savgol_filter
 from tsmoothie.smoother import *
 
 sys.path.insert(0, "../")
-from flash_helper.flash_functions import PDD_plotter_out
+from flash_helper.flash_functions import PDD_plotter_out, find_nearest, find_r
 
 if __name__ == "__main__":
 
@@ -163,6 +163,27 @@ if __name__ == "__main__":
     validation_distance_9, validation_dose_9 = np.loadtxt(
         "Send/EF_9Mev_Water.txt", unpack=True
     )
+    r100_val = find_r(validation_distance_9, validation_dose_9 / 100, 100)
+    r90_val = find_r(
+        validation_distance_9[validation_distance_9 > r100_val],
+        validation_dose_9[validation_distance_9 > r100_val] / 100,
+        90,
+    )
+    r50_val = find_r(validation_distance_9, validation_dose_9 / 100, 50)
+
+    r100_water = find_r(distance_9_pen, dose_9_pen / max(dose_9_pen), 100)
+    r90_water = find_r(
+        distance_9_pen[distance_9_pen > r100_water],
+        ((dose_9_pen) / max(dose_9_pen))[distance_9_pen > r100_water],
+        90,
+    )
+    r50_water = find_r(
+        distance_9_pen[distance_9_pen > r100_water],
+        ((dose_9_pen) / max(dose_9_pen))[distance_9_pen > r100_water],
+        50,
+    )
+    print(f"Validation data: R100 = {r100_val}, R90={r90_val}, R50={r50_val}")
+    print(f"water Sim data: R100 = {r100_water}, R90={r90_water}, R50={r50_water}")
 
     plt.figure("pdd")
     plt.plot(

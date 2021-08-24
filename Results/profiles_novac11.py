@@ -14,7 +14,8 @@ from uncertainties import ufloat, unumpy
 from uncertainties.umath import *
 
 sys.path.insert(0, "../")
-from flash_helper.flash_functions import PDD_plotter_out, mean_array_calculator
+from flash_helper.flash_functions import (PDD_plotter_out, find_nearest,
+                                          find_r, mean_array_calculator)
 
 if __name__ == "__main__":
 
@@ -227,6 +228,32 @@ if __name__ == "__main__":
 
     dose_novac11_means = unumpy.nominal_values(dose_novac11)
     dose_novac11_std = unumpy.std_devs(dose_novac11)
+
+    r100_val = find_r(distance_val, validation_dose / 100, 100)
+    r90_val = find_r(
+        distance_val[distance_val > r100_val],
+        validation_dose[distance_val > r100_val] / 100,
+        90,
+    )
+    r50_val = find_r(distance_val, validation_dose / 100, 50)
+
+    r100_water = find_r(
+        distance_novac11_1, dose_novac11 / max(dose_novac11_means), 100, True
+    )
+    r90_water = find_r(
+        distance_novac11_1[distance_novac11_1 > r100_water],
+        ((dose_novac11) / max(dose_novac11_means))[distance_novac11_1 > r100_water],
+        90,
+        True,
+    )
+    r50_water = find_r(
+        distance_novac11_1[distance_novac11_1 > r100_water],
+        ((dose_novac11) / max(dose_novac11_means))[distance_novac11_1 > r100_water],
+        50,
+        True,
+    )
+    print(f"Validation data: R100 = {r100_val}, R90={r90_val}, R50={r50_val}")
+    print(f"water Sim data: R100 = {r100_water}, R90={r90_water}, R50={r50_water}")
 
     plt.figure("novac11")
 
