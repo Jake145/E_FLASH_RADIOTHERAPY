@@ -242,7 +242,7 @@ def plotter(
     plt.subplot(2, 1, 2)
 
     plt.xlabel("Dose per pulse [Gy/p]")
-    plt.ylabel(r"$\frac{q-f(x)}{\sigma}$")
+    plt.ylabel(r"Residual components")
     res_x = myoutput.delta
     res_y = myoutput.eps
     plt.scatter(ddp_gaf_pl, res_x, marker="o", color="green", label="X residuals")
