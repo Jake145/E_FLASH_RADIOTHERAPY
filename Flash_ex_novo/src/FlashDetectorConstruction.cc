@@ -421,7 +421,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::ConstructPhantom_Support(
 
     // Definition of the logical volume of the Phantom
     phantomLogicalVolume =
-        new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
+        new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
 
     // Definition of the physics volume of the Phantom
     phant_phys = new G4PVPlacement(0, phantomPosition, "phantomPhys",
@@ -491,7 +491,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::ConstructPhantom_Support(
 
   // Definition of the logical volume of the Phantom
   G4LogicalVolume *phantomLogicalVolume_2 =
-      new G4LogicalVolume(phantom_2, PMMA, "phantomLog_2", 0, 0, 0);
+      new G4LogicalVolume(phantom_2, phantomMaterial, "phantomLog_2", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
 
@@ -820,7 +820,11 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   }
 
   // construct collimator
-  Detector_builder = true;
+  Detector_builder = false;
+  
+  VHEE = true;
+  
+  if (VHEE == false){
 
   Collimator = new Applicator(physicalTreatmentRoom);
   // constuct phantom//////
@@ -838,8 +842,25 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
                                       opticfiber_core_dx_, select_EJ212);
   }
 
+  
+}
+
+else if (VHEE== true){
+if (Detector_builder == false) {
+    phantom_physical =
+        ConstructPhantom(0*cm);
+  } else if (Detector_builder == true) {
+    phantom_physical = ConstructPhantom_Support(0*cm,
+        dX_, dY_, dZ_, fPTFEThickness_, opticfiber_core_dx_, select_EJ212);
+    /// construct Detector//////
+    detector_physical = BuildDetector(dX_, dY_, dZ_, fPTFEThickness_,
+                                      opticfiber_core_dx_, select_EJ212);
+  }
+
+}
   return physicalTreatmentRoom;
 }
+
 
 
 

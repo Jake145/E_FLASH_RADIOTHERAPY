@@ -64,10 +64,10 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   Z0 = defaultZ0;
 
   G4double defaultsigmaY = 1.115 * CLHEP::mm;
-  sigmaY = defaultsigmaY;
+  sigmaY = 0.3 * CLHEP::mm;
 
   G4double defaultsigmaZ = 1.115 * CLHEP::mm;
-  sigmaZ = defaultsigmaZ;
+  sigmaZ = 0.3 * CLHEP::mm;
 
   G4double defaultTheta = 6 * CLHEP::deg;
   Theta = defaultTheta;
@@ -75,6 +75,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
 
 void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
 
+Pencil = true;
 
   G4double x = X0;
   G4double y = Y0;
@@ -89,7 +90,7 @@ void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   }
 
   particleGun->SetParticlePosition(G4ThreeVector(x, y, z));
-
+if (Pencil == false){
   G4double Mx;
   G4double My;
   G4double Mz;
@@ -115,7 +116,10 @@ void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
   }
 
   particleGun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(
-      G4ThreeVector(Mx, My, Mz));
+      G4ThreeVector(Mx, My, Mz));}
+    else if(Pencil==true){
+     particleGun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(
+      G4ThreeVector(1., 0., 0.));}
 
   particleGun->GeneratePrimaryVertex(anEvent);
 }

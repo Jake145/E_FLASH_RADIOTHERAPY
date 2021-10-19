@@ -42,6 +42,7 @@ public:
 
 public:
   void GeneratePrimaries(G4Event *);
+  G4bool Pencil;
 
 private:
   void SetDefaultPrimaryParticle();

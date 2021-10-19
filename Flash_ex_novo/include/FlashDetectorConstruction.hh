@@ -91,6 +91,7 @@ private:
   G4bool fCheckOverlaps;
   G4bool select_EJ212;
   G4bool Detector_builder;
+  G4bool VHEE;
   G4double supp_coordinateX;
   G4double support_x;
   G4VPhysicalVolume *phys_cryst;
