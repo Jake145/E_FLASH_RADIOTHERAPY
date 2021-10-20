@@ -69,13 +69,13 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
   G4double defaultsigmaZ = 1.115 * CLHEP::mm;
   sigmaZ = 0.3 * CLHEP::mm;
 
-  G4double defaultTheta = 6 * CLHEP::deg;
+  G4double defaultTheta = 3 * CLHEP::deg;
   Theta = defaultTheta;
 }
 
 void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
 
-Pencil = true;
+Pencil = false;
 
   G4double x = X0;
   G4double y = Y0;
