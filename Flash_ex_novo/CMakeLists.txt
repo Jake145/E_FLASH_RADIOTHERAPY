@@ -52,6 +52,8 @@ set(flash_SCRIPTS
   Novac7.mac
   Novac11.mac
   EF_dark_Spectrum.mac
+  spectrum80MeV.mac
+  spectrum80MeV_1punta.mac
   )
 
 foreach(_script ${flash_SCRIPTS})

@@ -19,8 +19,11 @@
 #/gps/pos/centre -1000 0 0 mm
 
 ##Custom Histogram (ElectronFlash)########################
-/control/execute ElectronFlash.mac
+#/control/execute ElectronFlash.mac
 
+##VHEE
+#/control/execute spectrum80MeV_1punta.mac
+/control/execute spectrum80MeV.mac
 
 ##Custom Histogram (Novac7)########################
 #/control/execute Novac7.mac

@@ -145,11 +145,11 @@ void FlashDetectorConstruction::DefineMaterials() {
 
   mpt->AddProperty("ABSLENGTH", ene, abs, num);
 
-  mpt->AddConstProperty("SCINTILLATIONYIELD", 2700 / MeV);
+  mpt->AddConstProperty("SCINTILLATIONYIELD", 28000 / MeV);
 
   mpt->AddConstProperty("RESOLUTIONSCALE", 1);
 
-  mpt->AddConstProperty("FASTTIMECONSTANT", 41 * ns);
+  mpt->AddConstProperty("FASTTIMECONSTANT", 42 * ns);
   scintillator->SetMaterialPropertiesTable(mpt);
 
   // fluorinated polymer
@@ -563,8 +563,8 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
 
   G4double Position_coefficient = CollPos;
-  G4double phantomSizeX = 30.0 * cm, phantomSizeY = 30.0 * cm,
-           phantomSizeZ = 30.0 * cm,
+  G4double phantomSizeX = 60.0 * cm, phantomSizeY = 60.0 * cm,
+           phantomSizeZ = 60.0 * cm,
            phantom_coordinateX = (Position_coefficient * mm + phantomSizeX / 2);
 
   G4ThreeVector phantomPosition =
@@ -575,7 +575,7 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
