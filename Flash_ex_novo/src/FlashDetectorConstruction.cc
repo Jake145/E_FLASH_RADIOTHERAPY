@@ -563,8 +563,8 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
 
   G4double Position_coefficient = CollPos;
-  G4double phantomSizeX = 60.0 * cm, phantomSizeY = 60.0 * cm,
-           phantomSizeZ = 60.0 * cm,
+  G4double phantomSizeX = 30.0 * cm, phantomSizeY = 30.0 * cm,
+           phantomSizeZ = 30.0 * cm,
            phantom_coordinateX = (Position_coefficient * mm + phantomSizeX / 2);
 
   G4ThreeVector phantomPosition =

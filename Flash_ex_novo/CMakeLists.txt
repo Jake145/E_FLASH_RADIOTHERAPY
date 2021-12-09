@@ -54,6 +54,7 @@ set(flash_SCRIPTS
   EF_dark_Spectrum.mac
   spectrum80MeV.mac
   spectrum80MeV_1punta.mac
+  160MeV_v2.mac
   )
 
 foreach(_script ${flash_SCRIPTS})

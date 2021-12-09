@@ -87,8 +87,8 @@ int main(int argc, char **argv) {
   G4ScoringManager::GetScoringManager();
   // Activate score ntuple writer
   // The Root output type (.csv) is selected in FlashAnalysis.hh.
-  G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
-  scoreNtupleWriter.SetVerboseLevel(1);
+  //G4TScoreNtupleWriter<G4AnalysisManager> scoreNtupleWriter;
+  //scoreNtupleWriter.SetVerboseLevel(1);
 
   if (!ui) {
 
