@@ -75,7 +75,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
 
 void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
 
-Pencil = false;
+Pencil = true;
 
   G4double x = X0;
   G4double y = Y0;

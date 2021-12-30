@@ -64,7 +64,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VPrimitiveScorer.hh"
 #include "G4VisAttributes.hh"
-
+#include "VHEE_collimator.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FlashDetectorConstruction::FlashDetectorConstruction()
@@ -821,7 +821,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   // construct collimator
   Detector_builder = false;
-  
+  G4bool MLF = true;
   VHEE = true;
   
   if (VHEE == false){
@@ -857,6 +857,10 @@ if (Detector_builder == false) {
                                       opticfiber_core_dx_, select_EJ212);
   }
 
+}
+if (MLF == true){
+
+COLL = new VHEE_collimator(physicalTreatmentRoom);
 }
   return physicalTreatmentRoom;
 }

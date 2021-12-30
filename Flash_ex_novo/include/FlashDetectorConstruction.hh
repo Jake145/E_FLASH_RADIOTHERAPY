@@ -41,6 +41,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class Applicator;
+class VHEE_collimator;
 class G4VSensitiveDetector;
 class G4NistManager;
 class G4Tubs;
@@ -73,6 +74,7 @@ private:
   G4Material *airNist;
   G4Material *TEFLON;
   Applicator *Collimator;
+  VHEE_collimator *COLL;
   G4VPhysicalVolume *detector_physical;
   G4LogicalVolume *opticfiber_core_log;
   G4LogicalVolume *logicCryst;
