@@ -90,7 +90,7 @@ void VHEE_collimator::ConstructColl() {
   G4bool checkOverlaps = true;
   G4double X_leaf = 7.*cm, Y_leaf = 15.*cm;
   G4double h = radious_field/ number_of_leafs;
-  G4Box *wall = new G4Box("wall", X_leaf /2,Y_leaf  , Y_leaf);
+  G4Box *wall = new G4Box("wall", X_leaf /2,Y_leaf  , Y_leaf/2);
   G4Box *leaf = new G4Box("leaf", X_leaf / 2, Y_leaf / 2, h / 2);
 
     LeafLV = new G4LogicalVolume(leaf, Bromuro_SI, "Leaf_LV");
@@ -133,10 +133,10 @@ LeafLV->SetVisAttributes(blue);
 G4LogicalVolume *Wall_lv = new G4LogicalVolume(wall, Bromuro_SI, "wall_LV");
 
 new G4PVPlacement(G4Transform3D(rm1, 
-    G4ThreeVector(X_center, y_center, z_center + radious_field + Y_leaf + h/2)),"wall_phys",Wall_lv, motherPhys,false,0,checkOverlaps);
+    G4ThreeVector(X_center, y_center, z_center + radious_field + Y_leaf/2 + h/2)),"wall_phys",Wall_lv, motherPhys,false,0,checkOverlaps);
 
 new G4PVPlacement(G4Transform3D(rm1, 
-    G4ThreeVector(X_center, y_center, z_center - radious_field - Y_leaf - h/2)),"wall_phys",Wall_lv, motherPhys,false,1,checkOverlaps);
+    G4ThreeVector(X_center, y_center, z_center - radious_field - Y_leaf/2 - h/2)),"wall_phys",Wall_lv, motherPhys,false,1,checkOverlaps);
     
     Wall_lv->SetVisAttributes(blue);
 
