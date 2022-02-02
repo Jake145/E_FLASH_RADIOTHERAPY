@@ -15,7 +15,7 @@ from flash_helper.flash_functions import (PDD_plotter_out, find_nearest,
 
 if __name__ == "__main__":
     print("go")
-
+    '''
     ##7 MeV Water, This section calculates the coefficients for the Novac7
     simulated_energy_7 = np.array(
         [
@@ -57,8 +57,10 @@ if __name__ == "__main__":
     df = pd.read_csv(path, names=["X", "Y", "Z", "dose [Gy]", "dosesq [Gy^2]", "entry"])
     tic = time.perf_counter_ns()
     indexes = [5, 15, 25, 31]
+    '''
     mass_lyso = 7.4 * 1 * 0.2 * 0.2
     mass_lyso = mass_lyso * 0.001
+    '''
     tic = time.perf_counter_ns()
     dose = np.array(df["dose [Gy]"])[indexes]
     x = np.divide(dose / 1e7, (Run2_simulated_energy * 1.6e-10 / mass_lyso) / 2e6)
@@ -140,21 +142,51 @@ if __name__ == "__main__":
 
     plt.grid()
     plt.show()
+    '''
     ##9Mev and Dark PMMA, this section calculates the PDDs in PMMA for 9Mev EF and Dark spectrum
     path_9 = "../Flash_ex_novo/VALIDATION/9MevEF_PMMA_10mil_8cm_200bin.csv"
     dose_9_, sq_9, distance_9 = PDD_plotter_out(path_9, 80)
-    path_7 = "../Flash_ex_novo/VALIDATION/7MevEF_custom_200bin_8cm.csv"
-    path_7_1000 = "Send/darklyso/pmmalysodarkpdd.csv"
-    path_7_54545454 = "Send/darklyso/pmmapdddarklyso2.csv"
-    dose_7_1, sq_7_1, distance_7_1 = PDD_plotter_out(path_7, 80)  # seed 42
-    dose_7_2, sq_7_2, distance_7_2 = PDD_plotter_out(path_7_1000, 80)  # seed 1000
-    dose_7_3, sq_7_3, distance_7_3 = PDD_plotter_out(path_7_54545454, 80)  # seed 42
-    dose_7 = mean_array_calculator(dose_7_1, dose_7_2, dose_7_3)
-    dose_7_means = unumpy.nominal_values(dose_7)
-    dose_7_stds = unumpy.std_devs(dose_7)
-
-    path_7_1000 = "Send/darklyso/pmmalysodarkpdd.csv"
-    path_7_54545454 = "Send/darklyso/pmmalysodarkpdd2.csv"
+    test=True
+    if test:
+       simulated_energy_7=np.array([3.53893,3.54004,3.63542,3.15476,2.62647,1.7587,0.809028])
+       path_7 = "Send/test.csv"
+       dose_7, sq_7_1, distance_7_1 = PDD_plotter_out(path_7, 80)
+       dose_7_means = dose_7
+       
+    else:
+        path_7 = "Send/EF_DARK_SEED_42_200.csv"
+        path_7_1000 = "Send/EF_DARK_SEED_145_200.csv"
+        path_7_54545454 = "Send/EF_DARK_SEED_69_200.csv"
+        dose_7_1, sq_7_1, distance_7_1 = PDD_plotter_out(path_7, 80)  # seed 42
+        dose_7_2, sq_7_2, distance_7_2 = PDD_plotter_out(path_7_1000, 80)  # seed 1000
+        dose_7_3, sq_7_3, distance_7_3 = PDD_plotter_out(path_7_54545454, 80)  # seed 42
+        dose_7 = mean_array_calculator(dose_7_1, dose_7_2, dose_7_3)
+        dose_7_means = unumpy.nominal_values(dose_7)
+        dose_7_stds = unumpy.std_devs(dose_7)
+        simulated_energy_7 = np.array(
+        [2.89866,3.06285,2.92242,2.50374,2.20582,1.4628,0.713238]
+    )  # lyso seed 42
+        simulated_energy_7_seed_106 = np.array(
+        [2.97196,2.91182,2.89442,2.49522,2.13832,1.35863,0.706737]
+    )
+        simulated_energy_7_seed_145 = np.array(
+        [2.86442, 2.83716,2.79214,2.50228,2.24271,1.42199, 0.689874]
+    )
+        simulated_energy_7 = np.array(
+        [2.95361,2.97378,2.90458,2.34429,2.24832,1.33019,0.66292]
+        )
+    #simulated_energy_7_seed_106 = np.array(
+    #    [2.87748,2.9274,2.84878,2.38968,2.1193,1.39413,0.664677]
+    #)
+    #simulated_energy_7_seed_145 = np.array(
+    #    [2.84051,3.03844,2.85396,2.22632,2.17628,1.33243,0.687263]
+    #)
+        simulated_energy_7 = mean_array_calculator(
+        simulated_energy_7, simulated_energy_7_seed_106, simulated_energy_7_seed_145
+    )
+        simulated_energy_7_means = unumpy.nominal_values(simulated_energy_7)
+        simulated_energy_7_stds = unumpy.std_devs(simulated_energy_7)
+   
 
     path_106 = "Send/phantomstats/dose_106.csv"  # seed 106
     path_145 = "Send/phantomstats/dose_145.csv"  # seed 145
@@ -170,21 +202,15 @@ if __name__ == "__main__":
     dose_9_means = unumpy.nominal_values(dose_9)
     dose_9_std = unumpy.std_devs(dose_9)
 
-    simulated_energy_7 = np.array(
-        [3.74886, 3.68112, 3.13143, 3.01489, 2.13634, 0.95427]
-    )  # lyso seed 42
-    simulated_energy_7_seed_106 = np.array(
-        [4.00161, 3.7975, 3.21129, 3.25056, 1.9335, 0.892416]
-    )
-    simulated_energy_7_seed_145 = np.array(
-        [3.68242, 3.77736, 3.38892, 3.05226, 1.98661, 0.908911]
-    )
+    
+    #simulated_energy_7_test = np.array([766.556,782.067,704.792,575.741,569.999,377.11,177.136])
+    
+    
+    #simulated_energy_7_test = np.array([647.24,648.822,689.798,638.791,531.543,350.16,166.405])
 
-    simulated_energy_7 = mean_array_calculator(
-        simulated_energy_7, simulated_energy_7_seed_106, simulated_energy_7_seed_145
-    )
-    simulated_energy_7_means = unumpy.nominal_values(simulated_energy_7)
-    simulated_energy_7_stds = unumpy.std_devs(simulated_energy_7)
+    #simulated_energy_7_test = np.array([687.392,644.321,688.048,630.269,542.462,308.169,160.400])
+    #simulated_energy_7_test = np.array([724,691.104,689.52,654.627,579.536,329.733,186.102])
+    #simulated_energy_7_test = np.array([830.386,892.915,897.363,782.0,653.75,490.333,239.856])
     simulated_energy_9 = np.array(
         [3.99749, 3.96411, 3.96835, 3.83761, 3.5549, 2.49916]
     )  # gev lyso
@@ -495,8 +521,9 @@ if __name__ == "__main__":
     print(f"PMMA Sum data: R100 = {r100_pmma}, R90={r90_pmma}, R50={r50_pmma}")
     print(f"Uncorrected EJ212 data: R100 = {r100_ej}, R90={r90_ej}, R50={r50_ej}")
     print(f"Corrected EJ212 data: R100 = {r100_corr}, R90={r90_corr}, R50={r50_corr}")
-
+    
     plt.figure("ej212")
+    '''
     plt.plot(
         distance_9,
         100 * unumpy.nominal_values(dose_9) / max(unumpy.nominal_values(dose_9)),
@@ -515,7 +542,7 @@ if __name__ == "__main__":
         color="magenta",
         label="Simulated EJ212 9 MeV ",
     )
-
+    '''
     plt.errorbar(
         ej212_distance[:-1],
         unumpy.nominal_values(
@@ -558,6 +585,7 @@ if __name__ == "__main__":
 
     plt.grid()
     plt.show()
+    
     ## 9mev lyso EF coefficients
     indexes = [5, 13, 25, 30, 42, 55]
     mass_lyso = 7.25 * 1 * 0.2 * 0.2
@@ -589,7 +617,7 @@ if __name__ == "__main__":
     c_corr = c_corr / np.max(c_corr)
     dis_corr = measured_distance[1:]
     ## 9 Mev LYSO plot
-
+    
     plt.figure(2)
     plt.plot(
         distance_9,
@@ -646,13 +674,13 @@ if __name__ == "__main__":
 
     plt.grid()
     plt.show()
-
+    
     ## Dark spectrum coefficients
-    indexes_lyso = [5, 13, 25, 30, 42, 55]
+    indexes_lyso = [3,8, 16, 29, 34, 46, 57]
 
     tic = time.perf_counter_ns()
     dose_lyso = np.array(dose_7)[indexes_lyso]
-    x = np.divide(dose_lyso / 1e7, (simulated_energy_7 * 1.6e-10 / mass_lyso) / 2e6)
+    x = np.divide(dose_lyso/2e6 , (simulated_energy_7 * 1.6e-10 / mass_lyso)/2e6 )
     coefficients_lyso = np.array(x)
     toc = time.perf_counter_ns()
     print(
@@ -666,7 +694,7 @@ if __name__ == "__main__":
     coefficients_lyso_means = unumpy.nominal_values(coefficients_lyso)
 
     coefficients_lyso_std = unumpy.std_devs(coefficients_lyso)
-    print("Obtained coefficients: ", coefficients_lyso)
+    #print("Obtained coefficients: ", coefficients_lyso)
 
     ## Dark spectrum measurements and PDD plot
     measured_charge_lyso_1 = np.array([4.85, 4.90, 5.02, 4.64, 4.30, 3.28, 1.47])
@@ -688,22 +716,23 @@ if __name__ == "__main__":
     measured_distance = np.array([0, 2, 5, 10, 12, 17, 22]) + 1.5
     charge_per_pulse = (measured_charge - noise) / 100
 
-    x_r = measured_distance[1:]
-    y_r = charge_per_pulse[1:] * coefficients_lyso
+    x_r = measured_distance
+    y_r = charge_per_pulse * coefficients_lyso
     y_r = y_r / np.max(unumpy.nominal_values(y_r)) * 100
     validation_distance_7, _, validation_dose_7 = np.loadtxt(
         "EF_val_7mev.txt", unpack=True
     )
 
     plt.figure(5)
-    plt.plot(
-        distance_9,
-        100 * dose_7_means / np.max(dose_7_means),
-        marker=".",
-        linestyle="dashed",
-        color="blue",
-        label="Simulated PMMA  ",
-    )
+    if test:
+        plt.plot(
+            distance_7_1,
+            100 * dose_7_means / np.max(dose_7_means),
+            marker=".",
+            linestyle="dashed",
+            color="blue",
+            label="Simulated PMMA  ",
+        )
     plt.plot(
         validation_distance_7,
         validation_dose_7,
@@ -714,19 +743,19 @@ if __name__ == "__main__":
     )
 
     plt.errorbar(
-        measured_distance[1:],
+        measured_distance,
         100
-        * unumpy.nominal_values(charge_per_pulse)[1:]
-        / np.max(unumpy.nominal_values(charge_per_pulse)[1:]),
-        yerr=unumpy.std_devs(100 * charge_per_pulse[1:] / max(charge_per_pulse[1:])),
+        * unumpy.nominal_values(charge_per_pulse)
+        / np.max(unumpy.nominal_values(charge_per_pulse)),
+        yerr=unumpy.std_devs(100 * charge_per_pulse/ max(charge_per_pulse)),
         marker=".",
         linestyle="--",
         color="black",
         label="Measured LYSO",
     )
-
+    '''
     plt.plot(
-        exp_distance_9,
+        measured_distance,
         100
         * unumpy.nominal_values(simulated_energy_7)
         / np.max(unumpy.nominal_values(simulated_energy_7)),
@@ -735,13 +764,25 @@ if __name__ == "__main__":
         color="green",
         label="Simulated LYSO  ",
     )
+    
+    plt.plot(
+        measured_distance,
+        100
+        * simulated_energy_7_test
+        / np.max(simulated_energy_7_test),
+        marker=".",
+        linestyle="dashed",
+        color="skyblue",
+        label="test LYSO  ",
+    )
+    '''
     plt.errorbar(
         x_r,
         unumpy.nominal_values(y_r),
         yerr=unumpy.std_devs(y_r),
         marker=".",
-        linestyle="",
-        color="magenta",
+        linestyle="--",
+        color="green",
         label="PMMA Equivalence corrected Points",
     )
 
@@ -753,13 +794,4 @@ if __name__ == "__main__":
 
     plt.grid()
     plt.show()
-    ## Dark spectrum plotting
-    x, y = np.loadtxt("Send/efdark.txt.txt", unpack=True)
-    plt.figure("dark spectrum")
-    plt.title("ElectronFlash Dark Spectrum")
-    plt.xlabel("energy [MeV]")
-    plt.ylabel("intensity")
-    plt.bar(x, y, color="orange")
-    plt.xlim(0, 9)
-    plt.grid()
-    plt.show()
+    

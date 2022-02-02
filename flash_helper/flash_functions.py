@@ -228,14 +228,14 @@ def plotter(
         (
             r"$y = k\cdot\frac{x}{1 + \alpha x}$",
             r"$\alpha=%.2f \pm %.2f $" % (alpha__, sigma_alpha__),
-            r"$k=%.2f \pm %.2f $" % (k__, sigma_k__),
+            r"$k=%.1f \pm %.1f $" % (k__, sigma_k__),
             r"$R^2$ score = %.3f " % (r2),
         )
     )
 
     props = dict(boxstyle="round", facecolor="white", alpha=0.5)
 
-    plt.text(cord_1, cord_2, textstr, fontsize=14, verticalalignment="top", bbox=props)
+    plt.text(cord_1, cord_2, textstr, fontsize=11, verticalalignment="top", bbox=props)
 
     plt.grid()
 

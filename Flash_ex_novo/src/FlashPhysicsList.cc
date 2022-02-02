@@ -66,7 +66,7 @@ void FlashPhysicsList::SetCuts() {
   G4Region *region;
   G4String regName;
   G4ProductionCuts *cuts;
-
+  G4bool Det = false;
   regName = "Phantom_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts = new G4ProductionCuts;
@@ -74,7 +74,7 @@ void FlashPhysicsList::SetCuts() {
   cuts->SetProductionCut(0.1 * mm, G4ProductionCuts::GetIndex("e-"));
   cuts->SetProductionCut(0.1 * mm, G4ProductionCuts::GetIndex("e+"));
   region->SetProductionCuts(cuts);
-
+  if (Det == true){
   regName = "crystal_reg";
   region = G4RegionStore::GetInstance()->GetRegion(regName);
   cuts = new G4ProductionCuts;
@@ -84,7 +84,7 @@ void FlashPhysicsList::SetCuts() {
   // cuts->SetProductionCut(0.1*mm,G4ProductionCuts::GetIndex("proton"));
   region->SetProductionCuts(cuts);
 
-  /*regName = "OF_core_reg";
+  regName = "OF_core_reg";
    region = G4RegionStore::GetInstance()->GetRegion(regName);
    cuts = new G4ProductionCuts;
    cuts->SetProductionCut(0.1 * mm);
@@ -97,5 +97,5 @@ void FlashPhysicsList::SetCuts() {
    region = G4RegionStore::GetInstance()->GetRegion(regName);
    cuts = new G4ProductionCuts;
    cuts->SetProductionCut(0.1 * mm);
-   region->SetProductionCuts(cuts);*/
+   region->SetProductionCuts(cuts);}
 }

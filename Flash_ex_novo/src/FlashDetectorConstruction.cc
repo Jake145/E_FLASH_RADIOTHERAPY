@@ -145,7 +145,7 @@ void FlashDetectorConstruction::DefineMaterials() {
 
   mpt->AddProperty("ABSLENGTH", ene, abs, num);
 
-  mpt->AddConstProperty("SCINTILLATIONYIELD", 2700 / MeV);
+  mpt->AddConstProperty("SCINTILLATIONYIELD", 27000 / MeV);
 
   mpt->AddConstProperty("RESOLUTIONSCALE", 1);
 
@@ -407,7 +407,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::ConstructPhantom_Support(
   G4double Position_coefficient = CollPos;
   G4double Detector_size = 1.5 * mm; // this is the distance from the phantom to
                                      // the barycenter of the detector
-  G4double Measurement_point = 1.5 * mm;
+  G4double Measurement_point = 22* mm + Detector_size;
   G4double phantomSizeX = Measurement_point - Detector_size,
            phantomSizeY = 30.0 * cm, phantomSizeZ = 30.0 * cm,
            phantom_coordinateX = (Position_coefficient * mm + phantomSizeX / 2);
@@ -575,7 +575,7 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
@@ -799,7 +799,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   // -----------------------------
   // detector + phantom +Default dimensions
   //------------------------------
-  select_EJ212 = true;
+  select_EJ212 = false;
   // LYSO_dimensions/////////////////////
   if (select_EJ212 == false) {
     G4double cryst_dX = 1 * cm, cryst_dY = 2 * mm, cryst_dZ = 2 * mm;
@@ -820,7 +820,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   }
 
   // construct collimator
-  Detector_builder = true;
+  Detector_builder = false;
 
   Collimator = new Applicator(physicalTreatmentRoom);
   // constuct phantom//////

@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
   //#endif
   // Comment to unset the seed.
 
-  G4Random::setTheSeed(5454545);
+  G4Random::setTheSeed(777);
 
   auto *runManager = new G4MTRunManager;
 

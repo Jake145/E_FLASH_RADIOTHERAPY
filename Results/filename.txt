@@ -2590,3 +2590,867 @@ Kurtosis:                       1.153   Cond. No.                         7.47
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 sklearn: Y=0.07874999999999999X + 0.07666666666666672
+results for SSD= 73 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.968
+Model:                            OLS   Adj. R-squared:                  0.952
+Method:                 Least Squares   F-statistic:                     60.52
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):             0.0161
+Time:                        15:58:37   Log-Likelihood:                 1.7207
+No. Observations:                   4   AIC:                            0.5586
+Df Residuals:                       2   BIC:                           -0.6688
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.8383      0.273      3.075      0.091      -0.335       2.011
+x1             0.7743      0.100      7.780      0.016       0.346       1.203
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.027
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.618
+Skew:                           0.046   Prob(JB):                        0.734
+Kurtosis:                       1.077   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.7743333333333333X + 0.8383333333333336
+results for SSD= 90 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     4908.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000204
+Time:                        15:58:37   Log-Likelihood:                 11.339
+No. Observations:                   4   AIC:                            -18.68
+Df Residuals:                       2   BIC:                            -19.91
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.2917      0.025     11.850      0.007       0.186       0.398
+x1             0.6297      0.009     70.059      0.000       0.591       0.668
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.009
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.650
+Skew:                           0.015   Prob(JB):                        0.722
+Kurtosis:                       1.025   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.6296666666666666X + 0.29166666666666696
+results for SSD= 105 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 5.236e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           1.91e-05
+Time:                        15:58:37   Log-Likelihood:                 17.925
+No. Observations:                   4   AIC:                            -31.85
+Df Residuals:                       2   BIC:                            -33.08
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1733      0.005     36.542      0.001       0.153       0.194
+x1             0.3963      0.002    228.823      0.000       0.389       0.404
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.233
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.428
+Skew:                           0.365   Prob(JB):                        0.807
+Kurtosis:                       1.573   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.3963333333333332X + 0.17333333333333356
+results for SSD= 106 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     5172.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000193
+Time:                        15:58:37   Log-Likelihood:                 12.366
+No. Observations:                   4   AIC:                            -20.73
+Df Residuals:                       2   BIC:                            -21.96
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1867      0.019      9.804      0.010       0.105       0.269
+x1             0.5000      0.007     71.919      0.000       0.470       0.530
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.040
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.597
+Skew:                           0.068   Prob(JB):                        0.742
+Kurtosis:                       1.112   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.49999999999999983X + 0.18666666666666698
+results for SSD= 114 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 1.186e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           8.43e-05
+Time:                        15:58:37   Log-Likelihood:                 14.460
+No. Observations:                   4   AIC:                            -24.92
+Df Residuals:                       2   BIC:                            -26.15
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1567      0.011     13.889      0.005       0.108       0.205
+x1             0.4486      0.004    108.909      0.000       0.431       0.466
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.023
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.625
+Skew:                           0.039   Prob(JB):                        0.732
+Kurtosis:                       1.065   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.44858333333333317X + 0.15666666666666695
+results for SSD= 122 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 1.728e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           5.79e-05
+Time:                        15:58:37   Log-Likelihood:                 15.945
+No. Observations:                   4   AIC:                            -27.89
+Df Residuals:                       2   BIC:                            -29.12
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1263      0.008     16.222      0.004       0.093       0.160
+x1             0.3736      0.003    131.456      0.000       0.361       0.386
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.073
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.550
+Skew:                           0.122   Prob(JB):                        0.759
+Kurtosis:                       1.199   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.3735833333333332X + 0.1262500000000002
+results for SSD= 134 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     3117.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000321
+Time:                        15:58:37   Log-Likelihood:                 13.308
+No. Observations:                   4   AIC:                            -22.62
+Df Residuals:                       2   BIC:                            -23.84
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1167      0.015      7.754      0.016       0.052       0.181
+x1             0.3067      0.005     55.830      0.000       0.283       0.330
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.523
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.494
+Skew:                           0.710   Prob(JB):                        0.781
+Kurtosis:                       2.026   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.30674999999999997X + 0.1166666666666667
+results for SSD= 162 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                     8665.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000115
+Time:                        15:58:37   Log-Likelihood:                 17.787
+No. Observations:                   4   AIC:                            -31.57
+Df Residuals:                       2   BIC:                            -32.80
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0388      0.005      7.891      0.016       0.018       0.060
+x1             0.1669      0.002     93.087      0.000       0.159       0.175
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.122
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.495
+Skew:                           0.201   Prob(JB):                        0.781
+Kurtosis:                       1.324   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.16691666666666663X + 0.03875000000000017
+results for SSD= 190 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     4471.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000224
+Time:                        15:58:37   Log-Likelihood:                 19.143
+No. Observations:                   4   AIC:                            -34.29
+Df Residuals:                       2   BIC:                            -35.51
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0113      0.003      3.216      0.085      -0.004       0.026
+x1             0.0854      0.001     66.864      0.000       0.080       0.091
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.670
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.581
+Skew:                           0.830   Prob(JB):                        0.748
+Kurtosis:                       2.145   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.08541666666666664X + 0.011250000000000066
+results for SSD= 217 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 1.281e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           7.81e-05
+Time:                        15:58:37   Log-Likelihood:                 23.024
+No. Observations:                   4   AIC:                            -42.05
+Df Residuals:                       2   BIC:                            -43.28
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0019      0.001      1.414      0.293      -0.004       0.008
+x1             0.0548      0.000    113.177      0.000       0.053       0.057
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.130
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.488
+Skew:                          -0.212   Prob(JB):                        0.783
+Kurtosis:                       1.342   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.05479166666666666X + 0.0018750000000000155
+results for SSD= 73 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.893
+Model:                            OLS   Adj. R-squared:                  0.839
+Method:                 Least Squares   F-statistic:                     16.67
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):             0.0551
+Time:                        15:58:51   Log-Likelihood:                 2.5226
+No. Observations:                   4   AIC:                            -1.045
+Df Residuals:                       2   BIC:                            -2.273
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          2.4900      0.223     11.163      0.008       1.530       3.450
+x1             0.3326      0.081      4.083      0.055      -0.018       0.683
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.154
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.468
+Skew:                           0.249   Prob(JB):                        0.791
+Kurtosis:                       1.399   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.3325999999999999X + 2.4900000000000007
+results for SSD= 114 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     2760.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000362
+Time:                        15:58:51   Log-Likelihood:                 10.364
+No. Observations:                   4   AIC:                            -16.73
+Df Residuals:                       2   BIC:                            -17.96
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.2525      0.031      8.039      0.015       0.117       0.388
+x1             0.6025      0.011     52.535      0.000       0.553       0.652
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.033
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.608
+Skew:                           0.056   Prob(JB):                        0.738
+Kurtosis:                       1.093   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.6025000000000001X + 0.2524999999999997
+results for SSD= 122 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     4287.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000233
+Time:                        15:58:51   Log-Likelihood:                 11.808
+No. Observations:                   4   AIC:                            -19.62
+Df Residuals:                       2   BIC:                            -20.84
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.2117      0.022      9.670      0.011       0.117       0.306
+x1             0.5233      0.008     65.474      0.000       0.489       0.558
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.030
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.613
+Skew:                           0.052   Prob(JB):                        0.736
+Kurtosis:                       1.085   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.5233333333333333X + 0.21166666666666667
+results for SSD= 162 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     3410.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000293
+Time:                        15:58:51   Log-Likelihood:                 14.270
+No. Observations:                   4   AIC:                            -24.54
+Df Residuals:                       2   BIC:                            -25.77
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1420      0.012     12.004      0.007       0.091       0.193
+x1             0.2522      0.004     58.393      0.000       0.234       0.271
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.083
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.538
+Skew:                           0.137   Prob(JB):                        0.764
+Kurtosis:                       1.224   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.2522166666666666X + 0.14200000000000024
+results for SSD= 190 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     5016.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000199
+Time:                        15:58:51   Log-Likelihood:                 17.042
+No. Observations:                   4   AIC:                            -30.08
+Df Residuals:                       2   BIC:                            -31.31
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1008      0.006     17.044      0.003       0.075       0.126
+x1             0.1530      0.002     70.825      0.000       0.144       0.162
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.067
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.559
+Skew:                           0.112   Prob(JB):                        0.756
+Kurtosis:                       1.183   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.153X + 0.10083333333333333
+results for SSD= 217 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     2835.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000353
+Time:                        15:58:51   Log-Likelihood:                 18.557
+No. Observations:                   4   AIC:                            -33.11
+Df Residuals:                       2   BIC:                            -34.34
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0767      0.004     18.928      0.003       0.059       0.094
+x1             0.0787      0.001     53.245      0.000       0.072       0.085
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.056
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.574
+Skew:                           0.093   Prob(JB):                        0.750
+Kurtosis:                       1.153   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.07874999999999999X + 0.07666666666666672
+results for SSD= 73 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.968
+Model:                            OLS   Adj. R-squared:                  0.952
+Method:                 Least Squares   F-statistic:                     60.52
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):             0.0161
+Time:                        15:59:26   Log-Likelihood:                 1.7207
+No. Observations:                   4   AIC:                            0.5586
+Df Residuals:                       2   BIC:                           -0.6688
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.8383      0.273      3.075      0.091      -0.335       2.011
+x1             0.7743      0.100      7.780      0.016       0.346       1.203
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.027
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.618
+Skew:                           0.046   Prob(JB):                        0.734
+Kurtosis:                       1.077   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.7743333333333333X + 0.8383333333333336
+results for SSD= 90 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     4908.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000204
+Time:                        15:59:26   Log-Likelihood:                 11.339
+No. Observations:                   4   AIC:                            -18.68
+Df Residuals:                       2   BIC:                            -19.91
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.2917      0.025     11.850      0.007       0.186       0.398
+x1             0.6297      0.009     70.059      0.000       0.591       0.668
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.009
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.650
+Skew:                           0.015   Prob(JB):                        0.722
+Kurtosis:                       1.025   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.6296666666666666X + 0.29166666666666696
+results for SSD= 105 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 5.236e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           1.91e-05
+Time:                        15:59:26   Log-Likelihood:                 17.925
+No. Observations:                   4   AIC:                            -31.85
+Df Residuals:                       2   BIC:                            -33.08
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1733      0.005     36.542      0.001       0.153       0.194
+x1             0.3963      0.002    228.823      0.000       0.389       0.404
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.233
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.428
+Skew:                           0.365   Prob(JB):                        0.807
+Kurtosis:                       1.573   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.3963333333333332X + 0.17333333333333356
+results for SSD= 106 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     5172.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000193
+Time:                        15:59:26   Log-Likelihood:                 12.366
+No. Observations:                   4   AIC:                            -20.73
+Df Residuals:                       2   BIC:                            -21.96
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1867      0.019      9.804      0.010       0.105       0.269
+x1             0.5000      0.007     71.919      0.000       0.470       0.530
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.040
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.597
+Skew:                           0.068   Prob(JB):                        0.742
+Kurtosis:                       1.112   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.49999999999999983X + 0.18666666666666698
+results for SSD= 114 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 1.186e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           8.43e-05
+Time:                        15:59:26   Log-Likelihood:                 14.460
+No. Observations:                   4   AIC:                            -24.92
+Df Residuals:                       2   BIC:                            -26.15
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1567      0.011     13.889      0.005       0.108       0.205
+x1             0.4486      0.004    108.909      0.000       0.431       0.466
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.023
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.625
+Skew:                           0.039   Prob(JB):                        0.732
+Kurtosis:                       1.065   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.44858333333333317X + 0.15666666666666695
+results for SSD= 122 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 1.728e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           5.79e-05
+Time:                        15:59:26   Log-Likelihood:                 15.945
+No. Observations:                   4   AIC:                            -27.89
+Df Residuals:                       2   BIC:                            -29.12
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1263      0.008     16.222      0.004       0.093       0.160
+x1             0.3736      0.003    131.456      0.000       0.361       0.386
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.073
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.550
+Skew:                           0.122   Prob(JB):                        0.759
+Kurtosis:                       1.199   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.3735833333333332X + 0.1262500000000002
+results for SSD= 134 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     3117.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000321
+Time:                        15:59:26   Log-Likelihood:                 13.308
+No. Observations:                   4   AIC:                            -22.62
+Df Residuals:                       2   BIC:                            -23.84
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1167      0.015      7.754      0.016       0.052       0.181
+x1             0.3067      0.005     55.830      0.000       0.283       0.330
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.523
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.494
+Skew:                           0.710   Prob(JB):                        0.781
+Kurtosis:                       2.026   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.30674999999999997X + 0.1166666666666667
+results for SSD= 162 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                     8665.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000115
+Time:                        15:59:26   Log-Likelihood:                 17.787
+No. Observations:                   4   AIC:                            -31.57
+Df Residuals:                       2   BIC:                            -32.80
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0388      0.005      7.891      0.016       0.018       0.060
+x1             0.1669      0.002     93.087      0.000       0.159       0.175
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.122
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.495
+Skew:                           0.201   Prob(JB):                        0.781
+Kurtosis:                       1.324   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.16691666666666663X + 0.03875000000000017
+results for SSD= 190 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     4471.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000224
+Time:                        15:59:26   Log-Likelihood:                 19.143
+No. Observations:                   4   AIC:                            -34.29
+Df Residuals:                       2   BIC:                            -35.51
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0113      0.003      3.216      0.085      -0.004       0.026
+x1             0.0854      0.001     66.864      0.000       0.080       0.091
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.670
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.581
+Skew:                           0.830   Prob(JB):                        0.748
+Kurtosis:                       2.145   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.08541666666666664X + 0.011250000000000066
+results for SSD= 217 plastic
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  1.000
+Method:                 Least Squares   F-statistic:                 1.281e+04
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           7.81e-05
+Time:                        15:59:26   Log-Likelihood:                 23.024
+No. Observations:                   4   AIC:                            -42.05
+Df Residuals:                       2   BIC:                            -43.28
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0019      0.001      1.414      0.293      -0.004       0.008
+x1             0.0548      0.000    113.177      0.000       0.053       0.057
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.130
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.488
+Skew:                          -0.212   Prob(JB):                        0.783
+Kurtosis:                       1.342   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.05479166666666666X + 0.0018750000000000155
+results for SSD= 73 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.893
+Model:                            OLS   Adj. R-squared:                  0.839
+Method:                 Least Squares   F-statistic:                     16.67
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):             0.0551
+Time:                        15:59:47   Log-Likelihood:                 2.5226
+No. Observations:                   4   AIC:                            -1.045
+Df Residuals:                       2   BIC:                            -2.273
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          2.4900      0.223     11.163      0.008       1.530       3.450
+x1             0.3326      0.081      4.083      0.055      -0.018       0.683
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.154
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.468
+Skew:                           0.249   Prob(JB):                        0.791
+Kurtosis:                       1.399   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.3325999999999999X + 2.4900000000000007
+results for SSD= 114 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     2760.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000362
+Time:                        15:59:47   Log-Likelihood:                 10.364
+No. Observations:                   4   AIC:                            -16.73
+Df Residuals:                       2   BIC:                            -17.96
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.2525      0.031      8.039      0.015       0.117       0.388
+x1             0.6025      0.011     52.535      0.000       0.553       0.652
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.033
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.608
+Skew:                           0.056   Prob(JB):                        0.738
+Kurtosis:                       1.093   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.6025000000000001X + 0.2524999999999997
+results for SSD= 122 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     4287.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000233
+Time:                        15:59:47   Log-Likelihood:                 11.808
+No. Observations:                   4   AIC:                            -19.62
+Df Residuals:                       2   BIC:                            -20.84
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.2117      0.022      9.670      0.011       0.117       0.306
+x1             0.5233      0.008     65.474      0.000       0.489       0.558
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.030
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.613
+Skew:                           0.052   Prob(JB):                        0.736
+Kurtosis:                       1.085   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.5233333333333333X + 0.21166666666666667
+results for SSD= 162 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     3410.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000293
+Time:                        15:59:47   Log-Likelihood:                 14.270
+No. Observations:                   4   AIC:                            -24.54
+Df Residuals:                       2   BIC:                            -25.77
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1420      0.012     12.004      0.007       0.091       0.193
+x1             0.2522      0.004     58.393      0.000       0.234       0.271
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.083
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.538
+Skew:                           0.137   Prob(JB):                        0.764
+Kurtosis:                       1.224   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.2522166666666666X + 0.14200000000000024
+results for SSD= 190 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       1.000
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     5016.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000199
+Time:                        15:59:47   Log-Likelihood:                 17.042
+No. Observations:                   4   AIC:                            -30.08
+Df Residuals:                       2   BIC:                            -31.31
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1008      0.006     17.044      0.003       0.075       0.126
+x1             0.1530      0.002     70.825      0.000       0.144       0.162
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.067
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.559
+Skew:                           0.112   Prob(JB):                        0.756
+Kurtosis:                       1.183   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.153X + 0.10083333333333333
+results for SSD= 217 lyso
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      y   R-squared:                       0.999
+Model:                            OLS   Adj. R-squared:                  0.999
+Method:                 Least Squares   F-statistic:                     2835.
+Date:                Thu, 13 Jan 2022   Prob (F-statistic):           0.000353
+Time:                        15:59:47   Log-Likelihood:                 18.557
+No. Observations:                   4   AIC:                            -33.11
+Df Residuals:                       2   BIC:                            -34.34
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.0767      0.004     18.928      0.003       0.059       0.094
+x1             0.0787      0.001     53.245      0.000       0.072       0.085
+==============================================================================
+Omnibus:                          nan   Durbin-Watson:                   2.056
+Prob(Omnibus):                    nan   Jarque-Bera (JB):                0.574
+Skew:                           0.093   Prob(JB):                        0.750
+Kurtosis:                       1.153   Cond. No.                         7.47
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+sklearn: Y=0.07874999999999999X + 0.07666666666666672
