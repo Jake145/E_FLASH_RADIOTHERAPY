@@ -45,9 +45,9 @@
 /score/create/boxMesh boxMesh_1
 
 # scorer for 9 mev
-/score/mesh/boxSize 20. 0.1 0.1 cm
-/score/mesh/nBin 100 1 1
-/score/mesh/translate/xyz 20. 0 0 cm 
+/score/mesh/boxSize 15 1 1 cm
+/score/mesh/nBin 60 20 20
+/score/mesh/translate/xyz 15. 0 0 cm 
 /score/quantity/doseDeposit dose Gy
 
 #
@@ -67,7 +67,7 @@
 /score/list  
 
 
-/run/beamOn	500000
+/run/beamOn	2000000
 #/run/beamOn  211950
 #/run/beamOn 500000
 

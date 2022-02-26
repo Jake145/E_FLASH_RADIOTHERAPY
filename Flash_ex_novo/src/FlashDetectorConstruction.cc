@@ -563,8 +563,8 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
 
   G4double Position_coefficient = CollPos;
-  G4double phantomSizeX = 30.0 * cm, phantomSizeY = 30.0 * cm,
-           phantomSizeZ = 30.0 * cm,
+  G4double phantomSizeX = 60.0 * cm, phantomSizeY = 60.0 * cm,
+           phantomSizeZ = 60.0 * cm,
            phantom_coordinateX = (Position_coefficient * mm + phantomSizeX / 2);
 
   G4ThreeVector phantomPosition =
@@ -575,7 +575,7 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
 
   // Definition of the logical volume of the Phantom
   phantomLogicalVolume =
-      new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
+      new G4LogicalVolume(phantom, PMMA, "phantomLog", 0, 0, 0);
 
   // Definition of the physics volume of the Phantom
   phant_phys =
@@ -821,7 +821,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 
   // construct collimator
   Detector_builder = false;
-  G4bool MLF = true;
+  G4bool MLF = false;
   VHEE = true;
   
   if (VHEE == false){

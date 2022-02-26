@@ -50,6 +50,9 @@ private:
   G4int fCerenkovCounter;
   G4int fBremstralung;
   G4int fFluo;
+  G4double Annihil_x;
+  G4double Annihil_y;
+  G4double Annihil_z;
 };
 
 #endif
