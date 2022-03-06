@@ -92,6 +92,14 @@ void FlashDetectorConstruction::DefineMaterials() {
   prelude->AddElement(man->FindOrBuildElement("O"), 18 * perCent);
   prelude->AddElement(man->FindOrBuildElement("Y"), 4 * perCent);
 
+
+
+  G4Material* LSO = new G4Material("Lu2SiO5", 7.4*g/cm3, 3);
+  LSO->AddElement(man->FindOrBuildElement("Lu"), 2);
+  LSO->AddElement(man->FindOrBuildElement("Si"), 1);
+  LSO->AddElement(man->FindOrBuildElement("O") , 5);  
+  
+  
   G4Material *scintillator =
       new G4Material("scintillator", prelude_density, ncomponents = 2);
   scintillator->AddMaterial(prelude, 99.81 * perCent);
@@ -364,6 +372,146 @@ void FlashDetectorConstruction::DefineMaterials() {
 
   ej212->SetMaterialPropertiesTable(ej212_MPT);
   EJ212 = nist->FindOrBuildMaterial("EJ-212");
+}
+
+void FlashDetectorConstruction::Construct_PET()
+{  
+  // Gamma detector Parameters
+  //
+  G4double cryst_dX = 3*cm, cryst_dY = 3*cm, cryst_dZ = 1.5*cm;
+  G4int nb_cryst = 100;
+  G4int nb_rings = 40;
+  //
+  G4double dPhi = twopi/nb_cryst, half_dPhi = dPhi; //multiply half_dphi to increase space between crystals
+  G4double cosdPhi = std::cos(half_dPhi);
+  G4double tandPhi = std::tan(half_dPhi);
+  // 
+  G4double ring_R1 = cryst_dY/tandPhi;
+  G4double ring_R2 = (ring_R1+cryst_dZ)/cosdPhi;
+  //
+  G4double detector_dZ = nb_rings*cryst_dX;
+  //
+  //G4NistManager* nist = G4NistManager::Instance();
+  G4Material* default_mat = nist->FindOrBuildMaterial("G4_AIR");
+  G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2SiO5");
+        
+  
+  //
+  // ring
+  //
+  G4Tubs* solidRing =
+    new G4Tubs("Ring", ring_R1, ring_R2, 0.5*cryst_dX, 0., twopi);
+      
+  G4LogicalVolume* logicRing =                         
+    new G4LogicalVolume(solidRing,           //its solid
+                        default_mat,         //its material
+                        "Ring");             //its name
+                    
+  //     
+  // define crystal
+  //
+  G4double gap = 0.5*mm;        //a gap for wrapping
+  G4double dX = cryst_dX - gap, dY = cryst_dY - gap;
+  G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, cryst_dZ/2);
+                     
+  G4LogicalVolume* logicCryst = 
+    new G4LogicalVolume(solidCryst,          //its solid
+                        cryst_mat,           //its material
+                        "CrystalLV");        //its name
+               
+  // place crystals within a ring 
+  //
+  for (G4int icrys = 0; icrys < nb_cryst ; icrys++) {
+    G4double phi = icrys*dPhi;
+    G4RotationMatrix rotm  = G4RotationMatrix();
+    rotm.rotateY(90*deg); 
+    rotm.rotateZ(phi);
+    G4ThreeVector uz = G4ThreeVector(std::cos(phi),  std::sin(phi),0.);     
+    G4ThreeVector position = (ring_R1+0.5*cryst_dZ)*uz;
+    G4Transform3D transform = G4Transform3D(rotm,position);
+                                    
+    new G4PVPlacement(transform,             //rotation,position
+                      logicCryst,            //its logical volume
+                      "crystal",             //its name
+                      logicRing,             //its mother  volume
+                      false,                 //no boolean operation
+                      icrys,                 //copy number
+                      fCheckOverlaps);       // checking overlaps 
+  }
+                                                      
+  //
+  // full detector
+  //
+  G4Tubs* solidDetector =
+    new G4Tubs("Detector", ring_R1, ring_R2, 0.5*detector_dZ, 0., twopi);
+      
+  G4LogicalVolume* logicDetector =                         
+    new G4LogicalVolume(solidDetector,       //its solid
+                        default_mat,         //its material
+                        "Detector");         //its name
+                                 
+  // 
+  // place rings within detector 
+  //
+  G4double OG = -0.5*(detector_dZ + cryst_dX);
+  for (G4int iring = 0; iring < nb_rings ; iring++) {
+    OG += cryst_dX;
+    new G4PVPlacement(0,                     
+                      G4ThreeVector(0,0,OG), 
+                      logicRing,             
+                      "ring",                
+                      logicDetector,         
+                      false,                 
+                      iring,                 
+                      fCheckOverlaps);       
+  }
+                       
+  //
+  // place detector in world
+  //                 
+  G4RotationMatrix rotm  = G4RotationMatrix();
+    rotm.rotateY(90*deg); 
+     G4Transform3D transform = G4Transform3D(rotm,G4ThreeVector(30*cm,0,0));
+  new G4PVPlacement(transform,         
+                    logicDetector,           
+                    "Detector",              
+                    logicTreatmentRoom,              
+                    false,                   
+                    0,                       
+                    fCheckOverlaps);          
+                 
+ 
+                                          
+  // Visualization attributes
+  //
+  blue = new G4VisAttributes(G4Colour(0., 0., 1.));
+  blue->SetVisibility(true);
+
+  G4VisAttributes *grey = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5));
+  grey->SetVisibility(true);
+
+  G4VisAttributes *yellow = new G4VisAttributes(G4Colour(1., 1., 0.));
+  yellow->SetVisibility(true);
+  
+  logicRing->SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicDetector->SetVisAttributes(grey);    
+
+
+  logicCryst->SetVisAttributes(yellow);
+
+  G4double maxStep = 0.1 * mm;
+  fStepLimit = new G4UserLimits(maxStep);
+  logicCryst->SetUserLimits(fStepLimit);
+  
+  logicCryst->SetUserLimits(fStepLimit);
+  
+  G4Region *CrystalRegion = new G4Region("crystal_reg");
+  logicCryst->SetRegion(CrystalRegion);
+  CrystalRegion->AddRootLogicalVolume(logicCryst);
+
+
+
+
 }
 
 G4VPhysicalVolume *FlashDetectorConstruction::ConstructPhantom_Support(
@@ -820,6 +968,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   }
 
   // construct collimator
+  PET_builder = true;
   Detector_builder = false;
   G4bool MLF = false;
   VHEE = true;
@@ -862,6 +1011,12 @@ if (MLF == true){
 
 COLL = new VHEE_collimator(physicalTreatmentRoom);
 }
+
+if (PET_builder == true){
+
+Construct_PET();
+
+}
   return physicalTreatmentRoom;
 }
 
@@ -869,7 +1024,7 @@ COLL = new VHEE_collimator(physicalTreatmentRoom);
 
 
 void FlashDetectorConstruction::ConstructSDandField() {
-  if (Detector_builder == true) {
+  if (Detector_builder == true||PET_builder == true) {
     G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
     G4MultiFunctionalDetector *cryst =
@@ -879,6 +1034,9 @@ void FlashDetectorConstruction::ConstructSDandField() {
     cryst->RegisterPrimitive(primitiv1);
     SetSensitiveDetector("CrystalLV", cryst);
   }
+  
+  
+  
 }
 
 

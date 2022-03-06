@@ -86,4 +86,6 @@ void FlashRunAction::EndOfRunAction(const G4Run *run) {
       << "Total events: " << fEvents.GetValue() << G4endl
       << "------------------------------------------------------------"
       << G4endl << G4endl;
+      G4cout
+     << "; Nb of 'good' e+ annihilations: " << fEvents.GetValue()  << G4endl;
 }

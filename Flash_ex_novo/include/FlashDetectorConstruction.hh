@@ -63,6 +63,7 @@ public:
                                    G4double fPTFEThickness,
                                    G4double opticfiber_core_dx,
                                    G4bool plastic_bool);
+  void Construct_PET();                                
   FlashDetectorConstruction();
   virtual ~FlashDetectorConstruction();
 
@@ -70,6 +71,7 @@ public:
   virtual void ConstructSDandField();
 
 private:
+G4bool PET_builder;
   G4LogicalVolume *AirBox;
   G4Material *airNist;
   G4Material *TEFLON;

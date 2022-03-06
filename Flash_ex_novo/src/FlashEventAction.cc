@@ -51,7 +51,36 @@ void FlashEventAction::BeginOfEventAction(const G4Event *) {
 }
 
 void FlashEventAction::EndOfEventAction(const G4Event *evt) {
-  /*G4HCofThisEvent *HCE = evt->GetHCofThisEvent();
+G4bool dosimetry = false;
+G4bool PET = true;
+if (PET = true){
+ const G4double eThreshold = 511*keV;
+  G4int nbOfFired = 0;
+   
+G4HCofThisEvent *HCE = evt->GetHCofThisEvent();
+  if (!HCE)
+    return;
+  G4SDManager *SDMan = G4SDManager::GetSDMpointer();
+  fCollID_cryst = SDMan->GetCollectionID("crystalSD/edep");
+  
+G4THitsMap<G4double>* evtMap = 
+                     (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_cryst));
+               
+  std::map<G4int,G4double*>::iterator itr;
+  for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
+     
+     G4double edep = 0.;
+     edep = *(itr->second);
+    if (edep > eThreshold) nbOfFired++;
+
+  }  
+  
+  if (nbOfFired == 2) fRunAction->CountEvent(1);
+
+
+}
+if (dosimetry == true){
+  G4HCofThisEvent *HCE = evt->GetHCofThisEvent();
   if (!HCE)
     return;
   G4SDManager *SDMan = G4SDManager::GetSDMpointer();
@@ -69,10 +98,10 @@ void FlashEventAction::EndOfEventAction(const G4Event *evt) {
   };
   if (edep > 0.) {
     fRunAction->SumEdep(edep);
-    fRunAction->CountEvent(1);
-  }
+	
+  }}
 
   G4cout << "Ending event: "
          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
-         << G4endl;*/
+         << G4endl;
 }
