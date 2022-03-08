@@ -71,7 +71,7 @@ G4THitsMap<G4double>* evtMap =
      
      G4double edep = 0.;
      edep = *(itr->second);
-    if (edep > eThreshold) nbOfFired++;
+    if (edep >= eThreshold) nbOfFired++;
 
   }  
   
