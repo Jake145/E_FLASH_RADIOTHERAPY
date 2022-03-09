@@ -146,7 +146,7 @@ if __name__ == "__main__":
     ##9Mev and Dark PMMA, this section calculates the PDDs in PMMA for 9Mev EF and Dark spectrum
     path_9 = "../Flash_ex_novo/VALIDATION/9MevEF_PMMA_10mil_8cm_200bin.csv"
     dose_9_, sq_9, distance_9 = PDD_plotter_out(path_9, 80)
-    test=True
+    test=False
     if test:
        simulated_energy_7=np.array([3.53893,3.54004,3.63542,3.15476,2.62647,1.7587,0.809028])
        path_7 = "Send/test.csv"
@@ -521,8 +521,12 @@ if __name__ == "__main__":
     print(f"PMMA Sum data: R100 = {r100_pmma}, R90={r90_pmma}, R50={r50_pmma}")
     print(f"Uncorrected EJ212 data: R100 = {r100_ej}, R90={r90_ej}, R50={r50_ej}")
     print(f"Corrected EJ212 data: R100 = {r100_corr}, R90={r90_corr}, R50={r50_corr}")
-    
+    params={"axes.labelsize":16,"axes.titlesize":20}
+    plt.rcParams.update(params)
     plt.figure("ej212")
+    plt.yticks(fontsize=20)
+    plt.xticks(fontsize=20)
+    
     '''
     plt.plot(
         distance_9,
@@ -551,17 +555,28 @@ if __name__ == "__main__":
         yerr=unumpy.std_devs(
             100 * (ej212_charge_over_pulse[:-1] / max(ej212_charge_over_pulse_means[:-1]))
         ),
-        marker=".",
+        marker="",
         linestyle="dashed",
         color="black",
-        label="Measured EJ212 9 MeV ",
+        #label="Measured EJ212 9 MeV ",s=20
+    )
+    plt.scatter(
+        ej212_distance[:-1],
+        unumpy.nominal_values(
+            100 * (ej212_charge_over_pulse[:-1] / max(ej212_charge_over_pulse_means[:-1]))
+        ),
+        
+        marker=".",
+        linestyle="None",
+        color="black",
+        label="Measured EJ212 9 MeV ",s=45
     )
 
     plt.plot(
         validation_distance_9,
         validation_dose_9,
-        marker=".",
-        linestyle="dashed",
+        #marker=".",
+        linestyle="-",
         color="red",
         label="Measured PMMA 9 MeV",
     )
@@ -570,18 +585,27 @@ if __name__ == "__main__":
         ej212_distance[:-1],
         100 * unumpy.nominal_values((c_corr_ej[:-1] / max(c_corr_ej_means[:-1]))),
         yerr=100 * unumpy.std_devs((c_corr_ej[:-1] / max(c_corr_ej_means[:-1]))),
-        marker=".",
+        marker="",
         linestyle="dashed",
         color="green",
-        label="Corrected EJ212 9 MeV ",
+        #label="Corrected EJ212 9 MeV ",s=20
+    )
+    plt.scatter(
+        ej212_distance[:-1],
+        100 * unumpy.nominal_values((c_corr_ej[:-1] / max(c_corr_ej_means[:-1]))),
+        
+        marker="d",
+        linestyle="None",
+        color="green",
+        label="Corrected EJ212 9 MeV ",s=45
     )
 
 
     plt.xlabel("distance [mm]")
-    plt.ylabel("relative dose[%]")
-    plt.title("Dose Distribution ElectronFlash")
+    plt.ylabel("relative dose [%]")
+    #plt.title("Dose Distribution ElectronFlash")
 
-    plt.legend()
+    plt.legend(fontsize=16)
 
     plt.grid()
     plt.show()
@@ -724,6 +748,10 @@ if __name__ == "__main__":
     )
 
     plt.figure(5)
+    plt.yticks(fontsize=20)
+    plt.xticks(fontsize=20)
+    #params={"axes.labelsize":30,"axes.titlesize":20}
+    #plt.rcParams.update(params)
     if test:
         plt.plot(
             distance_7_1,
@@ -736,10 +764,10 @@ if __name__ == "__main__":
     plt.plot(
         validation_distance_7,
         validation_dose_7,
-        marker=".",
-        linestyle="dashed",
+        #marker=".",
+        linestyle="-",
         color="red",
-        label="Measured PMMA validation",
+        label="Measured PMMA",
     )
 
     plt.errorbar(
@@ -751,7 +779,17 @@ if __name__ == "__main__":
         marker=".",
         linestyle="--",
         color="black",
-        label="Measured LYSO",
+        #label="Measured LYSO", s=45
+    )
+    plt.scatter(
+        measured_distance,
+        100
+        * unumpy.nominal_values(charge_per_pulse)
+        / np.max(unumpy.nominal_values(charge_per_pulse)),
+        marker=".",
+        linestyle="None",
+        color="black",
+        label="Measured LYSO", s=45
     )
     '''
     plt.plot(
@@ -780,17 +818,25 @@ if __name__ == "__main__":
         x_r,
         unumpy.nominal_values(y_r),
         yerr=unumpy.std_devs(y_r),
-        marker=".",
+        marker="",
         linestyle="--",
         color="green",
-        label="PMMA Equivalence corrected Points",
+        #label="PMMA Equivalence corrected Points", s =45
+    )
+    plt.scatter(
+        x_r,
+        unumpy.nominal_values(y_r),
+        marker="d",
+        linestyle="None",
+        color="green",
+        label="Corrected LYSO", s =45
     )
 
     plt.xlabel("distance [mm]")
-    plt.ylabel("relative dose[%]")
-    plt.title("Dose Distribution ElectronFlash Dark Spectrum")
+    plt.ylabel("relative dose [%]")
+    #plt.title("Dose Distribution ElectronFlash Dark Spectrum")
 
-    plt.legend()
+    plt.legend(fontsize=16)
 
     plt.grid()
     plt.show()
