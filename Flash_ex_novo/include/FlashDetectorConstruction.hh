@@ -58,7 +58,7 @@ public:
                                               G4double Cy, G4double Cz,
                                               G4double d, G4double Oz,
                                               G4bool plastic_bool);
-  G4VPhysicalVolume *ConstructPhantom(G4double CollPos);
+  G4VPhysicalVolume *ConstructPhantom(G4double CollPos, G4bool dishomo);
   G4VPhysicalVolume *BuildDetector(G4double dX, G4double dY, G4double dZ,
                                    G4double fPTFEThickness,
                                    G4double opticfiber_core_dx,

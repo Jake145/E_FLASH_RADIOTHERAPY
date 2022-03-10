@@ -56,15 +56,18 @@ FlashStackingAction::~FlashStackingAction() { OpticFile.close(); }
 G4ClassificationOfNewTrack
 FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
 
+G4double globaltime;
+
   if(aTrack->GetDefinition()==G4Gamma::GammaDefinition()){
-  if(aTrack->GetVolume()->GetLogicalVolume()->GetName() == "phantomLog"){
+  if(aTrack->GetVolume()->GetLogicalVolume()->GetName() == "phantomLog"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "SupportLog"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "phantomLog_2"){
 
   if(aTrack->GetCreatorProcess()->GetProcessName()== "annihil")
   {
   Annihil_x = aTrack->GetPosition().x();
   Annihil_y = aTrack->GetPosition().y();
   Annihil_z = aTrack->GetPosition().z();
-
+  globaltime= aTrack->GetGlobalTime();
+  
  if (OpticFile.is_open()) {
 
       OpticFile // event ID ; X ; Y ; Z #all units are mm (if you want use G4BestUnits(x, "Length"))
@@ -73,7 +76,7 @@ FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
           << "\t"
           << Annihil_x << "\t"
           << Annihil_y<< "\t"
-          << Annihil_z << G4endl;
+          << Annihil_z <<"\t"<<globaltime<< G4endl;
     }
   }
   }}

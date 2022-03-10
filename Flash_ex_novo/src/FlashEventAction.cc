@@ -51,8 +51,12 @@ void FlashEventAction::BeginOfEventAction(const G4Event *) {
 }
 
 void FlashEventAction::EndOfEventAction(const G4Event *evt) {
+
 G4bool dosimetry = false;
-G4bool PET = true;
+G4bool PET = false;
+G4bool Nothing = false;
+if(Nothing)
+{
 if (PET = true){
  const G4double eThreshold = 511*keV;
   G4int nbOfFired = 0;
@@ -100,6 +104,8 @@ if (dosimetry == true){
     fRunAction->SumEdep(edep);
 	
   }}
+  
+  }
 
   G4cout << "Ending event: "
          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()

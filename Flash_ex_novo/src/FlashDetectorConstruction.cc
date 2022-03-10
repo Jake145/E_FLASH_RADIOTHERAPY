@@ -674,7 +674,14 @@ G4VPhysicalVolume *FlashDetectorConstruction::ConstructPhantom_Support(
   return phant_phys;
 }
 G4VPhysicalVolume *
-FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
+FlashDetectorConstruction::ConstructPhantom(G4double CollPos, G4bool dishomo) {
+
+G4bool fCheckOverlaps=true;
+red = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
+  red->SetVisibility(true);
+
+  blue = new G4VisAttributes(G4Colour(0 / 255., 0. / 255., 255. / 255.));
+  blue->SetVisibility(true);
 
   G4Material *phantomMaterial = nist->FindOrBuildMaterial("G4_WATER");
 
@@ -709,8 +716,9 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
       ->SetSpline(true);
 
   phantomMaterial->SetMaterialPropertiesTable(myMPT1);
+    G4double Position_coefficient = CollPos;
+if (dishomo == false){
 
-  G4double Position_coefficient = CollPos;
   G4double phantomSizeX = 60.0 * cm, phantomSizeY = 60.0 * cm,
            phantomSizeZ = 60.0 * cm,
            phantom_coordinateX = (Position_coefficient * mm + phantomSizeX / 2);
@@ -728,7 +736,7 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
   // Definition of the physics volume of the Phantom
   phant_phys =
       new G4PVPlacement(0, phantomPosition, "phantomPhys", phantomLogicalVolume,
-                        physicalTreatmentRoom, false, 0);
+                        physicalTreatmentRoom, false, 0,fCheckOverlaps);
 
   G4Region *PhantomRegion = new G4Region("Phantom_reg");
   phantomLogicalVolume->SetRegion(PhantomRegion);
@@ -745,8 +753,92 @@ FlashDetectorConstruction::ConstructPhantom(G4double CollPos) {
 
   G4double maxStep = 0.1 * mm;
   fStepLimit = new G4UserLimits(maxStep);
-  phantomLogicalVolume->SetUserLimits(fStepLimit);
+  phantomLogicalVolume->SetUserLimits(fStepLimit);}
+  
+  else{
+  
+  G4Material* bone = G4NistManager::Instance()->FindOrBuildMaterial("G4_BONE_COMPACT_ICRU", false);
+  //=====================================first piece of phantom====================//
+  G4double Depth_firstpiece = 40 * cm;
+  G4double phantomSizeX = Depth_firstpiece,
+           phantomSizeY = 60.0 * cm, phantomSizeZ = 60.0 * cm,
+           phantom_coordinateX = (Position_coefficient * mm + phantomSizeX / 2);
 
+  if (phantomSizeX != 0) {
+    G4ThreeVector phantomPosition =
+        G4ThreeVector(phantom_coordinateX, 0. * mm, 0. * mm);
+    // Definition of the solid volume of the Phantom
+    phantom = new G4Box("Phantom", phantomSizeX / 2, phantomSizeY / 2,
+                        phantomSizeZ / 2);
+
+    // Definition of the logical volume of the Phantom
+    phantomLogicalVolume =
+        new G4LogicalVolume(phantom, phantomMaterial, "phantomLog", 0, 0, 0);
+
+    // Definition of the physics volume of the Phantom
+    phant_phys = new G4PVPlacement(0, phantomPosition, "phantomPhys",
+                                   phantomLogicalVolume, physicalTreatmentRoom,
+                                   false, 0,fCheckOverlaps);
+  }
+
+  //============================Dishomogeneity=====================================//
+
+ 
+
+    support_x = 10 * cm;
+    G4Box *support_whole =
+        new G4Box("Support_w", support_x / 2, phantomSizeY / 2, phantomSizeZ / 2);
+
+    DetectorSupport = new G4LogicalVolume(support_whole, airNist, "SupportLog");
+
+    G4RotationMatrix rotmp = G4RotationMatrix();
+    rotmp.rotateY(0 * deg);
+    supp_coordinateX = phantom_coordinateX + (phantomSizeX / 2 + support_x / 2);
+
+    G4ThreeVector positionp = G4ThreeVector(supp_coordinateX, 0, 0);
+    G4Transform3D transformp = G4Transform3D(rotmp, positionp);
+
+    new G4PVPlacement(transformp, DetectorSupport, "supportphys",
+                      logicTreatmentRoom, false, 0,fCheckOverlaps);
+  
+  //=================================================================================//
+  //================Second Piece of Phantom==================================//
+  G4double phantom2_coordinateX =
+      supp_coordinateX + (30 * cm - (phantomSizeX / 2 + support_x / 2)) +
+      support_x / 2;
+  G4ThreeVector phantomPosition_2 =
+      G4ThreeVector(phantom2_coordinateX, 0. * mm, 0. * mm);
+  // Definition of the solid volume of the Phantom
+  G4Box *phantom_2 =
+      new G4Box("Phantom_2", 30 * cm - (phantomSizeX / 2 + support_x / 2),
+                phantomSizeY / 2, phantomSizeZ / 2);
+
+  // Definition of the logical volume of the Phantom
+  G4LogicalVolume *phantomLogicalVolume_2 =
+      new G4LogicalVolume(phantom_2, phantomMaterial, "phantomLog_2", 0, 0, 0);
+
+  // Definition of the physics volume of the Phantom
+
+  new G4PVPlacement(0, phantomPosition_2, "phantomPhys_2",
+                    phantomLogicalVolume_2, physicalTreatmentRoom, false, 0,fCheckOverlaps);
+
+  //==========================================================================//
+
+  G4Region *PhantomRegion = new G4Region("Phantom_reg");
+
+  if (phantomSizeX != 0) {
+    phantomLogicalVolume->SetRegion(PhantomRegion);
+    PhantomRegion->AddRootLogicalVolume(phantomLogicalVolume);
+    phantomLogicalVolume->SetVisAttributes(red);
+    phantomLogicalVolume->SetUserLimits(fStepLimit);
+  }
+  DetectorSupport->SetVisAttributes(blue);
+  phantomLogicalVolume_2->SetVisAttributes(red);
+
+  }
+  
+  
+  
   return phant_phys;
 }
 G4VPhysicalVolume *FlashDetectorConstruction::BuildDetector(
@@ -968,7 +1060,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   }
 
   // construct collimator
-  PET_builder = true;
+  PET_builder = false;
   Detector_builder = false;
   G4bool MLF = false;
   VHEE = true;
@@ -980,7 +1072,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
   if (Detector_builder == false) {
     phantom_physical =
         ConstructPhantom(Collimator->finalApplicatorXPositionFlash +
-                         Collimator->hightFinalApplicatorFlash);
+                         Collimator->hightFinalApplicatorFlash,false);
   } else if (Detector_builder == true) {
     phantom_physical = ConstructPhantom_Support(
         Collimator->finalApplicatorXPositionFlash +
@@ -997,7 +1089,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 else if (VHEE== true){
 if (Detector_builder == false) {
     phantom_physical =
-        ConstructPhantom(0*cm);
+        ConstructPhantom(0*cm,true); //put true for inhomogeneous phantom
   } else if (Detector_builder == true) {
     phantom_physical = ConstructPhantom_Support(0*cm,
         dX_, dY_, dZ_, fPTFEThickness_, opticfiber_core_dx_, select_EJ212);
