@@ -76,6 +76,7 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
 void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
 
 Pencil = true;
+G4bool Rate = true;
 
   G4double x = X0;
   G4double y = Y0;
@@ -120,6 +121,14 @@ if (Pencil == false){
     else if(Pencil==true){
      particleGun->GetCurrentSource()->GetAngDist()->SetParticleMomentumDirection(
       G4ThreeVector(1., 0., 0.));}
+      
+      if (Rate){
+       
+      G4double Shot_time = CLHEP::RandFlat::shoot(0.0,9.9);
+      particleGun->SetParticleTime(Shot_time*ns);
+      
+      }
+      
 
   particleGun->GeneratePrimaryVertex(anEvent);
 }

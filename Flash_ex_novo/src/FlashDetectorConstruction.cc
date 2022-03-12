@@ -1089,7 +1089,7 @@ G4VPhysicalVolume *FlashDetectorConstruction::Construct() {
 else if (VHEE== true){
 if (Detector_builder == false) {
     phantom_physical =
-        ConstructPhantom(0*cm,true); //put true for inhomogeneous phantom
+        ConstructPhantom(0*cm,false); //put true for inhomogeneous phantom
   } else if (Detector_builder == true) {
     phantom_physical = ConstructPhantom_Support(0*cm,
         dX_, dY_, dZ_, fPTFEThickness_, opticfiber_core_dx_, select_EJ212);
