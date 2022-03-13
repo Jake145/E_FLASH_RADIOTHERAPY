@@ -81,6 +81,20 @@ G4double globaltime;
   }
   }}
   
+/*if (aTrack->GetParentID() == 0){
+globaltime=aTrack->GetGlobalTime();
+
+if (OpticFile.is_open()) {
+
+      OpticFile 
+         
+          << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
+          << "\t"
+          <<globaltime<< G4endl;
+    }
+
+}*/ //this is a test
+  
 
   return fUrgent;
 }

@@ -54,6 +54,19 @@ private:
   G4double sigmaZ;
 
   G4double Theta;
+  
+  G4int i;
+  
+  G4int n;
+  
+  
+  G4double dt;
+  
+  G4double dr;
+  
+  G4double T;
+  
+  G4int j;
 
 private:
   G4GeneralParticleSource *particleGun;

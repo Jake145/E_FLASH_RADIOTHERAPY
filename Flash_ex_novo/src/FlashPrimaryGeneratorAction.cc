@@ -28,16 +28,31 @@
 
 #include "FlashPrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4RunManager.hh"
 #include "G4Event.hh"
+#include "G4Threading.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"
 #include "globals.hh"
-
+#include <assert.h>
 FlashPrimaryGeneratorAction::FlashPrimaryGeneratorAction() {
+  
+  
+  
+  i=G4Threading::G4GetThreadId(); // helper index
+  
+  n=G4Threading::G4GetNumberOfCores(); // number of pulses of the beam, which is equal to the number of threads
+  
+  dt= 0.2 ; // duration of pulse
+  
+  T= 10; // total irradiation time
+  
+  dr = T/n - dt; // time between pulses
+  
+  assert (dr > 0);
 
   particleGun = new G4GeneralParticleSource();
 
@@ -123,12 +138,20 @@ if (Pencil == false){
       G4ThreeVector(1., 0., 0.));}
       
       if (Rate){
+
+      
+       assert (i*(dt+dr) + dr > 0);
+       assert ((i+1)*(dt+dr) >0);
        
-      G4double Shot_time = CLHEP::RandFlat::shoot(0.0,9.9);
+      G4double Shot_time = CLHEP::RandFlat::shoot(i*(dt+dr) + dr,(i+1)*(dt+dr));
+      
+      
       particleGun->SetParticleTime(Shot_time*ns);
+      
       
       }
       
 
   particleGun->GeneratePrimaryVertex(anEvent);
+  
 }
