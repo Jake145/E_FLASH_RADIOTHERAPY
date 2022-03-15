@@ -81,7 +81,57 @@ FlashDetectorConstruction::~FlashDetectorConstruction() {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void FlashDetectorConstruction::DefineMaterials() {
+
+//Number of crystals (scintillators) in the DOI (x), tangential (y) and axial (z) direction. 
+ numberOfCrystal_DOI =4;
+ numberOfCrystal_tangential =16;
+ numberOfCrystal_axial =16;
+
+//size of the crystals in the DOI (x), tangential (y) and axial (z) direction. 
+ sizeOfCrystal_DOI =7.5*mm;
+ sizeOfCrystal_tangential= 2.8*mm;
+ sizeOfCrystal_axial =2.8*mm;
+
+//Inter crystal gap between crystals. 
+ crystalGap_DOI =0.0*mm;
+ crystalGap_tangential =0.08*mm;
+ crystalGap_axial =0.08*mm;
+
+
+
+//Define Aluminum thickness cover for the detector
+ AluminumCoverThickness =0.3 * mm;
+
+//Number of PET detectors per ring
+ numberOfDetector_perRing =60;
+
+//Number of rings in the PET system 
+ numberOfRings =12;
+
+//Radius of the PET system. Note that the radius is defined between to opposing sensitive detectors (It does not include detector block cover).
+ scannerRadius =660 * mm;
+
+//Gap between two adjacent rings. There are three gaps in four ring PET system
+ ringGap =10.4 * mm;
+ 
+ 
+
   G4NistManager *man = G4NistManager::Instance();
+  //Defile Aluminum material for the detetor cover
+	Aluminum = man->FindOrBuildMaterial("G4_Al", isotopes);
+
+	//Define elements for the GSO  crystal (scintillator) 
+	O = man->FindOrBuildElement("O" , isotopes); 
+	Si = man->FindOrBuildElement("Si", isotopes);
+	Gd = man->FindOrBuildElement("Gd", isotopes);  
+
+
+	//define GSO crystal for PET detector
+	GSO = new G4Material("GSO", 6.7*g/cm3, 3);
+	GSO->AddElement(Gd, 2);
+	GSO->AddElement(Si, 1);
+	GSO->AddElement(O,  5); 
+	crystalMaterial   = man->FindOrBuildMaterial("GSO");
   G4int ncomponents;
   G4bool isotopes = false;
   G4double prelude_density = 7.25 * g / cm3;
@@ -376,139 +426,134 @@ void FlashDetectorConstruction::DefineMaterials() {
 
 void FlashDetectorConstruction::Construct_PET()
 {  
-  // Gamma detector Parameters
-  //
-  G4double cryst_dX = 3*cm, cryst_dY = 3*cm, cryst_dZ = 1.5*cm;
-  G4int nb_cryst = 100;
-  G4int nb_rings = 40;
-  //
-  G4double dPhi = twopi/nb_cryst, half_dPhi = dPhi; //multiply half_dphi to increase space between crystals
-  G4double cosdPhi = std::cos(half_dPhi);
-  G4double tandPhi = std::tan(half_dPhi);
-  // 
-  G4double ring_R1 = cryst_dY/tandPhi;
-  G4double ring_R2 = (ring_R1+cryst_dZ)/cosdPhi;
-  //
-  G4double detector_dZ = nb_rings*cryst_dX;
-  //
-  //G4NistManager* nist = G4NistManager::Instance();
-  G4Material* default_mat = nist->FindOrBuildMaterial("G4_AIR");
-  G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2SiO5");
-        
   
-  //
-  // ring
-  //
-  G4Tubs* solidRing =
-    new G4Tubs("Ring", ring_R1, ring_R2, 0.5*cryst_dX, 0., twopi);
-      
-  G4LogicalVolume* logicRing =                         
-    new G4LogicalVolume(solidRing,           //its solid
-                        default_mat,         //its material
-                        "Ring");             //its name
-                    
-  //     
-  // define crystal
-  //
-  G4double gap = 0.5*mm;        //a gap for wrapping
-  G4double dX = cryst_dX - gap, dY = cryst_dY - gap;
-  G4Box* solidCryst = new G4Box("crystal", dX/2, dY/2, cryst_dZ/2);
-                     
-  G4LogicalVolume* logicCryst = 
-    new G4LogicalVolume(solidCryst,          //its solid
-                        cryst_mat,           //its material
-                        "CrystalLV");        //its name
-               
-  // place crystals within a ring 
-  //
-  for (G4int icrys = 0; icrys < nb_cryst ; icrys++) {
-    G4double phi = icrys*dPhi;
-    G4RotationMatrix rotm  = G4RotationMatrix();
-    rotm.rotateY(90*deg); 
-    rotm.rotateZ(phi);
-    G4ThreeVector uz = G4ThreeVector(std::cos(phi),  std::sin(phi),0.);     
-    G4ThreeVector position = (ring_R1+0.5*cryst_dZ)*uz;
-    G4Transform3D transform = G4Transform3D(rotm,position);
-                                    
-    new G4PVPlacement(transform,             //rotation,position
-                      logicCryst,            //its logical volume
-                      "crystal",             //its name
-                      logicRing,             //its mother  volume
-                      false,                 //no boolean operation
-                      icrys,                 //copy number
-                      fCheckOverlaps);       // checking overlaps 
-  }
-                                                      
-  //
-  // full detector
-  //
-  G4Tubs* solidDetector =
-    new G4Tubs("Detector", ring_R1, ring_R2, 0.5*detector_dZ, 0., twopi);
-      
-  G4LogicalVolume* logicDetector =                         
-    new G4LogicalVolume(solidDetector,       //its solid
-                        default_mat,         //its material
-                        "Detector");         //its name
-                                 
-  // 
-  // place rings within detector 
-  //
-  G4double OG = -0.5*(detector_dZ + cryst_dX);
-  for (G4int iring = 0; iring < nb_rings ; iring++) {
-    OG += cryst_dX;
-    new G4PVPlacement(0,                     
-                      G4ThreeVector(0,0,OG), 
-                      logicRing,             
-                      "ring",                
-                      logicDetector,         
-                      false,                 
-                      iring,                 
-                      fCheckOverlaps);       
-  }
-                       
-  //
-  // place detector in world
-  //                 
-  G4RotationMatrix rotm  = G4RotationMatrix();
-    rotm.rotateY(90*deg); 
-     G4Transform3D transform = G4Transform3D(rotm,G4ThreeVector(30*cm,0,0));
-  new G4PVPlacement(transform,         
-                    logicDetector,           
-                    "Detector",              
-                    logicTreatmentRoom,              
-                    false,                   
-                    0,                       
-                    fCheckOverlaps);          
-                 
+	//Each block detector is identified with its unique number, blockIndex.
+	blockIndex = 0;
+
+	//Each crystal is identified with its unique number, crystalIndex
+	crystalIndex = 0;
+
+
+
+	//Define air volume (box) to fill the detector block. Crystal elements (scintillators) is then placed.
+	sizeOfAirBox_DOI = (numberOfCrystal_DOI * sizeOfCrystal_DOI) + (numberOfCrystal_DOI - 1)*crystalGap_DOI;
+	sizeOfAirBox_axial = (numberOfCrystal_axial * sizeOfCrystal_axial) + (numberOfCrystal_axial - 1)*crystalGap_axial;
+	sizeOfAirBox_tangential = (numberOfCrystal_tangential * sizeOfCrystal_tangential) + (numberOfCrystal_tangential - 1)*crystalGap_tangential;
+
+	
+	//pAnalysis = doiPETAnalysis::GetInstance();
+	//pAnalysis->GetSizeOfDetector(sizeOfAirBox_DOI,sizeOfAirBox_tangential, sizeOfAirBox_axial);
+
+	G4cout<<"size of crytal element: "<<sizeOfCrystal_tangential<<" "<<sizeOfCrystal_axial<<" "<<sizeOfCrystal_DOI<<G4endl;
+	G4cout<<"Size of detector block (without Al cover): "<<sizeOfAirBox_tangential<<" "<<sizeOfAirBox_axial<<" "<<sizeOfAirBox_DOI<<G4endl;
+
+
+
+	//Define the size of the detector block. 
+	sizeOfBlockDetector_DOI = sizeOfAirBox_DOI + AluminumCoverThickness;
+	sizeOfBlockDetector_axial = sizeOfAirBox_axial + AluminumCoverThickness;
+	sizeOfBlockDetector_tangential = sizeOfAirBox_tangential + AluminumCoverThickness;
+
+
+
+	//Define solid shape for the detector block
+	G4Box* blockDetector = new G4Box("blockDetector",sizeOfBlockDetector_DOI/2,sizeOfBlockDetector_tangential/2,sizeOfBlockDetector_axial/2);
+
+	//Define the logical volume for the detector block
+	blockDetector_logicalV = new G4LogicalVolume(blockDetector,Aluminum,"blockDetector_logicalV", 0,0,0);
+
+
+
+	//Define air (box) inside the detector block. Crystal elements will be placed in it.
+	G4Box* airBox = new G4Box("airBox", sizeOfAirBox_DOI/2, sizeOfAirBox_tangential/2,sizeOfAirBox_axial/2);
+
+	//Define the logical volume
+	airBox_logicalV = new G4LogicalVolume(airBox,airNist,"airBox_logicalV", 0,0,0);
+
+	//Define its physical volume and place it inside the detector block
+	airBox_physicalV = new G4PVPlacement (0,G4ThreeVector(0,0,0),airBox_logicalV,"airBox_physicalV", blockDetector_logicalV,false,0,fCheckOverlaps);
+
+
+	///////////////////////////////////////// Arrange the PET ring and place the PET detectors in the ring(s) ////////////////////////////////////
+
+	for(G4int Ring = 0; Ring< numberOfRings; Ring++)
+	{
+		//place the detectors in a ring along the axial direction. Note that the ring gap between two adjcent rings is measured from scintillator to scintillator.  It does not include the Aluminum thickness cover.
+
+		detectorPositionX = 30*cm+(Ring-((G4double)numberOfRings)/2 + 0.5)*(sizeOfBlockDetector_axial + ringGap - AluminumCoverThickness);
+
+		for(G4int i = 0; i<numberOfDetector_perRing; i++)
+		{
+			//The azimuthal angle to arrange the detectors in a ring
+			thetaDetector = (double)(i*twopi/numberOfDetector_perRing);
+
+			//The radius of the scanner is measured from opposing crystal (scintillator) faces. It does not include the Aluminum thickness cover.
+			detectorPositionZ = (scannerRadius + sizeOfBlockDetector_DOI/2 - AluminumCoverThickness/2)*std::cos(thetaDetector);
+			detectorPositionY = (scannerRadius + sizeOfBlockDetector_DOI/2 - AluminumCoverThickness/2)*std::sin(thetaDetector);
+
+			//Define the rotation matrix for correct placement of detetors
+			G4RotationMatrix rotm_PET = G4RotationMatrix();
+			rotm_PET.rotateX(thetaDetector);
+			G4ThreeVector uz_PET = G4ThreeVector(detectorPositionX,detectorPositionY,detectorPositionZ);
+			G4Transform3D transform = G4Transform3D(rotm_PET,uz_PET);
+
+			//Define the physical volume of the detectors.
+			blockDetector_physicalV = new G4PVPlacement (transform,blockDetector_logicalV,"blockDetector_physicalV", logicTreatmentRoom,false,blockIndex,fCheckOverlaps);
+			blockIndex++;
+			//G4cout<<Ring<<" "<<detectorPositionX- ((sizeOfBlockDetector_DOI - AluminumCoverThickness)/2)*cos(thetaDetector)<<" "<<detectorPositionY- ((sizeOfBlockDetector_DOI- AluminumCoverThickness)/2)*sin(thetaDetector)<<" "<<detectorPositionZ<<G4endl;
+
+		}
+	}
+
+	//Define the solid crystal
+	G4VSolid* CrystalSolid = new G4Box("Crystal", sizeOfCrystal_DOI/2., sizeOfCrystal_tangential/2., sizeOfCrystal_axial/2.);
+
+	//Define the local volume of the crystal
+	crystal_logicalV = new G4LogicalVolume(CrystalSolid,crystalMaterial,"Crystal_logicalV", 0,0,0);
+
+	//Place the crystals inside the detectors and give them a unique number with crystalIndex.
+	for(G4int i_DOI = 0; i_DOI<numberOfCrystal_DOI; i_DOI++){
+		crystalPositionX=(i_DOI-((G4double)numberOfCrystal_DOI)/2 + 0.5)*(sizeOfCrystal_DOI + crystalGap_DOI);
+		for(G4int i_axial=0; i_axial< numberOfCrystal_axial;i_axial++){
+			crystalPositionZ = (i_axial-((G4double)numberOfCrystal_axial)/2 + 0.5)*(sizeOfCrystal_axial + crystalGap_axial);
+			for(G4int i_tan=0; i_tan<numberOfCrystal_tangential;i_tan++){
+				crystalPositionY=(i_tan-((G4double)numberOfCrystal_tangential)/2 + 0.5)*(sizeOfCrystal_tangential + crystalGap_tangential);
+
+				//G4cout<<crystalIndex<<" "<<crystalPositionX<<" "<<crystalPositionY<<" "<<crystalPositionZ<<G4endl;
+				//place the crystal inside the block detector. 
+				crystal_physicalV = new G4PVPlacement (0, G4ThreeVector (crystalPositionX,crystalPositionY,crystalPositionZ), crystal_logicalV, "Crystal_physicalV", airBox_logicalV,false,crystalIndex/*,fCheckOverlaps*/);
+				crystalIndex++;
+			}
+		}
+	}
+
+	//******************  Visualization *****************************//
+
+	//visualization for the block detector
+	G4VisAttributes* blockDetectorVisAtt;
+	blockDetectorVisAtt = new G4VisAttributes(G4Colour(1,1.0,1.0));
+	blockDetectorVisAtt->SetVisibility (true);
+	//blockDetectorVisAtt->SetForceWireframe (true);
+	blockDetector_logicalV->SetVisAttributes (blockDetectorVisAtt);
+	//blockDetector_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+
+	//visualization for the the box filled with air
+	G4VisAttributes* airBoxVisAtt;
+	airBoxVisAtt = new G4VisAttributes(G4Colour(1,1.0,1.0));
+	airBoxVisAtt->SetVisibility (true);
+	airBoxVisAtt->SetForceWireframe (true);
+	airBox_logicalV->SetVisAttributes (airBoxVisAtt);
+	airBox_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
+
+	//visualization for the crystal
+	G4VisAttributes* crystalVisAtt;
+	crystalVisAtt = new G4VisAttributes(G4Colour(0.88,0.55,1.0));
+	//crystalVisAtt->SetVisibility (true);
+	crystalVisAtt->SetForceWireframe (true);
+	crystal_logicalV->SetVisAttributes (crystalVisAtt);
+	crystal_logicalV->SetVisAttributes (G4VisAttributes::Invisible);
  
-                                          
-  // Visualization attributes
-  //
-  blue = new G4VisAttributes(G4Colour(0., 0., 1.));
-  blue->SetVisibility(true);
-
-  G4VisAttributes *grey = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5));
-  grey->SetVisibility(true);
-
-  G4VisAttributes *yellow = new G4VisAttributes(G4Colour(1., 1., 0.));
-  yellow->SetVisibility(true);
   
-  logicRing->SetVisAttributes(G4VisAttributes::GetInvisible());
-  logicDetector->SetVisAttributes(grey);    
-
-
-  logicCryst->SetVisAttributes(yellow);
-
-  G4double maxStep = 0.1 * mm;
-  fStepLimit = new G4UserLimits(maxStep);
-  logicCryst->SetUserLimits(fStepLimit);
-  
-  logicCryst->SetUserLimits(fStepLimit);
-  
-  G4Region *CrystalRegion = new G4Region("crystal_reg");
-  logicCryst->SetRegion(CrystalRegion);
-  CrystalRegion->AddRootLogicalVolume(logicCryst);
-
 
 
 
@@ -1109,6 +1154,12 @@ if (PET_builder == true){
 Construct_PET();
 
 }
+
+//////////////////=================================/////////////////////////
+
+
+
+//////////////////////////============================///////////////////
   return physicalTreatmentRoom;
 }
 
@@ -1116,7 +1167,7 @@ Construct_PET();
 
 
 void FlashDetectorConstruction::ConstructSDandField() {
-  if (Detector_builder == true||PET_builder == true) {
+  if (Detector_builder == true) {
     G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
 
     G4MultiFunctionalDetector *cryst =

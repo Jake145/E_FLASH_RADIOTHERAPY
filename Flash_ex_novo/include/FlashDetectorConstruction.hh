@@ -117,6 +117,85 @@ G4bool PET_builder;
   G4Material *PE;
   G4Material *ej212;
   G4Material *EJ212;
+  G4Material* Aluminum;
+
+	//elements for GSO
+	G4Element*  O;
+	G4Element* Si;
+	G4Element* Gd;
+	G4Material* GSO;
+
+	G4Material* crystalMaterial;
+		G4bool isotopes;
+		//The following is moved to doiPETGlobalParameters.hh
+	G4int numberOfCrystal_DOI;
+	G4int numberOfCrystal_tangential;
+	G4int numberOfCrystal_axial;
+
+	////
+	G4double sizeOfCrystal_DOI; 
+	G4double sizeOfCrystal_tangential;
+	G4double sizeOfCrystal_axial;
+
+	////
+	G4double crystalGap_DOI;
+	G4double crystalGap_tangential;
+	G4double crystalGap_axial;
+
+	G4double sizeOfAirBox_DOI;
+	G4double sizeOfAirBox_axial;
+	G4double sizeOfAirBox_tangential;
+
+
+	G4double sizeOfBlockDetector_DOI;
+	G4double sizeOfBlockDetector_axial;
+	G4double sizeOfBlockDetector_tangential;
+
+	G4double AluminumCoverThickness;
+
+
+	G4int numberOfPETDetector;
+	G4int numberOfRings;
+
+
+	G4double scannerRadius;
+	G4double thetaDetector; //The azimuthal angle for arranging the detector in the PET ring 
+	G4double ringGap;
+	G4int blockIndex;
+	 G4int AlCase_Index;
+	G4int crystalIndex;
+	G4int numberOfDetector_perRing;
+	//detector position
+	G4double detectorPositionX;
+	G4double detectorPositionY;
+	G4double detectorPositionZ;
+
+	//crystal position
+	G4double crystalPositionX; 
+	G4double crystalPositionY;
+	G4double crystalPositionZ;
+	
+	G4LogicalVolume* phantom_logicalV;
+	G4VPhysicalVolume* phantom_physicalV;
+	// G4LogicalVolume* gelatin_logicalV;
+	// G4VPhysicalVolume* gelatin_physicalV;
+
+	
+
+	//detector block
+	G4LogicalVolume* blockDetector_logicalV;
+	G4VPhysicalVolume* blockDetector_physicalV;
+
+	//air volume to fill the detector block
+	G4LogicalVolume* airBox_logicalV;
+	G4VPhysicalVolume* airBox_physicalV;
+
+	//crystals
+	G4LogicalVolume* crystal_logicalV;
+	G4VPhysicalVolume* crystal_physicalV;
+
+
+
 };
 
 #endif
