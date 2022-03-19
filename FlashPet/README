@@ -1,0 +1,1 @@
+This is a experimental beam monitoring for VHEE with PET. This is a modified doiPET example with my VHEE pulsed beam generator. The timestamp isn't calculate with activity time distribution but by directly getting the time from the annihilation photon.

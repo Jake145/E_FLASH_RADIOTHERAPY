@@ -1,0 +1,14 @@
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+/run/initialize
+
+/gps/ene/mono 150 MeV
+
+/gps/pos/centre 0 0 -800 mm
+
+/run/beamOn	200000
+
