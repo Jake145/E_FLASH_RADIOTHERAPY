@@ -344,7 +344,7 @@ red = new G4VisAttributes(G4Colour(0 / 255., 255 / 255., 0 / 255.));
     G4double Position_coefficient = CollPos;
 if (dishomo == false){
 
-  G4double phantomSizeX = 60.0 * cm, phantomSizeY = 60.0 * cm,
+  G4double phantomSizeX = 20.0 * cm, phantomSizeY = 20.0 * cm,
            phantomSizeZ = 60.0 * cm,
            phantom_coordinateZ = (Position_coefficient * mm + phantomSizeZ / 2);
 
@@ -386,7 +386,7 @@ if (dishomo == false){
   //=====================================first piece of phantom====================//
   G4double Depth_firstpiece = 40 * cm;
   G4double phantomSizeZ = Depth_firstpiece,
-           phantomSizeY = 60.0 * cm, phantomSizeX = 60.0 * cm,
+           phantomSizeY = 20.0 * cm, phantomSizeX = 20.0 * cm,
            phantom_coordinateZ = (Position_coefficient * mm + phantomSizeX / 2);
 
   if (phantomSizeX != 0) {

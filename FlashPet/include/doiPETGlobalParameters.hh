@@ -60,13 +60,13 @@
 #define AluminumCoverThickness 0.3 * mm
 
 //Number of PET detectors per ring
-#define numberOfDetector_perRing 60
+#define numberOfDetector_perRing 40
 
 //Number of rings in the PET system 
 #define numberOfRings 12
 
 //Radius of the PET system. Note that the radius is defined between to opposing sensitive detectors (It does not include detector block cover).
-#define scannerRadius 660 * mm
+#define scannerRadius 330 * mm
 
 //Gap between two adjacent rings. There are three gaps in four ring PET system
 #define ringGap 10.4 * mm

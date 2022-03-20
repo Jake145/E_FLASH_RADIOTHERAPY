@@ -92,8 +92,9 @@ doiPETAnalysis::doiPETAnalysis()
 	scatterIndex = 0;
 
 	//
-	numberOfPixel_tan = 32;
-	numberOfPixel_axial = 32;
+	numberOfPixel_tan = 2*numberOfCrystal_tangential; //32;
+	numberOfPixel_axial = 2*numberOfCrystal_axial; //32;
+
 
 	//Default value for deadtime.
 	block_DeadTime = 256*ns;
