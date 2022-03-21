@@ -65,7 +65,7 @@ doiPETAnalysis* doiPETAnalysis::instance=0;
 doiPETAnalysis::doiPETAnalysis()
 {
 
-
+	source= false;
 	//Set energy window
 	lowerThreshold = 400*keV;
 	upperThreshold = 600*keV;
@@ -183,22 +183,43 @@ void doiPETAnalysis::GetSizeOfDetector(G4double detSizeDoi, G4double detSizeTan,
 
 //
 void doiPETAnalysis::SetActivity(G4double newActivity){
+	if (source){
+		InitialActivity = newActivity;
+	}
+	else{
+	
 	InitialActivity = 0;
+	}
 
 }
 void doiPETAnalysis::SetIsotopeHalfLife(G4double newHalfLife){
-	halfLife = 0;
+	if (source){
+		halfLife = newHalfLife;
+	}
+	else{
+	halfLife = 0;}
 	G4cout<<"Half life of the isotope "<<halfLife/s<<" sec."<<G4endl;
 }
 
 //The time is based on random time intervals between events. See https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3267383/
 //This time mimics acquisition time of a PET scanner for a given number of particles. 
 void doiPETAnalysis::CalulateAcquisitionTime(){
+
+if(source){
+
+//Calculate the strength of activity at t=totaltime using decay equation 
+	activityNow = InitialActivity * std::exp(-((0.693147/halfLife)*totalTime)); //ln(2) = 0.693147181
+
+	//Activity based time interval. 
+	timeInterval = -std::log(G4UniformRand())*(1./activityNow);
+}
+
+else{
 	//Calculate the strength of activity at t=totaltime using decay equation 
 	activityNow = 0; //ln(2) = 0.693147181
 
 	//Activity based time interval. 
-	timeInterval = 0;
+	timeInterval = 0;}
 	totalTime = timeInterval+prev_totalTime;
 	prev_totalTime = totalTime; 
 }
@@ -363,12 +384,42 @@ void doiPETAnalysis::Open(G4String fileName)
 
 void doiPETAnalysis::WriteOutput(){
 	if(getSinglesData){
-		ofs<<eventID<<" "<<blockID<<" "<<crystalID_axial<<" "<<crystalID_tangential<<" "<<DOI_ID<<" "<<std::setprecision(5)<<timeStamp/ns<<" "<<std::setprecision(7)<<totalEdep/keV<<G4endl;
+		ofs<<eventID<<" "<<blockID<<" "<<crystalID_axial<<" "<<crystalID_tangential<<" "<<DOI_ID<<" "<<std::setprecision(17)<<timeStamp/s<<" "<<std::setprecision(7)<<totalEdep/keV<<G4endl;
+
+	}
+	if(getCoincidenceData){
+		//2 singles will qualify to be in coincidence within the energy window.
+		for(G4int i=0; i<2; i++){
+
+			//First Single
+			if(i==0){
+				eventID0				= eventID_coin[0];
+				blockID0				= blockID_coin[0];
+				crystalID_axial0		= cryID_axial_coin[0];
+				crystalID_tangential0	= cryID_tan_coin[0];
+				DOI_ID0					= cryDOI_coin[0];
+				timeStamp0				= time_coin[0];
+				totalEdep0				= edep_coin[0];
+			}
+			if(i==1){
+				//Second Single
+				eventID1				= eventID_coin[1];
+				blockID1				= blockID_coin[1];
+				crystalID_axial1		= cryID_axial_coin[1];
+				crystalID_tangential1	= cryID_tan_coin[1];
+				DOI_ID1					= cryDOI_coin[1];
+				timeStamp1				= time_coin[1];
+				totalEdep1				= edep_coin[1];
+			}
+		}
+
+		ofs<<eventID0<<" "<<blockID0<<" "<<crystalID_axial0<<" "<<crystalID_tangential0<<" "<<DOI_ID0<<" "<<std::setprecision(17)<<timeStamp0/s<<" "<<std::setprecision(7)<<totalEdep0/keV<<" "
+			<<eventID1<<" "<<blockID1<<" "<<crystalID_axial1<<" "<<crystalID_tangential1<<" "<<DOI_ID1<<" "<<std::setprecision(17)<<timeStamp1/s<<" "<<std::setprecision(7)<<totalEdep1/keV<<G4endl;
+
 
 	}
 
 }
-
 //
 ///////// Close /////////////////////////////////////////////////////
 void doiPETAnalysis::Close()

@@ -89,10 +89,15 @@ void FlashPrimaryGeneratorAction::SetDefaultPrimaryParticle() {
 }
 
 void FlashPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
-
+G4bool Source = false;
 Pencil = true;
 G4bool Rate = true;
+if (Source){
 
+	particleGun->GeneratePrimaryVertex(anEvent);
+}
+
+else{
   G4double x = X0;
   G4double y = Y0;
   G4double z = Z0;
@@ -154,4 +159,4 @@ if (Pencil == false){
 
   particleGun->GeneratePrimaryVertex(anEvent);
   
-}
+}}

@@ -110,7 +110,7 @@ private:
 
 	G4double upperThreshold, lowerThreshold;	
 
-
+	G4bool source;
 
 	//G4ThreeVector sourcePosition;
 

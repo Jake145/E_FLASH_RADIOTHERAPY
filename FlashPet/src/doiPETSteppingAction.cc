@@ -108,7 +108,7 @@ void doiPETSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 	//Get scatter information in the phantom by the annihilation photon before detected by the detector. Note that the scatter index is initialized to 0. 
 	//If there is scatter, the index is 1, and if not it is 0.
-	if(edep>0 && (volumeName=="phantomLog"||volumeName == "phantomLog_2"||volumeName == "SupportLog")) scatterIndex = 1;
+	if(edep>0 && (volumeName=="phantomLog"||volumeName == "phantomLog_2"||volumeName == "SupportLog")&&particleName== "gamma") scatterIndex = 1;
 	doiPETAnalysis::GetInstance()->GetScatterIndexInPhantom(scatterIndex);
 
 	///////////////////    Retrive (Extract) information in the crystal ///////////////////////////
