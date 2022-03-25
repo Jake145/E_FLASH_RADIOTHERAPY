@@ -40,14 +40,18 @@
 #include "G4UnitsTable.hh"
 
 FlashEventAction::FlashEventAction(FlashRunAction *runAction)
-    : G4UserEventAction(), fRunAction(runAction), fCollID_cryst(-1) {}
+    : G4UserEventAction(), fRunAction(runAction), fCollID_cryst(-1) {	printModulo = 100000;}
 
 FlashEventAction::~FlashEventAction() {}
 
 void FlashEventAction::BeginOfEventAction(const G4Event *) {
-  G4cout << "Starting event: "
-         << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
-         << G4endl;
+
+G4int evtNb = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+	if (evtNb%printModulo == 0) { 
+		G4cout << "\n---> Begin of event: " << evtNb << G4endl;
+		//CLHEP::HepRandom::showEngineStatus();
+	}
+ 
 }
 
 void FlashEventAction::EndOfEventAction(const G4Event *evt) {
@@ -57,7 +61,7 @@ G4bool PET = false;
 G4bool Nothing = false;
 if(Nothing)
 {
-if (PET = true){
+if (PET == true){
  const G4double eThreshold = 511*keV;
   G4int nbOfFired = 0;
    
@@ -107,7 +111,8 @@ if (dosimetry == true){
   
   }
 
-  G4cout << "Ending event: "
-         << G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID()
-         << G4endl;
+G4int evtNb = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+		if (evtNb%printModulo == 0) {
+			G4cout << "---> End of event: " << evtNb << G4endl;	
+		}
 }

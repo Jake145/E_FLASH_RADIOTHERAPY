@@ -48,13 +48,21 @@ FlashSteppingAction::FlashSteppingAction(FlashEventAction *eventAction)
       fEventAction(eventAction) {
 
   std::ostringstream oss;
-  oss << "Kinetic_E_crystal_" << ThreadNumber << ".csv";
+  oss << "Annihil_s_surf_det_1_" << ThreadNumber << ".csv";
+  
+  std::ostringstream oss_2;
+  oss_2 << "Annihil_s_surf_det_2_" << ThreadNumber << ".csv";
+  
   std::string filename_1 = oss.str();
+  
+  std::string filename_2 = oss_2.str();
 
   KinEnFile.open(filename_1, std::ios_base::app);
+  
+  KinEnFile_2.open(filename_2, std::ios_base::app);
 }
 
-FlashSteppingAction::~FlashSteppingAction() { KinEnFile.close(); }
+FlashSteppingAction::~FlashSteppingAction() { KinEnFile.close(); KinEnFile_2.close(); }
 
 void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
 
@@ -75,27 +83,41 @@ void FlashSteppingAction::UserSteppingAction(const G4Step *aStep) {
         postStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
     G4String prevolumeName =
         preStep->GetPhysicalVolume()->GetLogicalVolume()->GetName();
-    if (volumeName == "CrystalLV" && aStep->GetTrack()->GetTrackID() == 1) {
-      G4String procName = postStep->GetProcessDefinedStep()->GetProcessName();
+    if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition() && volumeName == "s_surf_log" && aStep->GetTrack()->GetCreatorProcess()->GetProcessName()== "annihil") {
 
       G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
-
+      G4double kin_en_2= aStep->GetTrack()->GetDynamicParticle()->GetKineticEnergy(); //test
+      G4double mom_axial = aStep->GetTrack()->GetMomentumDirection().x();
+      G4double mom_y = aStep->GetTrack()->GetMomentumDirection().y();
+      G4double mom_z = aStep->GetTrack()->GetMomentumDirection().z();
+      G4double pos_x = aStep->GetTrack()->GetPosition().x();
+      G4double pos_y = aStep->GetTrack()->GetPosition().y();
+      G4double pos_z = aStep->GetTrack()->GetPosition().z();
+      G4double time = aStep->GetTrack()->GetGlobalTime();
       if (KinEnFile.is_open()) {
 
-        KinEnFile << "Incoming Energy"
-                  << "\t" << eventid << "\t" << kineticEnergy << "\t" << trackID
-                  << "\t" << procName << G4endl;
+        KinEnFile << eventid << "\t" << kineticEnergy << "\t" <<kin_en_2 << "\t" <<mom_axial<< "\t" << mom_y<< "\t" << mom_z<< "\t" <<pos_x<< "\t" << pos_y<< "\t" << pos_z<<"\t" << time<<G4endl;
+       
       }
     }
 
-    if ((volumeName == "CrystalLV" && aStep->GetTrack()->GetDefinition() ==
-                                          G4Electron::ElectronDefinition())) {
+ if (aStep->GetTrack()->GetDefinition()==G4Gamma::GammaDefinition() && volumeName == "s_surf_log_2" && aStep->GetTrack()->GetCreatorProcess()->GetProcessName()== "annihil") {
 
-      if (KinEnFile.is_open()) {
+      G4double kineticEnergy = aStep->GetTrack()->GetKineticEnergy();
+      G4double kin_en_2= aStep->GetTrack()->GetDynamicParticle()->GetKineticEnergy(); //test
+      G4double mom_axial = aStep->GetTrack()->GetMomentumDirection().x();
+      G4double mom_y = aStep->GetTrack()->GetMomentumDirection().y();
+      G4double mom_z = aStep->GetTrack()->GetMomentumDirection().z();
+      G4double pos_x = aStep->GetTrack()->GetPosition().x();
+      G4double pos_y = aStep->GetTrack()->GetPosition().y();
+      G4double pos_z = aStep->GetTrack()->GetPosition().z();
+      G4double time = aStep->GetTrack()->GetGlobalTime();
+      if (KinEnFile_2.is_open()) {
 
-        KinEnFile << "Incident Electron"
-                  << "\t" << eventid << "\t" << trackID << "\t" << G4endl;
+        KinEnFile_2 << eventid << "\t" << kineticEnergy << "\t" <<kin_en_2 << "\t" <<mom_axial<< "\t" << mom_y<< "\t" << mom_z<< "\t" <<pos_x<< "\t" << pos_y<< "\t" << pos_z<<"\t" << time<<G4endl;
+       
       }
     }
+    
   }
 }

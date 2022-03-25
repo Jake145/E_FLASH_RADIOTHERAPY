@@ -46,6 +46,7 @@ public:
 
 private:
   std::ofstream KinEnFile;
+    std::ofstream KinEnFile_2;
   std::ofstream OpticFiber;
   std::ofstream OpticInfo;
   G4int ThreadNumber;

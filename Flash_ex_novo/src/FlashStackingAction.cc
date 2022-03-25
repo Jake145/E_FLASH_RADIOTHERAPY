@@ -45,7 +45,7 @@ FlashStackingAction::FlashStackingAction()
     : G4UserStackingAction(), fScintillationCounter(0), fCerenkovCounter(0),
       fBremstralung(0), fFluo(0), Annihil_x(0), Annihil_y(0), Annihil_z(0) {
   std::ostringstream oss_1;
-  oss_1 << "Annihil_positions" << G4Threading::G4GetThreadId() << ".csv";
+  oss_1 << "Electrons_time_distr" << G4Threading::G4GetThreadId() << ".csv";
   std::string filename_1 = oss_1.str();
 
   OpticFile.open(filename_1, std::ios_base::app);
@@ -58,7 +58,7 @@ FlashStackingAction::ClassifyNewTrack(const G4Track *aTrack) {
 
 G4double globaltime;
 
-  if(aTrack->GetDefinition()==G4Gamma::GammaDefinition()){
+  /*if(aTrack->GetDefinition()==G4Gamma::GammaDefinition()){
   if(aTrack->GetVolume()->GetLogicalVolume()->GetName() == "phantomLog"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "SupportLog"||aTrack->GetVolume()->GetLogicalVolume()->GetName() == "phantomLog_2"){
 
   if(aTrack->GetCreatorProcess()->GetProcessName()== "annihil")
@@ -79,9 +79,9 @@ G4double globaltime;
           << Annihil_z <<"\t"<<globaltime<< G4endl;
     }
   }
-  }}
+  }}*/
   
-/*if (aTrack->GetParentID() == 0){
+if (aTrack->GetParentID() == 0){
 globaltime=aTrack->GetGlobalTime();
 
 if (OpticFile.is_open()) {
@@ -93,7 +93,7 @@ if (OpticFile.is_open()) {
           <<globaltime<< G4endl;
     }
 
-}*/ //this is a test
+} //this is a test
   
 
   return fUrgent;

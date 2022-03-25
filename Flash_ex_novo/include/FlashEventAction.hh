@@ -50,6 +50,7 @@ public:
 private:
   FlashRunAction *fRunAction;
   G4int fCollID_cryst;
+  G4int printModulo;
 };
 
 #endif
