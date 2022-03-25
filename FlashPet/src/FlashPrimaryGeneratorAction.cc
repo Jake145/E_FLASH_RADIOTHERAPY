@@ -46,9 +46,9 @@ FlashPrimaryGeneratorAction::FlashPrimaryGeneratorAction() {
   
   n=G4Threading::G4GetNumberOfCores(); // number of pulses of the beam, which is equal to the number of threads
   
-  dt= 0.2 ; // duration of pulse
+  dt= 0.01 ; // duration of pulse
   
-  T= 10; // total irradiation time
+  T= 5; // total irradiation time
   
   dr = T/n - dt; // time between pulses
   
