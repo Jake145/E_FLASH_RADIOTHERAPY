@@ -48,7 +48,7 @@ FlashPrimaryGeneratorAction::FlashPrimaryGeneratorAction() {
   
   dt= 0.01 ; // duration of pulse
   
-  T= 5; // total irradiation time
+  T= 10; // total irradiation time
   
   dr = T/n - dt; // time between pulses
   
@@ -145,11 +145,11 @@ if (Pencil == false){
       if (Rate){
 
       
-       assert (i*(dt+dr) + dr > 0);
-       assert ((i+1)*(dt+dr) >0);
+       //assert (i*(dt+dr) + dr > 0);
+       //assert ((i+1)*(dt+dr) >0);
        
-      G4double Shot_time = CLHEP::RandFlat::shoot(i*(dt+dr) + dr,(i+1)*(dt+dr));
-      
+      //G4double Shot_time = CLHEP::RandFlat::shoot(i*(dt+dr) + dr,(i+1)*(dt+dr));
+      G4double Shot_time = CLHEP::RandFlat::shoot(0.0,10.0);
       
       particleGun->SetParticleTime(Shot_time*ns);
       
