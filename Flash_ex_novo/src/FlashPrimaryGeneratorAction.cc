@@ -105,7 +105,7 @@ G4bool Rate = true;
     z += G4RandGauss::shoot(Z0, sigmaZ);
   }
 
-  particleGun->SetParticlePosition(G4ThreeVector(x, y, z));
+  particleGun->GetCurrentSource()->GetPosDist()->SetCentreCoords(G4ThreeVector(x, y, z));
 if (Pencil == false){
   G4double Mx;
   G4double My;

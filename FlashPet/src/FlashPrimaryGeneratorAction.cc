@@ -110,7 +110,7 @@ else{
     x += G4RandGauss::shoot(X0, sigmaX);
   }
 
-  particleGun->SetParticlePosition(G4ThreeVector(x, y, z));
+  particleGun->GetCurrentSource()->GetPosDist()->SetCentreCoords(G4ThreeVector(x, y, z));
 if (Pencil == false){
   G4double Mx;
   G4double My;
