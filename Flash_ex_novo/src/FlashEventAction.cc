@@ -40,7 +40,7 @@
 #include "G4UnitsTable.hh"
 
 FlashEventAction::FlashEventAction(FlashRunAction *runAction)
-    : G4UserEventAction(), fRunAction(runAction), fCollID_cryst(-1) {	printModulo = 100000;}
+    : G4UserEventAction(), fRunAction(runAction), fCollID_cryst(-1) {	printModulo = 10000;}
 
 FlashEventAction::~FlashEventAction() {}
 
